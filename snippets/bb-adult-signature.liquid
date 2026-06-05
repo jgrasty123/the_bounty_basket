@@ -1,0 +1,181 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+ADULT SIGNATURE OPTIONS
+----------------------------------------------------------------------------------------------------------------------
+
+This snippet renders an adult signature checkbox for products where custom.option_set_v2 metafield contains 
+"Alcohol Signature". The checkbox is preselected by default.
+
+When checked, the centralized handler (bb-product-addons.liquid) adds the adult signature product 
+to cart with the main product.
+
+Adult Signature Product: handle "adult-signature-required-for-all-orders" (ID: 9143475339500)
+Adult Signature Variant ID: 47248470212844
+
+Displays price next to the checkbox label.
+
+********************************************
+Supported variables
+********************************************
+
+* product: the product to check for option_set_v2 metafield
+* product_form_id: the ID of the main product form (passed to centralized handler)
+{%- endcomment -%}
+
+{%- liquid
+  assign show_adult_signature = false
+  assign option_set_metafield = product.metafields.custom.option_set_v2
+  if option_set_metafield != blank
+    assign option_set_string = option_set_metafield | metafield_text
+    if option_set_string contains 'Alcohol Signature'
+      assign show_adult_signature = true
+    endif
+  endif
+-%}
+
+{%- if show_adult_signature -%}
+  {%- assign adult_signature_product = all_products['adult-signature-required-for-all-orders'] -%}
+  {%- assign adult_signature_variant_id = 47248470212844 -%}
+  {%- assign adult_signature_price = adult_signature_product.price | default: 500 -%}
+  
+  <div class="product-adult-signature" data-adult-signature-wrapper data-product-title="{{ product.title | escape }}">
+    <div class="product-adult-signature__option">
+      <label class="product-adult-signature__checkbox-label">
+        <input 
+          type="checkbox" 
+          id="adult-signature-checkbox-{{ product.id }}"
+          class="product-adult-signature__checkbox"
+          name="adult_signature"
+          data-adult-signature-checkbox
+          data-variant-id="{{ adult_signature_variant_id }}"
+          checked
+        >
+        <span class="product-adult-signature__label-text">
+          Adult Signature Required
+          <span class="product-adult-signature__required">*</span>
+          <span class="product-adult-signature__price">({{ adult_signature_price | money }})</span>
+        </span>
+      </label>
+      <p class="product-adult-signature__hint">Required for all alcohol orders. Someone 21+ must sign for delivery.</p>
+    </div>
+
+    <input type="hidden" data-adult-signature-variant-id value="{{ adult_signature_variant_id }}">
+    <input type="hidden" data-adult-signature-product-title value="{{ product.title | escape }}">
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+      
+      function initAdultSignature() {
+        const wrapper = document.querySelector('[data-adult-signature-wrapper]');
+        if (!wrapper) return;
+        
+        const checkbox = wrapper.querySelector('[data-adult-signature-checkbox]');
+        const variantId = checkbox?.dataset.variantId;
+        const productTitle = wrapper.dataset.productTitle;
+        
+        // Register adult signature addon with the centralized handler
+        window.productAddons = window.productAddons || {};
+        window.productAddons.adultSignature = {
+          getItem: function() {
+            if (!checkbox?.checked || !variantId) {
+              return null;
+            }
+            
+            return {
+              id: parseInt(variantId, 10),
+              properties: {
+                'For': productTitle
+              }
+            };
+          },
+          validate: function() {
+            // Adult signature is required when shown - checkbox must be checked
+            if (!checkbox?.checked) {
+              checkbox?.focus();
+              wrapper.classList.add('product-adult-signature--error');
+              return false;
+            }
+            wrapper.classList.remove('product-adult-signature--error');
+            return true;
+          }
+        };
+        
+        // Remove error state when checkbox is checked
+        if (checkbox) {
+          checkbox.addEventListener('change', function() {
+            if (this.checked) {
+              wrapper.classList.remove('product-adult-signature--error');
+            }
+          });
+        }
+      }
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAdultSignature);
+      } else {
+        initAdultSignature();
+      }
+    })();
+  </script>
+
+  <style>
+    .product-adult-signature {
+      margin-bottom: var(--spacing-4, 16px);
+      padding: var(--spacing-3, 12px);
+      border-radius: var(--rounded-xs, 4px);
+    }
+    
+    .product-adult-signature--error {
+      border-color: rgb(var(--error-text, 220, 38, 38));
+      background: rgba(220, 38, 38, 0.05);
+    }
+    
+    .product-adult-signature__option {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-1, 4px);
+    }
+    
+    .product-adult-signature__checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2, 8px);
+      cursor: pointer;
+      font-size: var(--text-sm, 14px);
+    }
+    
+    .product-adult-signature__checkbox {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+      accent-color: rgb(var(--text-primary, 0, 0, 0));
+      flex-shrink: 0;
+    }
+    
+    .product-adult-signature__label-text {
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .product-adult-signature__required {
+      color: rgb(var(--error-text, 220, 38, 38));
+    }
+    
+    .product-adult-signature__price {
+      color: rgb(var(--text-secondary, 107, 114, 128));
+      font-weight: 400;
+    }
+    
+    .product-adult-signature__hint {
+      margin: 0;
+      margin-left: 26px;
+      font-size: var(--text-xs, 12px);
+      color: rgb(var(--text-secondary, 107, 114, 128));
+    }
+  </style>
+{%- endif -%}

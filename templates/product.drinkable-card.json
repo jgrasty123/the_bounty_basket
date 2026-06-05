@@ -1,0 +1,217 @@
+/*
+ * ------------------------------------------------------------
+ * Synced to main 2026-05-07 (re-trigger sync)
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "heading_tag": "h3"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "hide_sold_out_variants": false,
+            "stack_blocks": true,
+            "selector_style": "block",
+            "swatch_selector_style": "swatch",
+            "variant_image_options": "",
+            "size_chart_page": ""
+          }
+        },
+        "rating": {
+          "type": "rating",
+          "disabled": true,
+          "settings": {
+            "show_empty": false
+          }
+        },
+        "badges": {
+          "type": "badges",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_taxes_notice": false
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_payment_button": false,
+            "show_gift_card_recipient": true,
+            "atc_button_background": "",
+            "atc_button_text_color": "",
+            "payment_button_background": "",
+            "payment_button_text_color": ""
+          }
+        },
+        "judge_me_reviews_preview_badge_JPjzBp": {
+          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "payment_terms": {
+          "type": "payment_terms",
+          "settings": {}
+        },
+        "separator": {
+          "type": "separator",
+          "settings": {}
+        },
+        "drinkable_card_picker_bbDCP1": {
+          "type": "drinkable_card_picker",
+          "settings": {
+            "collection_handle": "mini-bottles",
+            "heading": "Pick Your Bottle",
+            "subheading": "Required \u2014 choose one mini to fill your card."
+          }
+        },
+        "gift_card_options": {
+          "type": "gift_card",
+          "settings": {
+            "open_by_default": true
+          }
+        },
+        "engraved_glass_options": {
+          "type": "engraved_glass",
+          "settings": {
+            "open_by_default": true
+          }
+        },
+        "adult_signature_options": {
+          "type": "adult_signature",
+          "settings": {
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "variant_picker",
+        "rating",
+        "badges",
+        "price",
+        "drinkable_card_picker_bbDCP1",
+        "gift_card_options",
+        "engraved_glass_options",
+        "adult_signature_options",
+        "buy_buttons",
+        "judge_me_reviews_preview_badge_JPjzBp",
+        "payment_terms",
+        "separator"
+      ],
+      "settings": {
+        "full_width": true,
+        "show_fixed_add_to_cart": true,
+        "desktop_media_width": 55,
+        "desktop_media_layout": "grid_one",
+        "mobile_media_size": "expanded",
+        "mobile_carousel_control": "floating_dots",
+        "enable_video_autoplay": false,
+        "enable_video_looping": true,
+        "enable_image_zoom": true,
+        "max_image_zoom_level": 3,
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "input_background": "rgba(0,0,0,0)",
+        "input_text_color": ""
+      }
+    },
+    "17400063553db9cd1c": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_YW98g3": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_YW98g3"
+      ],
+      "settings": {
+        "full_width": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false,
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "rich_text_cGKYbQ": {
+      "type": "rich-text",
+      "blocks": {
+        "richtext_Na7wTq": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p></p>{{ product.description }}"
+          }
+        }
+      },
+      "block_order": [
+        "richtext_Na7wTq"
+      ],
+      "settings": {
+        "full_width": true,
+        "content_width": "large",
+        "text_position": "start",
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "custom_liquid_tPMFia": {
+      "type": "custom-liquid",
+      "settings": {
+        "full_width": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false,
+        "liquid": "{% if product.tags contains 'ShopifyBundle' %}\n<p style=\"text-align: center\">\u24d8 Due to supply chain issues, alcohol minis and/or accessories may be substituted for products of equal/greater value.</p>\n{% endif %}",
+        "background": "#f3f3f3",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "recommendations_count": 6,
+        "products": [],
+        "full_width": true,
+        "stack_products": true,
+        "show_progress_bar": false,
+        "products_per_row_mobile": "1",
+        "products_per_row_desktop": 3,
+        "subheading": "",
+        "title": "You may also like",
+        "content": "",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "product_card_background": "",
+        "product_card_text_color": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "17400063553db9cd1c",
+    "rich_text_cGKYbQ",
+    "custom_liquid_tPMFia",
+    "related-products"
+  ]
+}

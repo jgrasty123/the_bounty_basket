@@ -1,0 +1,154 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BUNDLE CART ATTRIBUTES
+----------------------------------------------------------------------------------------------------------------------
+
+This snippet outputs bundle content data for all cart items tagged as ShopifyBundle.
+Bundle contents are saved to cart attributes (hidden from customer) for order fulfillment.
+{%- endcomment -%}
+
+{% assign bundle_metafields = "the_craft_beer_v2,the_wine_v2,the_liquor_v2,the_champagne_v2,the_coffee_v2,the_mixer_v2,the_goods_v2,the_contents_v2,the_drinks_v2,the_freebies_v2" | split: "," %}
+
+{%- capture bundle_json -%}
+[
+  {%- assign has_bundle = false -%}
+  {%- for line_item in cart.items -%}
+    {%- assign tags_lower = line_item.product.tags | join: ',' | downcase -%}
+    {%- if tags_lower contains 'shopifybundle' -%}
+      {%- if has_bundle -%},{%- endif -%}
+      {%- assign has_bundle = true -%}
+      {
+        "bundle_title": {{ line_item.product.title | json }},
+        "bundle_sku": {{ line_item.variant.sku | default: "N/A" | json }},
+        "line_quantity": {{ line_item.quantity }},
+        "items": [
+          {%- assign first_bundle_item = true -%}
+          {%- for metafield_name in bundle_metafields -%}
+            {%- assign metafield_value = line_item.product.metafields.custom[metafield_name] -%}
+            {%- if metafield_value != blank -%}
+              {%- for item in metafield_value.value -%}
+                {%- assign product_ref = item.product.value -%}
+                {%- assign quantity = item.quantity.value | default: 1 -%}
+                {%- if product_ref -%}
+                  {%- unless first_bundle_item -%},{%- endunless -%}
+                  {
+                    "quantity": {{ quantity }},
+                    "title": {{ product_ref.title | json }},
+                    "sku": {{ product_ref.variants.first.sku | default: "N/A" | json }}
+                  }
+                  {%- assign first_bundle_item = false -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+        ]
+      }
+    {%- endif -%}
+  {%- endfor -%}
+]
+{%- endcapture -%}
+
+<script id="bundle-cart-data" type="application/json">{{ bundle_json }}</script>
+
+<script>
+(function() {
+  var bundleDataScript = document.getElementById('bundle-cart-data');
+  if (!bundleDataScript) return;
+
+  var bundleData;
+  try {
+    bundleData = JSON.parse(bundleDataScript.textContent);
+  } catch (e) {
+    console.error('[Bundle Attr] Failed to parse bundle data:', e);
+    return;
+  }
+
+  // Consolidate duplicate items by SKU, summing quantities
+  function consolidateItems(items) {
+    var consolidated = {};
+    items.forEach(function(item) {
+      var key = item.sku;
+      if (consolidated[key]) {
+        consolidated[key].quantity += item.quantity;
+      } else {
+        consolidated[key] = {
+          quantity: item.quantity,
+          title: item.title,
+          sku: item.sku
+        };
+      }
+    });
+    return Object.values(consolidated);
+  }
+
+  // Build bundle summary text with proper line breaks
+  function buildBundleSummary(data) {
+    if (!data || data.length === 0) return '';
+    
+    var lines = [];
+
+    data.forEach(function(bundle) {
+      // For each bundle in cart (considering line quantity)
+      for (var i = 0; i < bundle.line_quantity; i++) {
+        // Bundle header
+        lines.push(bundle.bundle_title + ' | ' + bundle.bundle_sku);
+        
+        // Consolidate items to avoid duplicates
+        var items = consolidateItems(bundle.items);
+        
+        // Each item on its own line
+        items.forEach(function(item) {
+          lines.push(item.quantity + 'x ' + item.title + ' ' + item.sku);
+        });
+        
+        // Empty line between bundles
+        lines.push('');
+      }
+    });
+
+    return lines.join('\n').trim();
+  }
+
+  // Update cart attributes immediately on page load
+  function updateCartAttributes() {
+    var summary = '';
+    
+    if (bundleData && bundleData.length > 0) {
+      summary = buildBundleSummary(bundleData);
+      console.log('[Bundle Attr] Found ' + bundleData.length + ' bundle(s), updating attributes');
+    } else {
+      console.log('[Bundle Attr] No bundles in cart, clearing attributes');
+    }
+
+    // Only one clean attribute, no JSON
+    var payload = {
+      attributes: {
+        'Bundle Contents': summary
+      }
+    };
+
+    fetch(Shopify.routes.root + 'cart/update.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(result) {
+      console.log('[Bundle Attr] Cart attributes updated');
+    })
+    .catch(function(e) {
+      console.error('[Bundle Attr] Failed to update:', e);
+    });
+  }
+
+  // Update on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateCartAttributes);
+  } else {
+    updateCartAttributes();
+  }
+
+  // Also update when cart changes (items added/removed/quantity changed)
+  document.documentElement.addEventListener('cart:change', updateCartAttributes);
+})();
+</script>

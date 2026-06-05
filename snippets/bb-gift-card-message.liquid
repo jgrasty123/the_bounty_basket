@@ -1,0 +1,233 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+GIFT CARD MESSAGE OPTIONS
+----------------------------------------------------------------------------------------------------------------------
+
+This snippet renders gift card/message options for products where custom.option_set_v2 metafield contains "Card".
+When a gift card is selected, the centralized handler (bb-product-addons.liquid) adds the gift card product 
+to cart with line item properties linking it to the main product.
+
+Gift Card Product: handle "special-card" (ID: 9141983150316)
+
+********************************************
+Supported variables
+********************************************
+
+* product: the product to check for option_set_v2 metafield
+* product_form_id: the ID of the main product form (passed to centralized handler)
+{%- endcomment -%}
+
+{%- assign gift_card_product = all_products['special-card'] -%}
+
+{%- liquid
+  assign show_gift_card = false
+  assign option_set_metafield = product.metafields.custom.option_set_v2
+  if option_set_metafield != blank
+    assign option_set_string = option_set_metafield | metafield_text
+    if option_set_string contains 'Card'
+      assign show_gift_card = true
+    endif
+  endif
+-%}
+
+{%- if show_gift_card and gift_card_product != blank -%}
+  <div class="product-gift-card" data-gift-card-wrapper data-product-title="{{ product.title | escape }}">
+    <div class="product-gift-card__option">
+      <div class="product-gift-card__select-wrapper">
+        {%- assign default_gift_card_variant = nil -%}
+        {%- for variant in gift_card_product.variants -%}
+          {%- if variant.title contains 'A Special Gift For You' -%}
+            {%- assign default_gift_card_variant = variant -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        <select 
+          id="gift-card-select-{{ product.id }}"
+          class="product-gift-card__select"
+          name="gift_card_type"
+          data-gift-card-select
+          aria-label="Gift card option"
+        >
+          <option value="none" data-variant-id="" data-price="0">No Gift Card</option>
+          {%- for variant in gift_card_product.variants -%}
+            <option 
+              value="{{ variant.id }}" 
+              data-variant-id="{{ variant.id }}" 
+              data-price="{{ variant.price }}"
+              {%- if default_gift_card_variant and variant.id == default_gift_card_variant.id %} selected{%- endif -%}
+            >
+              {{ variant.title }}{%- if variant.price > 0 %} - {{ variant.price | money }}{%- endif -%}
+            </option>
+          {%- endfor -%}
+        </select>
+      </div>
+    </div>
+
+    <div class="product-gift-card__message-wrapper" data-gift-card-message-wrapper style="{% if default_gift_card_variant %}display: block;{% else %}display: none;{% endif %}">
+      <label class="product-gift-card__label" for="gift-card-message-{{ product.id }}">
+        Your Gift Message
+      </label>
+      <textarea 
+        id="gift-card-message-{{ product.id }}"
+        class="product-gift-card__textarea"
+        name="gift_card_message"
+        data-gift-card-message
+        placeholder="Enter your personalized message here..."
+        maxlength="200"
+        rows="3"
+      ></textarea>
+      <p class="product-gift-card__hint">Maximum 200 characters</p>
+    </div>
+
+    <input type="hidden" data-gift-card-variant-id value="{% if default_gift_card_variant %}{{ default_gift_card_variant.id }}{% endif %}">
+    <input type="hidden" data-gift-card-product-title value="{{ product.title | escape }}">
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+      
+      function initGiftCard() {
+        const wrapper = document.querySelector('[data-gift-card-wrapper]');
+        if (!wrapper) return;
+        
+        const select = wrapper.querySelector('[data-gift-card-select]');
+        const messageWrapper = wrapper.querySelector('[data-gift-card-message-wrapper]');
+        const messageInput = wrapper.querySelector('[data-gift-card-message]');
+        const variantIdInput = wrapper.querySelector('[data-gift-card-variant-id]');
+        const productTitle = wrapper.dataset.productTitle;
+        
+        // Handle select changes
+        if (select) {
+          select.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const selectedValue = this.value;
+            const variantId = selectedOption.dataset.variantId;
+            
+            variantIdInput.value = variantId || '';
+            
+            if (selectedValue === 'none' || !variantId) {
+              messageWrapper.style.display = 'none';
+              messageInput.value = '';
+            } else {
+              messageWrapper.style.display = 'block';
+            }
+          });
+        }
+        
+        // Register gift card addon with the centralized handler
+        window.productAddons = window.productAddons || {};
+        window.productAddons.giftCard = {
+          getItem: function() {
+            const selectedOption = select?.options[select.selectedIndex];
+            const giftCardVariantId = selectedOption?.dataset.variantId;
+            
+            if (!giftCardVariantId || select.value === 'none') {
+              return null;
+            }
+            
+            const giftMessage = messageInput?.value?.trim() || '';
+            return {
+              id: parseInt(giftCardVariantId, 10),
+              properties: {
+                'Message': giftMessage,
+                'For': productTitle
+              }
+            };
+          },
+          validate: function() {
+            return true; // Gift card message is optional
+          }
+        };
+      }
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGiftCard);
+      } else {
+        initGiftCard();
+      }
+    })();
+  </script>
+
+  <style>
+    .product-gift-card {
+      margin-bottom: var(--spacing-4, 16px);
+    }
+    
+    .product-gift-card__option {
+      margin-bottom: var(--spacing-4, 16px);
+    }
+    
+    .product-gift-card__label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: var(--spacing-2, 8px);
+      font-size: var(--text-sm, 14px);
+    }
+    
+    .product-gift-card__select-wrapper {
+      position: relative;
+    }
+    
+    .product-gift-card__select {
+      width: 100%;
+      padding: 9px var(--spacing-3, 12px);
+      padding-right: var(--spacing-8, 32px);
+      border: 1px solid rgb(var(--border-color, 229, 231, 235));
+      border-radius: var(--rounded-xs, 4px);
+      font-size: var(--text-sm, 14px);
+      font-family: inherit;
+      background: rgb(var(--input-background, 255, 255, 255));
+      color: rgb(var(--text-primary, 0, 0, 0));
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      transition: border-color 0.2s ease;
+    }
+    
+    .product-gift-card__select:focus {
+      outline: none;
+      border-color: rgb(var(--text-primary, 0, 0, 0));
+    }
+    
+    .product-gift-card__select:hover {
+      border-color: rgb(var(--text-primary, 0, 0, 0));
+    }
+    
+    .product-gift-card__message-wrapper {
+      margin-top: var(--spacing-3, 12px);
+    }
+    
+    .product-gift-card__textarea {
+      width: 100%;
+      padding: 9px var(--spacing-3, 12px);
+      border: 1px solid rgb(var(--border-color, 229, 231, 235));
+      border-radius: var(--rounded-xs, 4px);
+      font-size: var(--text-sm, 14px);
+      font-family: inherit;
+      background: rgb(var(--input-background, 255, 255, 255));
+      color: rgb(var(--text-primary, 0, 0, 0));
+      transition: border-color 0.2s ease;
+      resize: vertical;
+      min-height: 76px;
+    }
+    
+    .product-gift-card__textarea:focus {
+      outline: none;
+      border-color: rgb(var(--text-primary, 0, 0, 0));
+    }
+    
+    .product-gift-card__textarea::placeholder {
+      color: rgb(var(--text-secondary, 156, 163, 175));
+      font-size: var(--text-sm, 14px);
+    }
+    
+    .product-gift-card__hint {
+      margin-top: var(--spacing-1, 4px);
+      font-size: var(--text-xs, 12px);
+      color: rgb(var(--text-secondary, 107, 114, 128));
+    }
+  </style>
+{%- endif -%}

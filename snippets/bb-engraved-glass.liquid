@@ -1,0 +1,449 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+ENGRAVED GLASS OPTIONS
+----------------------------------------------------------------------------------------------------------------------
+
+This snippet renders engraved glass options for products where custom.option_set_v2 metafield contains 
+"Engraved Glass".
+
+When "Engraving Mandatory" is ALSO present, the glass selection is mandatory (no "No Glass" option).
+Otherwise, the glass selection is optional (includes "No Glass" option).
+
+Pint Glass is ONLY available when the product has custom.the_craft_beer_v2 or custom.the_craft_beer metafield set.
+
+Engraved Glass Product: handle "engraved-glass" (ID: 9145343836396)
+Options:
+  - Glass Type: Rocks Glass, Shot Glass, Pint Glass (conditional)
+  - Engraving: Clear Engraving ($30), Gold Color Fill Engraving ($35), Silver Color Fill Engraving ($35)
+
+Variants (9 total - Glass Type / Engraving):
+  - Rocks Glass / Clear Engraving: 47255846748396 ($30)
+  - Rocks Glass / Gold Color Fill Engraving: 47255846781164 ($35)
+  - Rocks Glass / Silver Color Fill Engraving: 47255846813932 ($35)
+  - Shot Glass / Clear Engraving: 47255846846700 ($30)
+  - Shot Glass / Gold Color Fill Engraving: 47255846879468 ($35)
+  - Shot Glass / Silver Color Fill Engraving: 47255846912236 ($35)
+  - Pint Glass / Clear Engraving: 47267135979756 ($30)
+  - Pint Glass / Gold Color Fill Engraving: (TBD)
+  - Pint Glass / Silver Color Fill Engraving: (TBD)
+
+********************************************
+Supported variables
+********************************************
+
+* product: the product to check for option_set_v2 metafield
+* product_form_id: the ID of the main product form (passed to centralized handler)
+{%- endcomment -%}
+
+{%- assign engraved_glass_product = all_products['engraved-glass'] -%}
+
+{%- liquid
+  assign show_engraved_glass = false
+  assign show_pint_glass = false
+  assign option_set_metafield = product.metafields.custom.option_set_v2
+  if option_set_metafield != blank
+    assign option_set_string = option_set_metafield | metafield_text
+    if option_set_string contains 'Engraved Glass'
+      assign show_engraved_glass = true
+    endif
+  endif
+
+  comment
+    Show Pint Glass option only when the product has the craft beer metafield set
+  endcomment
+  if product.metafields.custom.the_craft_beer_v2 != blank or product.metafields.custom.the_craft_beer != blank
+    assign show_pint_glass = true
+  endif
+-%}
+
+{%- if show_engraved_glass and engraved_glass_product != blank -%}
+  {%- comment -%}Extract unique glass types and engraving types from product options{%- endcomment -%}
+  {%- assign all_glass_types = engraved_glass_product.options_by_name['Glass Type'].values -%}
+  {%- assign engraving_types = engraved_glass_product.options_by_name['Engraving'].values -%}
+  
+  {%- comment -%}Filter glass types - only show Pint Glass when craft beer metafield is present{%- endcomment -%}
+  {%- assign glass_types = '' -%}
+  {%- for glass_type in all_glass_types -%}
+    {%- if glass_type == 'Pint Glass' -%}
+      {%- if show_pint_glass -%}
+        {%- if glass_types == '' -%}
+          {%- assign glass_types = glass_type -%}
+        {%- else -%}
+          {%- assign glass_types = glass_types | append: '|||' | append: glass_type -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- if glass_types == '' -%}
+        {%- assign glass_types = glass_type -%}
+      {%- else -%}
+        {%- assign glass_types = glass_types | append: '|||' | append: glass_type -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign glass_types = glass_types | split: '|||' -%}
+
+  <div class="product-engraved-glass" data-engraved-glass-wrapper data-product-title="{{ product.title | escape }}" data-mandatory="false">
+    {%- comment -%}Glass Type Selection{%- endcomment -%}
+    <div class="product-engraved-glass__option">
+
+      <div class="product-engraved-glass__radio-group">
+        {%- comment -%}
+          BB Required Field Validation 2026-05-07 — defensive fix.
+
+          "No Glass" is now always rendered, regardless of the
+          `is_mandatory` metafield value. The previous logic conflated two
+          different concerns: bottle engraving (which can legitimately be
+          mandatory on personalized-only products) and engraved glass
+          (which is always an optional upsell). When both flags were set
+          via "Engraving Mandatory" in the metafield, customers buying
+          standard bottles in /collections/engravings could not opt out of
+          paying for an engraved glass.
+
+          We pair this code change with a Matrixify import that removes
+          "Engraving Mandatory" from the 90 affected bottle products, but
+          this defensive code ensures the bug cannot recur even if that
+          metafield value drifts back in via a future product upload.
+
+          The data-mandatory data attribute is hard-coded to "false" so
+          downstream JS reads the corrected state (no consumer of that
+          attribute outside this snippet).
+        {%- endcomment -%}
+        <label class="product-engraved-glass__radio-item">
+          <input
+            type="radio"
+            name="engraved_glass_type"
+            value="none"
+            data-engraved-glass-type-radio
+            checked
+          >
+          <span class="product-engraved-glass__radio-label">No Glass</span>
+        </label>
+
+        {%- comment -%}Glass Type Options{%- endcomment -%}
+        {%- for glass_type in glass_types -%}
+          <label class="product-engraved-glass__radio-item">
+            <input
+              type="radio"
+              name="engraved_glass_type"
+              value="{{ glass_type | escape }}"
+              data-engraved-glass-type-radio
+              data-glass-type="{{ glass_type | escape }}"
+            >
+            <span class="product-engraved-glass__radio-label">{{ glass_type }}</span>
+          </label>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%}
+      Engraving Type Selection — hidden by default since "No Glass" is the
+      default selection. JS toggles visibility when a glass is picked.
+      Previously controlled by `unless is_mandatory` which is no longer
+      a meaningful signal here (BB Required Field Validation 2026-05-07).
+    {%- endcomment -%}
+    <div class="product-engraved-glass__option product-engraved-glass__engraving-options" data-engraved-glass-engraving-wrapper style="display: none;">
+      <label class="product-engraved-glass__label">
+        Engraving Type <span class="product-engraved-glass__required">*</span>
+      </label>
+      
+      <div class="product-engraved-glass__radio-group">
+        {%- comment -%}Get unique engraving types with their prices{%- endcomment -%}
+        {%- for engraving_type in engraving_types -%}
+          {%- comment -%}Find a variant with this engraving type to get its price{%- endcomment -%}
+          {%- for variant in engraved_glass_product.variants -%}
+            {%- if variant.option2 == engraving_type -%}
+              {%- assign engraving_price = variant.price -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <label class="product-engraved-glass__radio-item">
+            <input 
+              type="radio" 
+              name="engraved_glass_engraving" 
+              value="{{ engraving_type | escape }}"
+              data-engraved-glass-engraving-radio
+              data-engraving-type="{{ engraving_type | escape }}"
+              data-price="{{ engraving_price }}"
+              {% if forloop.first %}checked{% endif %}
+            >
+            <span class="product-engraved-glass__radio-label">
+              {{ engraving_type }}
+              <span class="product-engraved-glass__price">({{ engraving_price | money }})</span>
+            </span>
+          </label>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%}Engraved Glass Text Input - Shown when glass is selected{%- endcomment -%}
+    <div class="product-engraved-glass__text-wrapper" data-engraved-glass-text-wrapper style="display: none;">
+      <label class="product-engraved-glass__label" for="engraved-glass-text-{{ product.id }}">
+        Engraved Glass Text <span class="product-engraved-glass__required">*</span>
+      </label>
+      <input
+        type="text"
+        id="engraved-glass-text-{{ product.id }}"
+        class="product-engraved-glass__input"
+        name="engraved_glass_text"
+        data-engraved-glass-text
+        placeholder="Initials or Short Messages | Email for Images or Logos"
+        maxlength="50"
+      >
+      <p class="product-engraved-glass__hint">Maximum 50 characters</p>
+    </div>
+
+    {%- comment -%}Hidden fields to store glass data{%- endcomment -%}
+    <input type="hidden" data-engraved-glass-variant-id value="">
+    <input type="hidden" data-engraved-glass-product-title value="{{ product.title | escape }}">
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+      
+      // Variant data for lookup
+      const variants = [
+        {%- for variant in engraved_glass_product.variants -%}
+          { id: {{ variant.id }}, option1: "{{ variant.option1 | escape }}", option2: "{{ variant.option2 | escape }}", price: {{ variant.price }} }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ];
+      
+      function initEngravedGlass() {
+        const wrapper = document.querySelector('[data-engraved-glass-wrapper]');
+        if (!wrapper) return;
+        
+        const glassTypeRadios = wrapper.querySelectorAll('[data-engraved-glass-type-radio]');
+        const engravingRadios = wrapper.querySelectorAll('[data-engraved-glass-engraving-radio]');
+        const engravingWrapper = wrapper.querySelector('[data-engraved-glass-engraving-wrapper]');
+        const textWrapper = wrapper.querySelector('[data-engraved-glass-text-wrapper]');
+        const textInput = wrapper.querySelector('[data-engraved-glass-text]');
+        const variantIdInput = wrapper.querySelector('[data-engraved-glass-variant-id]');
+        const productTitle = wrapper.dataset.productTitle;
+        const isMandatory = wrapper.dataset.mandatory === 'true';
+        
+        // Find variant by glass type and engraving type
+        function findVariant(glassType, engravingType) {
+          return variants.find(v => v.option1 === glassType && v.option2 === engravingType);
+        }
+        
+        // Update the selected variant ID
+        function updateSelectedVariant() {
+          const selectedGlassRadio = wrapper.querySelector('[data-engraved-glass-type-radio]:checked');
+          const selectedEngravingRadio = wrapper.querySelector('[data-engraved-glass-engraving-radio]:checked');
+          
+          if (!selectedGlassRadio || selectedGlassRadio.value === 'none') {
+            variantIdInput.value = '';
+            return;
+          }
+          
+          const glassType = selectedGlassRadio.dataset.glassType;
+          const engravingType = selectedEngravingRadio?.dataset.engravingType;
+          
+          if (glassType && engravingType) {
+            const variant = findVariant(glassType, engravingType);
+            variantIdInput.value = variant ? variant.id : '';
+          }
+        }
+        
+        // Handle glass type radio button changes
+        glassTypeRadios.forEach(radio => {
+          radio.addEventListener('change', function() {
+            const selectedValue = this.value;
+            
+            if (selectedValue === 'none') {
+              engravingWrapper.style.display = 'none';
+              textWrapper.style.display = 'none';
+              textInput.removeAttribute('required');
+              textInput.value = '';
+              variantIdInput.value = '';
+            } else {
+              engravingWrapper.style.display = 'block';
+              textWrapper.style.display = 'block';
+              textInput.setAttribute('required', 'required');
+              updateSelectedVariant();
+            }
+          });
+        });
+        
+        // Handle engraving type radio button changes
+        engravingRadios.forEach(radio => {
+          radio.addEventListener('change', function() {
+            updateSelectedVariant();
+          });
+        });
+        
+        // Remove error class on input
+        if (textInput) {
+          textInput.addEventListener('input', function() {
+            this.classList.remove('product-engraved-glass__input--error');
+          });
+        }
+        
+        // Initialize variant ID if mandatory (first glass type + first engraving type)
+        if (isMandatory) {
+          updateSelectedVariant();
+        }
+        
+        // Register engraved glass addon with the centralized handler
+        window.productAddons = window.productAddons || {};
+        window.productAddons.engravedGlass = {
+          getItem: function() {
+            const selectedGlassRadio = wrapper.querySelector('[data-engraved-glass-type-radio]:checked');
+            const glassVariantId = variantIdInput.value;
+            
+            if (!glassVariantId || selectedGlassRadio?.value === 'none') {
+              return null;
+            }
+            
+            const glassText = textInput.value.trim();
+            const selectedEngravingRadio = wrapper.querySelector('[data-engraved-glass-engraving-radio]:checked');
+            const glassType = selectedGlassRadio?.dataset.glassType || '';
+            const engravingType = selectedEngravingRadio?.dataset.engravingType || '';
+            
+            return {
+              id: parseInt(glassVariantId, 10),
+              properties: {
+                'For': productTitle,
+                'Glass Type': glassType,
+                'Engraving Type': engravingType,
+                'Engraving Text': glassText
+              }
+            };
+          },
+          validate: function() {
+            const selectedGlassRadio = wrapper.querySelector('[data-engraved-glass-type-radio]:checked');
+            const glassVariantId = variantIdInput.value;
+            
+            // If mandatory and nothing selected, invalid
+            if (isMandatory && (!glassVariantId || selectedGlassRadio?.value === 'none')) {
+              return false;
+            }
+            
+            // If not mandatory and nothing selected, valid
+            if (!glassVariantId || selectedGlassRadio?.value === 'none') {
+              return true;
+            }
+            
+            // Glass selected - text is required
+            const glassText = textInput.value.trim();
+            if (!glassText) {
+              textInput.focus();
+              textInput.classList.add('product-engraved-glass__input--error');
+              return false;
+            }
+            return true;
+          }
+        };
+      }
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initEngravedGlass);
+      } else {
+        initEngravedGlass();
+      }
+    })();
+  </script>
+
+  <style>
+    .product-engraved-glass {
+      margin-bottom: var(--spacing-4, 16px);
+    }
+    
+    .product-engraved-glass__option {
+      margin-bottom: var(--spacing-4, 16px);
+    }
+    
+    .product-engraved-glass__engraving-options {
+      border-left: 2px solid rgb(var(--border-color, 229, 231, 235));
+    }
+    
+    .product-engraved-glass__label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: var(--spacing-2, 8px);
+      font-size: var(--text-sm, 14px);
+    }
+    
+    .product-engraved-glass__required {
+      color: rgb(var(--error-text, 220, 38, 38));
+    }
+    
+    .product-engraved-glass__radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-3, 12px);
+    }
+    
+    .product-engraved-glass__radio-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2, 8px);
+      cursor: pointer;
+      font-size: var(--text-sm, 14px);
+    }
+    
+    .product-engraved-glass__radio-item input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+      accent-color: rgb(var(--text-primary, 0, 0, 0));
+    }
+    
+    .product-engraved-glass__radio-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .product-engraved-glass__price {
+      color: rgb(var(--text-secondary, 107, 114, 128));
+    }
+    
+    .product-engraved-glass__text-wrapper {
+      margin-top: var(--spacing-4, 16px);
+    }
+    
+    .product-engraved-glass__input {
+      width: 100%;
+      padding: var(--spacing-2-5, 10px) var(--spacing-3, 12px);
+      border: 1px solid rgb(var(--border-color, 229, 231, 235));
+      border-radius: var(--rounded-xs, 4px);
+      font-size: var(--text-base, 16px);
+      background: rgb(var(--input-background, 255, 255, 255));
+      color: rgb(var(--text-primary, 0, 0, 0));
+      transition: border-color 0.2s ease;
+    }
+    
+    .product-engraved-glass__input:focus {
+      outline: none;
+      border-color: rgb(var(--text-primary, 0, 0, 0));
+    }
+    
+    .product-engraved-glass__input::placeholder {
+      color: rgb(var(--text-secondary, 156, 163, 175));
+      font-size: var(--text-sm, 14px);
+    }
+    
+    .product-engraved-glass__input--error {
+      border-color: rgb(var(--error-text, 220, 38, 38));
+    }
+    
+    .product-engraved-glass__input--error:focus {
+      border-color: rgb(var(--error-text, 220, 38, 38));
+    }
+    
+    .product-engraved-glass__hint {
+      margin-top: var(--spacing-1, 4px);
+      font-size: var(--text-xs, 12px);
+      color: rgb(var(--text-secondary, 107, 114, 128));
+    }
+    
+    @media screen and (max-width: 699px) {
+      .product-engraved-glass__radio-group {
+        flex-direction: column;
+        gap: var(--spacing-2, 8px);
+      }
+    }
+  </style>
+{%- endif -%}

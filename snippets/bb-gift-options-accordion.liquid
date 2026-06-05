@@ -1,0 +1,52 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET GIFT OPTIONS ACCORDION ITEM
+----------------------------------------------------------------------------------------------------------------------
+
+Wraps a gift option snippet in a collapsible accordion row.
+
+Supported parameters:
+* id: optional unique id
+* title: row title
+* content: accordion body HTML
+* price: optional right-aligned price text
+* open: optional boolean for default open state
+* option_type: optional option type key for state sync
+{%- endcomment -%}
+
+<details
+  {% if id %}id="{{ id | escape }}"{% endif %}
+  class="bb-gift-options__item accordion group"
+  {% if option_type %}data-gift-option-type="{{ option_type | escape }}"{% endif %}
+  aria-expanded="{% if open %}true{% else %}false{% endif %}"
+  is="accordion-disclosure"
+  {% if open %}open{% endif %}
+>
+  <summary>
+    <div class="accordion__toggle bb-gift-options__toggle">
+      <div class="bb-gift-options__left">
+        <span class="bb-gift-options__status-icon" aria-hidden="true">
+          <svg viewBox="0 0 20 20" width="20" height="20" focusable="false">
+            <circle cx="10" cy="10" r="8" fill="currentColor"></circle>
+            <path d="M8.9 12.2L6.9 10.3l-1.1 1.1 3.1 3 5.4-5.4-1.1-1.1z" fill="#fff"></path>
+          </svg>
+        </span>
+        <span class="bb-gift-options__title">{{ title | escape }}</span>
+      </div>
+
+      <div class="bb-gift-options__right">
+        {%- if price != blank -%}
+          <span class="bb-gift-options__price">{{ price }}</span>
+        {%- endif -%}
+
+        <span class="circle-chevron group-hover:colors group-expanded:colors group-expanded:rotate">
+          {%- render 'icon' with 'chevron-bottom-small' -%}
+        </span>
+      </div>
+    </div>
+  </summary>
+
+  <div class="accordion__content bb-gift-options__content">
+    {{- content -}}
+  </div>
+</details>

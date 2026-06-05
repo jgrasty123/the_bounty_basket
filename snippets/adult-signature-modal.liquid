@@ -1,0 +1,149 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+ADULT SIGNATURE WARNING MODAL
+----------------------------------------------------------------------------------------------------------------------
+
+This modal is displayed when a user attempts to remove the adult signature item from their cart.
+The modal prevents removal and informs the user that adult signature is required for all orders.
+{%- endcomment -%}
+
+<div id="adult-signature-modal" class="adult-signature-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="adult-signature-modal-title">
+  <div class="adult-signature-modal__backdrop"></div>
+  
+  <div class="adult-signature-modal__content">
+    <div class="adult-signature-modal__icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+        <line x1="12" y1="9" x2="12" y2="13"></line>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+    </div>
+    
+    <h2 id="adult-signature-modal-title" class="adult-signature-modal__title h5">
+      
+    </h2>
+    
+    <p class="adult-signature-modal__message">
+      Adult Signature Required
+    </p>
+    
+    <button type="button" class="adult-signature-modal__button button button--lg" data-adult-signature-close>
+      Got It
+    </button>
+  </div>
+</div>
+
+<style>
+  .adult-signature-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+  
+  .adult-signature-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .adult-signature-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  
+  .adult-signature-modal__content {
+    position: relative;
+    z-index: 1;
+    background: rgb(var(--dialog-background, var(--background)));
+    color: rgb(var(--text-primary));
+    border-radius: var(--rounded, 8px);
+    padding: var(--spacing-8) var(--spacing-6);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.25s ease;
+  }
+  
+  .adult-signature-modal.is-open .adult-signature-modal__content {
+    transform: scale(1) translateY(0);
+  }
+  
+  .adult-signature-modal__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--spacing-4);
+    background: rgb(var(--warning-background, 255, 243, 205));
+    color: rgb(var(--warning-text, 133, 100, 4));
+    border-radius: 50%;
+  }
+  
+  .adult-signature-modal__title {
+    margin: 0 0 var(--spacing-3);
+    font-weight: 600;
+  }
+  
+  .adult-signature-modal__message {
+    margin: 0 0 var(--spacing-6);
+    color: rgb(var(--text-secondary, var(--text-primary)));
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+  
+  .adult-signature-modal__button {
+    min-width: 120px;
+  }
+  
+  /* Ensure the modal button inherits theme styling */
+  .adult-signature-modal__button:hover {
+    opacity: 0.9;
+  }
+  
+  /* Accessibility - reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    .adult-signature-modal,
+    .adult-signature-modal__content {
+      transition: none;
+    }
+  }
+  
+  /* Dark mode adjustments if needed */
+  @media (prefers-color-scheme: dark) {
+    .adult-signature-modal__icon {
+      background: rgba(255, 193, 7, 0.15);
+      color: #ffc107;
+    }
+  }
+  
+  /* Adult signature item styling in cart */
+  .adult-signature-qty {
+    font-weight: 500;
+    min-width: 40px;
+    display: inline-block;
+  }
+  
+  .adult-signature-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  /* Add a subtle indicator on the line item for adult signature */
+  line-item[data-adult-signature="true"] {
+    position: relative;
+  }
+
+</style>

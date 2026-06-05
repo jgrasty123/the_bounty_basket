@@ -1,0 +1,140 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message": {
+          "type": "message",
+          "settings": {
+            "text": "FILL OUT GREETING CARD + CHOOSE DELIVERY DATE  = MAKE THEIR DAY!",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "message"
+      ],
+      "disabled": true,
+      "settings": {
+        "enable_sticky": true,
+        "show_on_homepage_only": false,
+        "navigation_mode": "arrows",
+        "autoplay": true,
+        "cycle_speed": 4,
+        "scrolling_speed": 10,
+        "text_size": "text-xs",
+        "background": "#f6f1eb",
+        "background_gradient": "",
+        "text_color": "#000000"
+      }
+    },
+    "bb_phone_strip_VPbXtf": {
+      "type": "bb-phone-strip",
+      "name": "Phone strip (W3-01)",
+      "settings": {
+        "phone_display": "844-446-2443",
+        "phone_dial": "+18444462443",
+        "supporting_text": "Questions? Call us:",
+        "background": "#1a1a1a",
+        "text_color": "#ffffff",
+        "accent_color": "#cd241d"
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "mega_menu_V3F4g3": {
+          "type": "mega_menu",
+          "disabled": true,
+          "settings": {
+            "menu_item": "",
+            "layout": "horizontal",
+            "submenu_style": "bold_heading",
+            "image_heading_1": "",
+            "image_link_1": "",
+            "image_text_color_1": "#ffffff",
+            "image_heading_2": "",
+            "image_link_2": "",
+            "image_text_color_2": "#ffffff",
+            "image_heading_3": "",
+            "image_link_3": "",
+            "image_text_color_3": "#ffffff",
+            "product": "",
+            "product_card_background": "",
+            "product_card_text_color": "",
+            "promo_content_layout": "grid",
+            "stretch_promo": false,
+            "drawer_link_image": "hide"
+          }
+        },
+        "mega_menu_Wqt97f": {
+          "type": "mega_menu",
+          "disabled": true,
+          "settings": {
+            "menu_item": "Shop All",
+            "layout": "horizontal_center",
+            "submenu_style": "bold_heading",
+            "image_heading_1": "",
+            "image_link_1": "",
+            "image_text_color_1": "#ffffff",
+            "image_heading_2": "The Ultimate Beer Lover",
+            "image_link_2": "shopify://products/ultimate-beer-lover-gift",
+            "image_text_color_2": "#ffffff",
+            "image_heading_3": "Shop All",
+            "image_link_3": "shopify://collections/gift-baskets-for-men",
+            "image_text_color_3": "#ffffff",
+            "product": "",
+            "product_card_background": "",
+            "product_card_text_color": "",
+            "promo_content_layout": "grid",
+            "stretch_promo": false,
+            "drawer_link_image": "hide"
+          }
+        }
+      },
+      "block_order": [
+        "mega_menu_V3F4g3",
+        "mega_menu_Wqt97f"
+      ],
+      "settings": {
+        "enable_sticky": true,
+        "hide_on_scroll": false,
+        "logo": "shopify://shop_images/Logo_1.png",
+        "logo_max_width": 65,
+        "logo_mobile_max_width": 50,
+        "menu": "main-menu",
+        "sidebar_menu": "",
+        "secondary_menu": "",
+        "customer_account_menu": "customer-account-main-menu",
+        "menu_open_trigger": "hover",
+        "opening_from": "left",
+        "layout": "logo_left_navigation_inline",
+        "show_social_media": true,
+        "show_locale_selector": true,
+        "show_country_selector": true,
+        "show_country_flag": true,
+        "show_country_name": false,
+        "transparent_header_text_color": "#ffffff",
+        "reduce_padding": false,
+        "background_opacity": 100,
+        "background_blur_radius": 0
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "bb_phone_strip_VPbXtf",
+    "header"
+  ]
+}

@@ -1,0 +1,310 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+ALCOHOL FEE RECONCILER  v1.0  (BB Cart Hardening 2026-05-04)
+----------------------------------------------------------------------------------------------------------------------
+
+REPLACES: assets/adult-signature.js
+
+PURPOSE:
+  Maintains exactly 1 Adult Signature fee line item ($6.99, product 9143475339500)
+  in the cart whenever the cart contains products that require it. Eliminates the
+  duplicate-fee bug caused by per-PDP-add fee insertion.
+
+DESIRED STATE:
+  - Cart contains 1+ alcohol items → exactly 1 fee line.
+  - Cart contains 0 alcohol items   → 0 fee lines (silently removed).
+  - Cart contains >1 fee lines      → reduce to 1.
+
+DETECTION ("alcohol item"):
+  A line item where:
+    a) line_item.properties._alcohol_signature_required == "true"  (PRIMARY)
+    b) line_item.product.metafields.custom.option_set_v2 contains "Alcohol Signature"
+       (server-side detection on initial render — handles legacy carts and
+        items added by means other than our PDP form)
+
+ARCHITECTURE:
+  - Server (Liquid): pre-compute initial cart state and emit as JSON.
+  - Client (JS):     reconcile() compares actual vs. desired and converges.
+  - Triggers:        page load + every cart:change event.
+  - Native fetch only — no window.fetch wrapping (this is the whole point of
+    the rebuild; eliminates one fetch wrapper contributing to Edge Strict-mode
+    breakage on customers running Microsoft Edge with tracking prevention).
+
+LOADED FROM: layout/theme.liquid (every page)
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- liquid
+  assign fee_product_id  = 9143475339500
+  assign fee_variant_id  = 47248470212844
+
+  assign alcohol_count = 0
+  assign fee_count     = 0
+  assign fee_line_keys = ''
+
+  for item in cart.items
+    if item.product_id == fee_product_id
+      assign fee_count     = fee_count | plus: 1
+      assign fee_line_keys = fee_line_keys | append: item.key | append: '|'
+      continue
+    endif
+
+    comment
+      Detect alcohol via property marker (added by bb-adult-signature on PDP submit)
+      OR via metafield (handles legacy carts and any item added without our marker).
+    endcomment
+    assign is_alcohol = false
+    assign marker = item.properties['_alcohol_signature_required']
+    if marker == 'true' or marker == true
+      assign is_alcohol = true
+    else
+      assign osv2_raw = item.product.metafields.custom.option_set_v2
+      if osv2_raw != blank
+        assign osv2 = osv2_raw | metafield_text
+        if osv2 contains 'Alcohol Signature'
+          assign is_alcohol = true
+        endif
+      endif
+    endif
+
+    if is_alcohol
+      assign alcohol_count = alcohol_count | plus: 1
+    endif
+  endfor
+-%}
+
+<script>
+  (function () {
+    'use strict';
+
+    // ── Constants ────────────────────────────────────────────────────────────
+    const FEE_PRODUCT_ID = {{ fee_product_id }};
+    const FEE_VARIANT_ID = {{ fee_variant_id }};
+    const ALCOHOL_KEYWORD = 'Alcohol Signature';
+    const PROPERTY_KEY    = '_alcohol_signature_required';
+    const LOG_PREFIX      = '[bb-alcohol-fee]';
+
+    // Initial server-rendered state (snapshot at page load).
+    const INITIAL = {
+      alcoholCount: {{ alcohol_count }},
+      feeCount:     {{ fee_count }},
+      feeLineKeys:  {{ fee_line_keys | split: '|' | json }}
+    };
+
+    // ── State ────────────────────────────────────────────────────────────────
+    let isReconciling = false;
+    let pendingReconcile = false;
+
+    // Verbose logging toggle (set window.__bbFeeVerbose = true in console)
+    function log(/* ...args */) {
+      if (!window.__bbFeeVerbose) return;
+      // eslint-disable-next-line no-console
+      console.log.apply(console, [LOG_PREFIX].concat(Array.prototype.slice.call(arguments)));
+    }
+
+    // ── Cart helpers ─────────────────────────────────────────────────────────
+    async function getCart() {
+      const res = await fetch(`${Shopify.routes.root}cart.js`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!res.ok) throw new Error(`cart.js ${res.status}`);
+      return res.json();
+    }
+
+    function isFeeLine(item) {
+      return item
+        && (item.product_id === FEE_PRODUCT_ID
+          || String(item.product_id) === String(FEE_PRODUCT_ID)
+          || item.variant_id === FEE_VARIANT_ID
+          || String(item.variant_id) === String(FEE_VARIANT_ID));
+    }
+
+    function isAlcoholLine(item) {
+      if (!item || isFeeLine(item)) return false;
+      // Primary: property marker (added by bb-adult-signature on PDP submit).
+      const props = item.properties || {};
+      const marker = props[PROPERTY_KEY];
+      if (marker === 'true' || marker === true) return true;
+      // Fallback: option_set_v2 — cart.js exposes only first-level fields,
+      // so if no marker, we trust the server's INITIAL snapshot for items
+      // present at page load. New adds without the marker won't be detected
+      // here, but our PDP form always sets the marker for products that
+      // render bb-adult-signature, so this path is rarely hit.
+      return false;
+    }
+
+    // Apply a quantity change using cart/change.js by line key.
+    async function changeLine(lineKey, quantity) {
+      const res = await fetch(`${Shopify.routes.root}cart/change.js`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ id: lineKey, quantity })
+      });
+      if (!res.ok) throw new Error(`cart/change.js ${res.status}`);
+      return res.json();
+    }
+
+    // Add the fee variant once, with the marker property so future reconciles
+    // can identify it via properties without depending on product_id matching.
+    async function addFee() {
+      const res = await fetch(`${Shopify.routes.root}cart/add.js`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          items: [{
+            id: FEE_VARIANT_ID,
+            quantity: 1
+          }]
+        })
+      });
+      if (!res.ok) throw new Error(`cart/add.js ${res.status}`);
+      return res.json();
+    }
+
+    // ── Core reconciliation ─────────────────────────────────────────────────
+    async function reconcile(reason) {
+      if (isReconciling) {
+        pendingReconcile = true;
+        log('reconcile already in progress; queued', reason);
+        return;
+      }
+      isReconciling = true;
+      let mutated = false;
+
+      try {
+        log('reconcile start', reason || '');
+        const cart = await getCart();
+
+        const feeLines = cart.items.filter(isFeeLine);
+        const alcoholLines = cart.items.filter(isAlcoholLine);
+
+        // Hybrid detection: also count alcohol from initial server snapshot
+        // for items that exist at page load without the marker property.
+        // After any mutation we fully trust runtime detection; the snapshot
+        // is only used to bootstrap the first reconcile.
+        const alcoholFromRuntime = alcoholLines.length > 0;
+        const alcoholFromInitial = (reason === 'init' && INITIAL.alcoholCount > 0);
+        const hasAlcohol = alcoholFromRuntime || alcoholFromInitial;
+
+        log('state', {
+          feeLines: feeLines.length,
+          alcoholLines: alcoholLines.length,
+          initialAlcohol: INITIAL.alcoholCount,
+          hasAlcohol
+        });
+
+        // Case 1: Alcohol present, no fee → add one.
+        if (hasAlcohol && feeLines.length === 0) {
+          log('action: add fee');
+          await addFee();
+          mutated = true;
+        }
+        // Case 2: Alcohol present, multiple fees → drop extras to 1.
+        else if (hasAlcohol && feeLines.length > 1) {
+          log('action: dedupe fees, keep 1, remove', feeLines.length - 1);
+          // Keep the first; remove the rest.
+          for (let i = 1; i < feeLines.length; i++) {
+            await changeLine(feeLines[i].key, 0);
+          }
+          mutated = true;
+        }
+        // Case 3: No alcohol, fee(s) present → remove all fees.
+        else if (!hasAlcohol && feeLines.length > 0) {
+          log('action: remove all fees', feeLines.length);
+          for (const fee of feeLines) {
+            await changeLine(fee.key, 0);
+          }
+          mutated = true;
+        }
+        // Case 4: Already correct → no-op.
+        else {
+          log('action: none (already balanced)');
+        }
+
+        if (mutated) {
+          // Notify the page so cart sections re-render. We tag the event with
+          // `bb-alcohol-fee:reconciled` so this very listener can ignore its
+          // own dispatch (avoids reconcile loops).
+          const updatedCart = await getCart();
+          document.documentElement.dispatchEvent(new CustomEvent('cart:change', {
+            bubbles: true,
+            detail: {
+              baseEvent: 'bb-alcohol-fee:reconciled',
+              cart: updatedCart
+            }
+          }));
+
+          // On the cart page, the simplest reliable refresh is a soft reload
+          // so prices, totals, and line items all redraw without us having to
+          // manage section HTML manually. Other pages don't render line items
+          // so they don't need a reload.
+          if (window.location.pathname.replace(/\/$/, '') === Shopify.routes.root.replace(/\/$/, '') + 'cart'
+            || window.location.pathname.endsWith('/cart')) {
+            // Small delay to let any pending UI work settle.
+            setTimeout(() => window.location.reload(), 100);
+          }
+        }
+      } catch (err) {
+        // Failures are non-fatal — checkout still works, fee is just out of
+        // sync. Surface to console for debugging but don't break the page.
+        // eslint-disable-next-line no-console
+        console.warn(LOG_PREFIX, 'reconcile failed:', err);
+      } finally {
+        isReconciling = false;
+        if (pendingReconcile) {
+          pendingReconcile = false;
+          // Re-run once to catch any change that arrived mid-flight.
+          reconcile('queued');
+        }
+      }
+    }
+
+    // ── Event wiring ────────────────────────────────────────────────────────
+    function onCartChange(event) {
+      // Ignore our own dispatch to prevent infinite loops.
+      const detail = event && event.detail;
+      if (detail && detail.baseEvent === 'bb-alcohol-fee:reconciled') return;
+      // Tiny debounce-ish delay so any concurrent cart writes settle first.
+      setTimeout(() => reconcile('cart:change'), 50);
+    }
+
+    function init() {
+      document.addEventListener('cart:change', onCartChange);
+
+      // Fire an initial reconcile if state is out of balance per the server
+      // snapshot. This catches:
+      //   - Legacy carts with duplicate fees (alcoholCount > 0 && feeCount > 1)
+      //   - Stale fees (alcoholCount === 0 && feeCount > 0)
+      //   - Missing fees (alcoholCount > 0 && feeCount === 0)
+      const needsReconcile =
+        (INITIAL.alcoholCount > 0 && INITIAL.feeCount !== 1) ||
+        (INITIAL.alcoholCount === 0 && INITIAL.feeCount > 0);
+
+      if (needsReconcile) {
+        log('initial state out of balance, reconciling', INITIAL);
+        reconcile('init');
+      } else {
+        log('initial state balanced, no action', INITIAL);
+      }
+    }
+
+    // Public hooks for debugging / manual triggers.
+    window.__bbAlcoholFee = {
+      reconcile: () => reconcile('manual'),
+      state: () => INITIAL,
+      isReconciling: () => isReconciling
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>

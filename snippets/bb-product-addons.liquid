@@ -1,0 +1,475 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+PRODUCT ADDONS - CENTRALIZED FORM HANDLER  v2.6
+----------------------------------------------------------------------------------------------------------------------
+
+CHANGE LOG:
+  v2.6 (2026-05-15)
+  - Use the dynamic Shopify section ID (e.g. 'sections--XXXXX__cart-drawer')
+    read from the cart-drawer element's wrapping .shopify-section div, NOT
+    the filename 'cart-drawer'. v2.5 requested by filename, so the response
+    came back keyed by 'cart-drawer' — but the drawer's _onCartChanged
+    looks up the section via extractSectionId(this), which returns the
+    dynamic id. Key mismatch → undefined HTML → parseFromString empty doc →
+    querySelector('.cart-drawer').innerHTML threw TypeError on null.
+  - Same dynamic id is used for BOTH the cart/add.js sections request and
+    the event detail key, so there is no remap and no chance of drift.
+  - Falls back to filename 'cart-drawer' if the DOM read fails (defensive).
+
+  v2.5 (2026-05-15)
+  - Collapsed v2.4's two-fetch flow (cart/add.js then cart.js?sections) into
+    a single atomic cart/add.js call with the `sections` parameter. Reason:
+    in fresh incognito sessions, the cart cookie set by cart/add.js had not
+    propagated by the time the follow-up cart.js fetch fired, so cart.js
+    sometimes read a stale empty cart and the drawer painted "Your cart is
+    empty" even though items WERE added. The atomic call eliminates the
+    race entirely — Shopify renders the section against the post-add cart
+    state in the same response.
+  - item_count for the dispatched events is now parsed from the rendered
+    section HTML (the cart-count element inside the drawer section), so
+    the header cart-count and the drawer's empty/populated branching
+    both stay accurate.
+
+  v2.4 (2026-05-15)
+  - Drawer-aware cart update path. When window.themeVariables.settings.cartType
+    is "drawer", we now fetch /cart.js?sections=cart-drawer after cart/add.js
+    and dispatch cart:change + variant:add events with the section HTML
+    populated. The drawer's _onCartChanged can now read
+    event.detail.cart.sections[sectionId] without crashing.
+  - If the sections fetch fails for any reason, we fall back to the legacy
+    /cart redirect so the customer is never stranded.
+  - When cartType is "page" (or anything other than "drawer"), behavior is
+    unchanged from v2.3 — 200ms redirect to /cart, no events dispatched.
+
+  v2.3 (Apr 2026)
+  - REMOVED cart:change and variant:add event dispatches after cart/add.js.
+    These were triggering CartDrawer._onCartChanged which crashed with:
+    "Cannot read properties of undefined (reading 'sections--XXXXX__cart-drawer')"
+    because our cart/add.js call does not return section HTML data that the
+    CartDrawer expects. BroBasket uses page-type cart, not drawer — we never
+    need to update a drawer. Removing these events eliminates the crash entirely.
+  - Kept 200ms redirect delay (prevents stale cart page on multi-item adds).
+  - All other v2.2 behavior unchanged.
+
+  v2.2 (Apr 2026)
+  - Submit handler in capture phase, surgical:
+    stopImmediatePropagation() ONLY fires when addons are actually present.
+    When no addons, returns immediately so theme handles normally.
+  - Click listener remains removed (apps still see all ATC clicks).
+  - Array support for modal multi-select upsell returns.
+{%- endcomment -%}
+
+<script>
+  (function() {
+    'use strict';
+
+    let isProcessing = false;
+
+    function initProductAddonsHandler() {
+      const productFormId = '{{ product_form_id }}';
+      const productForm = document.getElementById(productFormId)
+        || document.querySelector('form[id*="product-form-{{ product.id }}"]');
+
+      if (!productForm) return;
+      if (productForm.dataset.addonsHandlerAttached === 'true') return;
+      productForm.dataset.addonsHandlerAttached = 'true';
+
+      function getSelectedAddons() {
+        const addons = window.productAddons || {};
+        const selectedItems = [];
+        for (const key of Object.keys(addons)) {
+          if (!addons[key].getItem) continue;
+          const item = addons[key].getItem();
+          if (!item) continue;
+          if (Array.isArray(item)) {
+            item.forEach(i => selectedItems.push(i));
+          } else {
+            selectedItems.push(item);
+          }
+        }
+        return selectedItems;
+      }
+
+      function validateAddons() {
+        const addons = window.productAddons || {};
+        for (const key in addons) {
+          if (addons[key].validate && !addons[key].validate()) return false;
+        }
+        return true;
+      }
+
+      // BB Required Field Validation 2026-05-07 — Custom validation UI
+      // ----------------------------------------------------------------
+      // Originally we used productForm.reportValidity() which fires the
+      // browser's native validation tooltip. That tooltip is small,
+      // disappears on click-outside, and uses generic browser copy. For
+      // an older / less-tech-savvy customer base, that proved
+      // insufficient — a red field border alone wasn't communicating
+      // "you need to type something here." This upgraded version shows
+      // a persistent inline error message in BroBasket's brand red,
+      // with explicit copy and a red border on the field.
+      // ----------------------------------------------------------------
+
+      // Map specific input names to human-readable labels for error copy.
+      // Falls back to the field's <label> text if name not in this map,
+      // and to "this field" as a last resort.
+      // Names below are taken verbatim from the snippet form fields:
+      //   bb-custom-engraving.liquid → engraving_text, engraving_type
+      //   bb-engraved-glass.liquid   → engraved_glass_text, engraved_glass_type, engraved_glass_engraving
+      var FIELD_LABELS = {
+        'engraving_text': 'Engraving text',
+        'engraving_type': 'Engraving type',
+        'engraved_glass_text': 'Engraved glass text',
+        'engraved_glass_type': 'Glass selection',
+        'engraved_glass_engraving': 'Engraving type for the glass',
+        'properties[Engraving Text]': 'Engraving text',
+        'properties[Gift Message]': 'Gift message',
+        'properties[Card Message]': 'Card message',
+        'properties[Recipient Name]': 'Recipient name'
+      };
+
+      function getFieldLabel(field) {
+        if (!field) return 'this field';
+        // 1) Explicit map by name
+        var mapped = FIELD_LABELS[field.name];
+        if (mapped) return mapped;
+        // 2) <label for="..."> text
+        if (field.id) {
+          var lbl = document.querySelector('label[for="' + field.id + '"]');
+          if (lbl) return (lbl.textContent || '').replace(/\s*\*\s*$/, '').trim() || 'this field';
+        }
+        // 3) ancestor <label>
+        var parentLabel = field.closest && field.closest('label');
+        if (parentLabel) {
+          var t = (parentLabel.textContent || '').replace(/\s*\*\s*$/, '').trim();
+          if (t) return t;
+        }
+        // 4) aria-label
+        var aria = field.getAttribute && field.getAttribute('aria-label');
+        if (aria) return aria.trim();
+        return 'this field';
+      }
+
+      function getErrorMessage(field) {
+        if (!field) return 'Please fill out this field to add to cart.';
+        var label = getFieldLabel(field);
+        // Email and tel get more specific messages.
+        if (field.type === 'email' && field.value) return 'Please enter a valid email address.';
+        if (field.type === 'tel' && field.value) return 'Please enter a valid phone number.';
+        if (field.tagName === 'SELECT') return 'Please select ' + label.toLowerCase() + ' to add to cart.';
+        return label + ' is required to add to cart.';
+      }
+
+      // Inject the error stylesheet once, lazily, on first use. Keeps
+      // the per-snippet asset footprint zero unless validation fires.
+      function ensureErrorStyles() {
+        if (document.getElementById('bb-validation-styles')) return;
+        var style = document.createElement('style');
+        style.id = 'bb-validation-styles';
+        style.textContent =
+          '.bb-field-error{display:flex;align-items:flex-start;gap:0.4em;margin-top:0.5em;padding:0.6em 0.8em;' +
+          'background:rgba(220,38,38,0.08);border-left:3px solid #dc2626;border-radius:0.25em;' +
+          'color:#991b1b;font-size:0.875em;line-height:1.4;font-weight:500;}' +
+          '.bb-field-error::before{content:"⚠";flex-shrink:0;font-size:1.1em;line-height:1.2;}' +
+          '.bb-field-invalid{border-color:#dc2626 !important;box-shadow:0 0 0 1px #dc2626 !important;}' +
+          '@media (prefers-reduced-motion:no-preference){' +
+          '.bb-field-error{animation:bb-fade-in 0.18s ease-out;}' +
+          '@keyframes bb-fade-in{from{opacity:0;transform:translateY(-2px);}to{opacity:1;transform:none;}}}';
+        document.head.appendChild(style);
+      }
+
+      // Find or create the error message element associated with a field.
+      function getOrCreateErrorEl(field) {
+        var existing = field.parentNode && field.parentNode.querySelector('.bb-field-error[data-bb-error-for="' + field.name + '"]');
+        if (existing) return existing;
+        var el = document.createElement('div');
+        el.className = 'bb-field-error';
+        el.setAttribute('role', 'alert');
+        el.setAttribute('aria-live', 'polite');
+        el.setAttribute('data-bb-error-for', field.name);
+        // Insert immediately after the field (or its wrapper if field is wrapped).
+        var insertAfter = field;
+        // If field is inside a wrapper that contains a hint <p>, place
+        // the error after the wrapper so it appears below the hint copy.
+        var wrapper = field.closest && field.closest('[data-engraving-text-wrapper], [data-engraving-wrapper], [data-adult-signature-wrapper]');
+        if (wrapper && wrapper.parentNode) insertAfter = wrapper;
+        if (insertAfter.nextSibling) {
+          insertAfter.parentNode.insertBefore(el, insertAfter.nextSibling);
+        } else {
+          insertAfter.parentNode.appendChild(el);
+        }
+        return el;
+      }
+
+      function showFieldError(field, message) {
+        ensureErrorStyles();
+        field.classList.add('bb-field-invalid');
+        field.setAttribute('aria-invalid', 'true');
+        var errEl = getOrCreateErrorEl(field);
+        errEl.textContent = message;
+        // Bind a one-time clearer so the error disappears as soon as the
+        // customer starts fixing it. Using { once: true } so the listener
+        // self-removes — no leak across multiple validation cycles.
+        var clear = function () { clearFieldError(field); };
+        field.addEventListener('input', clear, { once: true });
+        field.addEventListener('change', clear, { once: true });
+      }
+
+      function clearFieldError(field) {
+        if (!field) return;
+        field.classList.remove('bb-field-invalid');
+        field.removeAttribute('aria-invalid');
+        var errEl = field.parentNode && field.parentNode.querySelector('.bb-field-error[data-bb-error-for="' + field.name + '"]');
+        // If wrapper-relative insertion was used, search broader.
+        if (!errEl) {
+          errEl = document.querySelector('.bb-field-error[data-bb-error-for="' + field.name + '"]');
+        }
+        if (errEl && errEl.parentNode) errEl.parentNode.removeChild(errEl);
+      }
+
+      function clearAllFieldErrors() {
+        var marks = productForm.querySelectorAll('.bb-field-invalid');
+        marks.forEach(function (f) { clearFieldError(f); });
+      }
+
+      function validateRequiredFields() {
+        // Native HTML5 still drives the truth (we honour `required`,
+        // pattern, type=email, etc.) — we just present the result our
+        // own way instead of using reportValidity().
+        clearAllFieldErrors();
+        if (productForm.checkValidity()) return true;
+
+        var invalidFields = Array.prototype.slice.call(
+          productForm.querySelectorAll(':invalid')
+        ).filter(function (f) {
+          // Skip <fieldset> elements that report invalid because of children;
+          // we want the actual field, not the container.
+          return f.tagName !== 'FIELDSET';
+        });
+
+        // Show error for every invalid field at once. Customers fixing
+        // multiple required fields shouldn't have to play whack-a-mole.
+        invalidFields.forEach(function (f) {
+          showFieldError(f, getErrorMessage(f));
+        });
+
+        // Focus + scroll to the FIRST invalid field. On mobile this also
+        // opens the keyboard if it's a text input.
+        var first = invalidFields[0];
+        if (first) {
+          if (typeof first.scrollIntoView === 'function') {
+            first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          // Slight delay so scroll completes before focus (smoother UX).
+          setTimeout(function () {
+            try { first.focus({ preventScroll: true }); } catch (_) { first.focus(); }
+          }, 250);
+        }
+        return false;
+      }
+
+      productForm.addEventListener('submit', async function(event) {
+
+        if (isProcessing) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return;
+        }
+
+        const addons = window.productAddons || {};
+
+        // No addons registered → let theme handle normally (theme runs
+        // checkValidity() before submitting; required fields work natively
+        // via reportValidity at theme.js line ~2825).
+        if (Object.keys(addons).length === 0) return;
+
+        // Run our custom validation. When addons are registered, the
+        // theme's native handler never fires (we stopImmediatePropagation
+        // below), so we must handle required-field validation ourselves.
+        // See validateRequiredFields() above for the implementation.
+        if (!validateRequiredFields()) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return;
+        }
+
+        // Validate addon-specific rules (e.g. adult signature checkbox state)
+        if (!validateAddons()) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return;
+        }
+
+        const addonItems = getSelectedAddons();
+
+        // No addons selected → let theme handle normally (single-item add)
+        if (addonItems.length === 0) return;
+
+        // We have addons — take over the submission
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        isProcessing = true;
+
+        const mainVariantInput = productForm.querySelector('input[name="id"]');
+        const mainVariantId = mainVariantInput?.value;
+        const quantityInput = productForm.querySelector('input[name="quantity"]');
+        const quantity = parseInt(quantityInput?.value || '1', 10);
+
+        if (!mainVariantId) {
+          console.error('[bb-product-addons] Could not find main product variant ID');
+          isProcessing = false;
+          return;
+        }
+
+        // Collect line item properties from the form
+        const mainProperties = {};
+        productForm.querySelectorAll('[name^="properties["]').forEach(input => {
+          const match = input.name.match(/properties\[([^\]]+)\]/);
+          if (!match) return;
+          const propName = match[1];
+          if (input.type === 'checkbox') {
+            if (input.checked) mainProperties[propName] = input.value || 'Yes';
+          } else if (input.value) {
+            mainProperties[propName] = input.value;
+          }
+        });
+
+        const items = [
+          { id: parseInt(mainVariantId, 10), quantity, properties: mainProperties },
+          ...addonItems.map(addon => ({ id: addon.id, quantity, properties: addon.properties }))
+        ];
+
+        const submitBtn = productForm.querySelector('[type="submit"]');
+        const originalHTML = submitBtn?.innerHTML;
+        if (submitBtn) {
+          submitBtn.setAttribute('disabled', 'disabled');
+          submitBtn.setAttribute('aria-busy', 'true');
+        }
+
+        try {
+          // ── v2.6 (2026-05-15): Dynamic section ID match ─────────────────────────
+          // The drawer's _onCartChanged uses extractSectionId(this) which reads
+          // the dynamic 'sections--XXXXX__cart-drawer' id from the wrapping
+          // .shopify-section element (NOT the filename 'cart-drawer'). v2.5
+          // requested by filename which made the response key 'cart-drawer',
+          // but the drawer looked up under the dynamic id, found undefined,
+          // and crashed at querySelector('.cart-drawer').innerHTML.
+          //
+          // Fix: read the dynamic section id from the DOM at submit time and
+          // use it as BOTH the request key (cart/add.js accepts dynamic ids
+          // just like file names — theme.js:1879 confirms) and the event key.
+          // Same key end-to-end, no remap needed.
+          // ────────────────────────────────────────────────────────────────────────
+          let drawerSectionId = 'cart-drawer'; // safe fallback (filename)
+          try {
+            const cartDrawerEl = document.querySelector('cart-drawer');
+            const sectionWrapper = cartDrawerEl && (
+              cartDrawerEl.classList.contains('shopify-section')
+                ? cartDrawerEl
+                : cartDrawerEl.closest('.shopify-section')
+            );
+            if (sectionWrapper && sectionWrapper.id) {
+              drawerSectionId = sectionWrapper.id.replace('shopify-section-', '');
+            }
+          } catch (_) { /* fall back to filename */ }
+
+          const response = await fetch(`${Shopify.routes.root}cart/add.js`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              items,
+              sections: drawerSectionId
+            })
+          });
+
+          if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.description || `Cart error: ${response.status}`);
+          }
+
+          const addData = await response.json();
+          const cartType = window.themeVariables?.settings?.cartType;
+
+          if (cartType === 'drawer') {
+            try {
+              const drawerHTML = addData?.sections?.[drawerSectionId];
+              if (!drawerHTML) {
+                throw new Error(`cart/add.js response missing section HTML for id "${drawerSectionId}"`);
+              }
+
+              // Parse item_count from the rendered cart-count element inside
+              // the section HTML so the header count and the drawer's
+              // empty/populated branch both stay accurate.
+              const parser = new DOMParser();
+              const sectionDoc = parser.parseFromString(drawerHTML, 'text/html');
+              const countEl = sectionDoc.querySelector('cart-count, .count-bubble');
+              let itemCount = 1; // safe fallback — we just added, so > 0
+              if (countEl) {
+                const parsed = parseInt((countEl.textContent || '').trim(), 10);
+                if (!isNaN(parsed) && parsed > 0) itemCount = parsed;
+              }
+
+              const detail = {
+                cart: {
+                  sections: { [drawerSectionId]: drawerHTML },
+                  item_count: itemCount
+                },
+                baseEvent: 'variant:add'
+              };
+
+              document.documentElement.dispatchEvent(new CustomEvent('cart:change', {
+                bubbles: true,
+                detail
+              }));
+              document.documentElement.dispatchEvent(new CustomEvent('variant:add', {
+                bubbles: true,
+                detail
+              }));
+
+              // Drawer auto-opens via its variant:add listener (theme.js ~1867).
+              isProcessing = false;
+              if (submitBtn) {
+                submitBtn.removeAttribute('disabled');
+                submitBtn.removeAttribute('aria-busy');
+                if (originalHTML) submitBtn.innerHTML = originalHTML;
+              }
+              return;
+            } catch (drawerErr) {
+              // Drawer update path failed — fall through to the page redirect
+              // so the customer still gets their cart. Log for Sentry visibility.
+              console.error('[bb-product-addons] Drawer update failed, falling back to redirect:', drawerErr);
+            }
+          }
+
+          // Page-cart mode (or drawer fallback): redirect to /cart.
+          // 200ms delay prevents stale cart page render on multi-item adds.
+          setTimeout(() => {
+            window.location.href = `${Shopify.routes.root}cart`;
+          }, 200);
+
+        } catch (error) {
+          console.error('[bb-product-addons] Error adding items to cart:', error);
+          productForm.dispatchEvent(new CustomEvent('cart:error', {
+            bubbles: true,
+            detail: { error: error.message || 'Could not add items to cart. Please try again.' }
+          }));
+        } finally {
+          isProcessing = false;
+          if (submitBtn) {
+            submitBtn.removeAttribute('disabled');
+            submitBtn.removeAttribute('aria-busy');
+            if (originalHTML) submitBtn.innerHTML = originalHTML;
+          }
+        }
+
+      }, true); // ← CAPTURE PHASE
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initProductAddonsHandler);
+    } else {
+      initProductAddonsHandler();
+    }
+  })();
+</script>

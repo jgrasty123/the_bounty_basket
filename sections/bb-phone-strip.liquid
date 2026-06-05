@@ -1,0 +1,122 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET HEADER PHONE STRIP (W3-01)
+----------------------------------------------------------------------------------------------------------------------
+
+A thin top-of-page strip containing a click-to-call phone number alongside
+optional supporting text (e.g. business hours). Lives as its own section
+in the header section group so it can be toggled and moved independently
+of the main announcement bar and header.
+
+Why a separate section instead of editing header.liquid directly:
+the Impact theme's header is intentionally fragile (per the comment block
+at the top of sections/header.liquid covering hundreds of layout combos).
+A standalone strip avoids that surface area entirely and gives the user
+clean theme-editor control.
+
+Visible on desktop and mobile by default. Phone is rendered as a tel:
+link so taps on mobile dial directly.
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign phone_display = section.settings.phone_display | default: '844-446-2443' -%}
+{%- assign phone_dial    = section.settings.phone_dial    | default: '+18444462443' -%}
+{%- assign supporting    = section.settings.supporting_text -%}
+{%- assign bg_color      = section.settings.background    | default: '#1a1a1a' -%}
+{%- assign text_color    = section.settings.text_color    | default: '#ffffff' -%}
+{%- assign accent_color  = section.settings.accent_color  | default: '#cd241d' -%}
+
+<div
+  class="bb-phone-strip"
+  style="--bb-ps-bg: {{ bg_color }}; --bb-ps-text: {{ text_color }}; --bb-ps-accent: {{ accent_color }};"
+>
+  <div class="bb-phone-strip__inner">
+    {%- if supporting != blank -%}
+      <span class="bb-phone-strip__supporting">{{ supporting | escape }}</span>
+    {%- endif -%}
+    <a
+      class="bb-phone-strip__link"
+      href="tel:{{ phone_dial }}"
+      aria-label="Call us at {{ phone_display | escape }}"
+    >
+      <svg
+        class="bb-phone-strip__icon"
+        viewBox="0 0 24 24"
+        width="14"
+        height="14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+      <span class="bb-phone-strip__number">{{ phone_display | escape }}</span>
+    </a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Phone strip (W3-01)",
+  "tag": "section",
+  "class": "section--bb-phone-strip",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Thin click-to-call strip at the very top of the page. Defaults to BroBasket's main number; edit any setting below to override."
+    },
+    {
+      "type": "text",
+      "id": "phone_display",
+      "label": "Phone number (display)",
+      "default": "844-446-2443",
+      "info": "How the number is shown on screen."
+    },
+    {
+      "type": "text",
+      "id": "phone_dial",
+      "label": "Phone number (tel: link)",
+      "default": "+18444462443",
+      "info": "What the device dials when tapped. Include country code, no spaces or punctuation."
+    },
+    {
+      "type": "text",
+      "id": "supporting_text",
+      "label": "Supporting text",
+      "default": "Questions? Call us:",
+      "info": "Shown to the left of the phone number on desktop. Hidden on mobile to save space."
+    },
+    { "type": "header", "content": "Appearance" },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background colour",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text colour",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Phone hover accent",
+      "default": "#cd241d"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Phone strip (W3-01)",
+      "category": "Header"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["header"]
+  }
+}
+{% endschema %}

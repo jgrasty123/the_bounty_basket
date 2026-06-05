@@ -1,0 +1,692 @@
+{%- comment -%}
+------------------------------------------------------------------------------------------------------------------------
+NOTE TO DEVELOPERS: welcome to Impact theme! We hope that you will enjoy editing this theme as much as we did for
+  developing it. We have put a lot of work to make this theme as developer friendly as possible by offering you
+  hooks to integrate into critical parts of the theme. You will find the complete technical documentation (including
+  all events, dependencies...) in the "documentation.txt" file, located in the Assets folder.
+------------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<!doctype html>
+
+<html lang="{{ request.locale.iso_code }}" dir="{% render 'direction' %}">
+  <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+SENTRY ERROR MONITORING (installed 2026-05-07)
+----------------------------------------------------------------------------------------------------------------------
+Loader Script — fetches the full Sentry SDK lazily. Project key is embedded in the URL (it is public, not
+a secret — Sentry's loader keys are designed to be exposed client-side, like Google Analytics IDs).
+
+Loaded BEFORE bb-defensive-shim and BEFORE Google Tag Manager so Sentry's window error handler is registered
+as early as possible. The defensive shim runs in capture phase with stopImmediatePropagation, so the specific
+addEventListener-on-null errors we already know about will NOT reach Sentry (intentional — those are already
+mitigated and we do not want to spam Sentry quota with them). Everything else bubbles up to Sentry normally.
+
+Project: Bounty Basket Co. (the-bounty-basket.sentry.io)
+Default config (per onboarding): tracesSampleRate 1.0, replaysSessionSampleRate 0.1, replaysOnErrorSampleRate 1.0
+Configure further in Sentry's Project Settings UI rather than here — keeps this loader version-agnostic.
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+<script
+  src="https://js.sentry-cdn.com/REPLACE_WITH_BOUNTY_SENTRY_KEY.min.js"
+  crossorigin="anonymous"
+></script>
+
+{%- comment -%}
+BB Cart Hardening 2026-05-04: Defensive shim must load FIRST (after Sentry) so it intercepts errors
+from all subsequently-loaded scripts (GTM, theme, third-party apps).
+{%- endcomment -%}
+{%- render 'bb-defensive-shim' -%}
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-XXXXXXX_BOUNTY');</script>
+<!-- End Google Tag Manager -->
+
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+OPENAI CHATGPT ADS PIXEL (installed 2026-05-15)
+----------------------------------------------------------------------------------------------------------------------
+Init script for ChatGPT Ads conversion tracking. Pixel ID: REPLACE_WITH_BOUNTY_OPENAI_PIXEL
+Account: thebountybasket.com data source in OpenAI Ads Manager (Go-To Gifting LLC).
+
+NOTE: debug:true is currently ON — flip to false (or remove the line) once we confirm events are firing
+correctly in the OpenAI Ads Manager.
+
+Conversion events (oaiq("measure", ...)) are intentionally NOT installed globally here — they must fire
+only on the specific action being tracked (purchase on order confirmation, registration on account
+creation, etc.) or they will fire on every page load and pollute the data.
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+<script>
+  !function(w, d, s, u) {
+    if (w.oaiq) return;
+    var q = function() {
+      q.q.push(arguments);
+    };
+    q.q = [];
+    w.oaiq = q;
+    var j = d.createElement(s);
+    j.async = 1;
+    j.src = u;
+    var f = d.getElementsByTagName(s)[0];
+    f.parentNode.insertBefore(j, f);
+  }(window, document, "script", "https://bzrcdn.openai.com/sdk/oaiq.min.js");
+  oaiq("init", {
+    pixelId: "REPLACE_WITH_BOUNTY_OPENAI_PIXEL",
+    debug: true
+  });
+</script>
+<!-- End OpenAI ChatGPT Ads Pixel -->
+
+    <meta charset="utf-8">
+    
+    <meta name="theme-color" content="{{ settings.header_background }}">
+
+    <title>{% if page_title == blank %}{{ shop.name }}{% else %}{{ page_title }}{% if current_page != 1 %} &ndash; {{ 'general.page' | t: page: current_page }}{% endif %}{% endif %}</title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 96 }}">
+      <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180 }}">
+    {%- endif -%}
+
+    {%- comment -%}Resource hints to increase performance on commonly used third-parties{%- endcomment -%}
+    <link rel="preconnect" href="https://cdn.shopify.com">
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://productreviews.shopifycdn.com">
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+    <link rel="dns-prefetch" href="https://beacon-v2.helpscout.net">
+
+    {%- unless settings.heading_font.system? -%}
+      <link rel="preload" href="{{ settings.heading_font | font_url }}" as="font" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    {%- unless settings.text_font.system? -%}
+      <link rel="preload" href="{{ settings.text_font | font_url }}" as="font" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    {%- comment -%}
+    BB CRO W1-04: Explicit preload of the product hero image on product pages.
+    Impact sets loading="eager" on the first product image via snippets/media.liquid
+    but does not emit an explicit <link rel="preload"> — that hint lets the browser
+    start the image fetch earlier in the head parse, before css-variables / js-variables
+    complete. Responsive imagesrcset uses the same widths Impact already generates so
+    the preload matches the <img srcset> the browser selects (no wasted download).
+    {%- endcomment -%}
+    {%- if request.page_type == 'product' and product != blank -%}
+      {%- assign bb_hero_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
+      {%- if bb_hero_media.media_type == 'image' and bb_hero_media.preview_image != blank -%}
+        {%- capture bb_hero_sizes -%}(max-width: 740px) calc(100vw - 40px), (max-width: 999px) calc(100vw - 64px), min(760px, 42vw){%- endcapture -%}
+        <link
+          rel="preload"
+          as="image"
+          href="{{ bb_hero_media | image_url: width: 1200 }}"
+          imagesrcset="{{ bb_hero_media | image_url: width: 400 }} 400w, {{ bb_hero_media | image_url: width: 600 }} 600w, {{ bb_hero_media | image_url: width: 800 }} 800w, {{ bb_hero_media | image_url: width: 1200 }} 1200w, {{ bb_hero_media | image_url: width: 1600 }} 1600w"
+          imagesizes="{{ bb_hero_sizes }}"
+          fetchpriority="high">
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- render 'social-meta-tags' -%}
+    {%- render 'microdata-schema' -%}
+    {%- render 'css-variables' -%}
+    {%- render 'js-variables' -%}
+
+    {%- comment -%}
+    ------------------------------------------------------------------------------------------------------------------------
+    COMPREHENSIVE CONSOLE SUPPRESSION
+    Silently handles all third-party app logs, blocked services, and non-critical errors
+    Prevents console pollution while maintaining site functionality
+    ------------------------------------------------------------------------------------------------------------------------
+    {%- endcomment -%}
+    <script>
+      (function() {
+        'use strict';
+        
+        // List of third-party domains and services to suppress
+        // Last audited 2026-05-11: removed entries for apps no longer installed.
+        const BLOCKED_DOMAINS = [
+          'klaviyo.com',
+          'static-tracking.klaviyo.com',
+          'static.klaviyo.com',
+          'shareasale.com',
+          'beacon-v2.helpscout.net',
+          '/api/collect',
+          'web-pixel-',
+          'judge.me',
+          'cdnwidget.judge.me',
+          'clarity.ms',
+          'l.clarity.ms',
+          'analytics.ahrefs.com',
+          'd3hb14vkzrxvla.cloudfront.net'
+        ];
+        
+        // Third-party app scripts to suppress logs from
+        // Last audited 2026-05-11: removed entries for apps no longer installed.
+        const APP_SCRIPTS = [
+          'theme-hot-reload.js',
+          'web-pixel-',
+          'gbbMix',
+          'judge.me'
+        ];
+        
+        // Error patterns to suppress
+        // Last audited 2026-05-11: removed patterns for uninstalled apps
+        // (InCartUpsell, GiftBox/bbq-related, EB-old-syntax). Also removed
+        // overly broad patterns that hid real issues:
+        //   - "Not Found" / "502" / "503" / "Bad Gateway" (real 404s/5xxs matter)
+        //   - "Failed to load resource" (real load failures matter)
+        //   - "Unexpected token" / "is not valid JSON" (real JSON parse bugs matter)
+        //   - "was preloaded using link preload but not used" (kept hidden a
+        //     real Shopify Early Hints misuse — better to see and fix the
+        //     underlying preload, not silence the warning)
+        const SUPPRESS_PATTERNS = [
+          'ERR_BLOCKED_BY_CLIENT',
+          'net::ERR_BLOCKED_BY_CLIENT',
+          'Unchecked runtime.lastError',
+          'message port closed',
+          'sandboxed environment',
+          'addEventListener may not behave as expected',
+          'HotReload',
+          'CLI hot reload disabled',
+          'gbbMixUtils',
+          'Event: gbbMix',
+          '?pb='
+        ];
+        
+        // Check if message should be suppressed
+        function shouldSuppress(message) {
+          const msgStr = String(message).toLowerCase();
+          
+          // Check patterns (but be careful with generic terms like "object")
+          for (let pattern of SUPPRESS_PATTERNS) {
+            const patternLower = pattern.toLowerCase();
+            // For generic terms like "object" or "array", only suppress if they appear to be debug logs
+            if ((patternLower === 'object' || patternLower === 'array(') && msgStr === patternLower) {
+              return true; // Just the word "object" or "array(" alone
+            } else if (msgStr.includes(patternLower)) {
+              return true;
+            }
+          }
+          
+          return BLOCKED_DOMAINS.some(domain => msgStr.includes(domain.toLowerCase())) ||
+                 APP_SCRIPTS.some(script => msgStr.includes(script.toLowerCase()));
+        }
+        
+        // Suppress console.error
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+          const errorString = args.join(' ');
+          if (shouldSuppress(errorString)) return;
+          originalConsoleError.apply(console, args);
+        };
+        
+        // Suppress console.warn
+        const originalConsoleWarn = console.warn;
+        console.warn = function(...args) {
+          const warnString = args.join(' ');
+          if (shouldSuppress(warnString)) return;
+          originalConsoleWarn.apply(console, args);
+        };
+        
+        // Suppress console.log from third-party apps
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+          const logString = args.join(' ');
+          
+          // Check stack trace for third-party apps
+          try {
+            const stack = new Error().stack;
+            if (stack && APP_SCRIPTS.some(script => stack.includes(script))) {
+              return; // Suppress third-party app logs
+            }
+          } catch (e) {
+            // Continue if stack trace fails
+          }
+          
+          // Suppress based on content patterns
+          if (shouldSuppress(logString)) return;
+          
+          // Suppress debug logs that are just numbers or single words from apps
+          if (args.length === 1 && (
+            typeof args[0] === 'number' ||
+            (typeof args[0] === 'string' && args[0].length < 50 && /^[0-9]+$/.test(args[0]))
+          )) {
+            return; // Likely debug counter
+          }
+          
+          // Suppress array/object debug logs that look like app debugging
+          if (args.length <= 2 && args.some(arg => 
+            (Array.isArray(arg) || (typeof arg === 'object' && arg !== null))
+          )) {
+            try {
+              const stack = new Error().stack;
+              // If it's from an inline script (contains ?pb=0 or similar), suppress it
+              if (stack && (stack.includes('?pb=') || stack.includes('craft-sampler') || stack.includes('product'))) {
+                return;
+              }
+            } catch (e) {
+              // Continue
+            }
+          }
+          
+          originalConsoleLog.apply(console, args);
+        };
+        
+        // Handle XMLHttpRequest errors for blocked services
+        const originalXHRSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.send = function(...args) {
+          const xhr = this;
+          const originalOnError = xhr.onerror;
+          const originalOnReadyStateChange = xhr.onreadystatechange;
+          
+          xhr.onerror = function(e) {
+            const url = xhr.responseURL || '';
+            if (BLOCKED_DOMAINS.some(domain => url.includes(domain))) {
+              return; // Silently ignore blocked requests
+            }
+            if (originalOnError) originalOnError.apply(this, arguments);
+          };
+          
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 0) {
+              const url = xhr.responseURL || '';
+              if (BLOCKED_DOMAINS.some(domain => url.includes(domain))) {
+                return; // Silently ignore blocked requests
+              }
+            }
+            if (originalOnReadyStateChange) originalOnReadyStateChange.apply(this, arguments);
+          };
+          
+          try {
+            return originalXHRSend.apply(this, args);
+          } catch (e) {
+            const url = xhr.responseURL || '';
+            if (!BLOCKED_DOMAINS.some(domain => url.includes(domain))) {
+              throw e; // Re-throw if not a blocked domain
+            }
+          }
+        };
+        
+        // Handle fetch errors for blocked services
+        const originalFetch = window.fetch;
+        window.fetch = function(...args) {
+          const url = args[0] ? args[0].toString() : '';
+          
+          return originalFetch.apply(this, args).catch(error => {
+            if (BLOCKED_DOMAINS.some(domain => url.includes(domain))) {
+              // Return a fake successful response for blocked domains
+              return new Response(null, { status: 200, statusText: 'OK' });
+            }
+            throw error; // Re-throw if not a blocked domain
+          });
+        };
+        
+        // Suppress unhandled promise rejections for blocked services
+        // NOTE: Do NOT suppress generic 'Failed to fetch' — that matches
+        // cart/add.js failures and silently swallows real checkout errors.
+        window.addEventListener('unhandledrejection', function(event) {
+          const reason = event.reason ? event.reason.toString() : '';
+          const isBlockedDomain = BLOCKED_DOMAINS.some(domain => reason.toLowerCase().includes(domain.toLowerCase()));
+          if (isBlockedDomain || shouldSuppress(reason)) {
+            event.preventDefault();
+            return;
+          }
+        });
+        
+        // Suppress resource loading errors (network tab errors that appear in console)
+        window.addEventListener('error', function(event) {
+          const target = event.target || event.srcElement;
+          
+          // Check if it's a resource loading error
+          if (target && (target.tagName === 'SCRIPT' || target.tagName === 'LINK' || target.tagName === 'IMG')) {
+            const src = target.src || target.href || '';
+            
+            if (BLOCKED_DOMAINS.some(domain => src.includes(domain)) || 
+                APP_SCRIPTS.some(script => src.includes(script))) {
+              event.preventDefault();
+              event.stopPropagation();
+              return false;
+            }
+          }
+          
+          // Suppress based on error message
+          const errorMsg = event.message || '';
+          if (shouldSuppress(errorMsg)) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+          }
+        }, true);
+        
+        // Create safe script loader helper
+        window.loadScriptSafely = function(src, options = {}) {
+          return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = options.async !== false;
+            script.defer = options.defer || false;
+            
+            script.onload = () => resolve(true);
+            script.onerror = () => {
+              // Silently fail for third-party scripts
+              if (BLOCKED_DOMAINS.some(domain => src.includes(domain))) {
+                resolve(false);
+              } else {
+                console.warn('Failed to load script:', src);
+                resolve(false);
+              }
+            };
+            
+            (options.target || document.body).appendChild(script);
+          });
+        };
+      })();
+    </script>
+
+    {%- comment -%}
+    ------------------------------------------------------------------------------------------------------------------------
+    HELP SCOUT BEACON — DEFERRED LOAD (2026-05-11)
+
+    Help Scout's standard embed loads ~50KB of JS on every page via
+    window.onload. We defer it until first user interaction (scroll,
+    click, touch, keydown) OR 8 seconds idle, whichever comes first.
+    Customers reaching for chat are doing so intentionally — they'll
+    interact with the page before needing the beacon.
+
+    Help Scout app embed has been toggled OFF in Shopify Admin so this
+    is the only place Beacon loads. The standard window.Beacon stub
+    is defined synchronously so any other code referencing Beacon()
+    queues calls until the real script loads.
+    ------------------------------------------------------------------------------------------------------------------------
+    {%- endcomment -%}
+    <script>
+      (function (w, d) {
+        // Define stub Beacon queue function immediately
+        w.Beacon = function (method, options, data) {
+          w.Beacon.readyQueue.push({ method: method, options: options, data: data });
+        };
+        w.Beacon.readyQueue = [];
+
+        // Queue the init call — real beacon.js will process this queue once loaded
+        w.Beacon('init', '094650dc-9f67-482d-b84f-306d434284f9');
+
+        // Move Beacon to bottom-left so it doesn't collide with the floating
+        // ATC bar on PDPs (which lives bottom-right). Uses Help Scout's
+        // documented JS config API rather than CSS, which is class-name
+        // fragile. CSS in bb-cro-overrides.css still handles the vertical
+        // offset that lifts the beacon above the ADA accessibility widget.
+        // Help Scout docs: https://developer.helpscout.com/beacon-2/web/javascript-api/#configuration
+        w.Beacon('config', { display: { position: 'left' } });
+
+        var loaded = false;
+        function loadBeacon() {
+          if (loaded) return;
+          loaded = true;
+          var script = d.createElement('script');
+          script.type = 'text/javascript';
+          script.async = true;
+          script.src = 'https://beacon-v2.helpscout.net';
+          var first = d.getElementsByTagName('script')[0];
+          first.parentNode.insertBefore(script, first);
+        }
+
+        // Triggers: first user interaction OR 8s timeout
+        var interactionEvents = ['mousedown', 'touchstart', 'keydown', 'scroll'];
+        function onInteraction() {
+          interactionEvents.forEach(function (ev) {
+            d.removeEventListener(ev, onInteraction);
+          });
+          loadBeacon();
+        }
+        interactionEvents.forEach(function (ev) {
+          d.addEventListener(ev, onInteraction, { once: true, passive: true });
+        });
+        setTimeout(loadBeacon, 8000);
+      })(window, document);
+    </script>
+
+    {%- comment -%}
+    ------------------------------------------------------------------------------------------------------------------------
+    MICROSOFT CLARITY — DEFERRED LOAD (2026-05-11)
+
+    Clarity records session replays and heatmaps. We don't need it firing
+    on the critical render path. Defer to requestIdleCallback so it loads
+    only after the browser is idle (~3-5s after page load, typically).
+    Fallback to setTimeout for browsers without requestIdleCallback
+    support (Safari pre-15.4).
+
+    Clarity app embed has been toggled OFF in Shopify Admin so this is
+    the only place Clarity loads.
+
+    Project ID: REPLACE_WITH_BOUNTY_CLARITY_ID
+    Tradeoff: misses the first ~3-5s of session recording. Acceptable
+    because most user behavior we want to see (interactions, scrolls,
+    clicks) happens after initial paint anyway.
+    ------------------------------------------------------------------------------------------------------------------------
+    {%- endcomment -%}
+    <script>
+      (function (w, d) {
+        function loadClarity() {
+          (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+          })(w, d, "clarity", "script", "REPLACE_WITH_BOUNTY_CLARITY_ID");
+        }
+
+        // Defer until browser is idle (after critical render complete).
+        // Modern browsers: requestIdleCallback, max 4s timeout fallback.
+        // Older browsers: plain setTimeout at 3s.
+        if ('requestIdleCallback' in w) {
+          w.requestIdleCallback(loadClarity, { timeout: 4000 });
+        } else {
+          setTimeout(loadClarity, 3000);
+        }
+      })(window, document);
+    </script>
+
+    <script>
+      if (!(HTMLScriptElement.supports && HTMLScriptElement.supports('importmap'))) {
+        const importMapPolyfill = document.createElement('script');
+        importMapPolyfill.async = true;
+        importMapPolyfill.src = "{{ 'es-module-shims.min.js' | asset_url }}";
+
+        document.head.appendChild(importMapPolyfill);
+      }
+    </script>
+
+    <script type="importmap">
+      {%- comment -%}On Safari 16.3 and lower, a polyfill is used to load importmap{%- endcomment -%}
+      {%- comment -%}Optimized: PhotoSwipe removed from global imports, loaded only on product pages{%- endcomment -%}
+      {
+        "imports": {
+          "vendor": "{{ 'vendor.min.js' | asset_url }}",
+          "theme": "{{ 'theme.js' | asset_url }}",
+          "photoswipe": "{{ 'photoswipe.min.js' | asset_url }}"
+        }
+      }
+    </script>
+
+    <script src="{{ 'vendor.min.js' | asset_url }}" type="module"></script>
+    <script src="{{ 'theme.js' | asset_url }}" type="module"></script>
+    
+    {%- comment -%}
+      BB Cart Hardening 2026-05-04 — TEMPORARILY DISABLED, holding for rebuild.
+
+      The reconciler was found to mis-handle EBB custom-bundle carts: those
+      carts already contain a fee line that EBB itself adds, but the items in
+      the bundle don't carry our `_alcohol_signature_required` property — they
+      carry EBB's `Bundle` + `Box ID` properties. The first iteration of the
+      reconciler would have incorrectly added a SECOND fee for EBB carts that
+      already had one.
+
+      Re-enable after the bundle-aware version lands. Until then, restore the
+      legacy adult-signature.js conditional load so behavior matches what was
+      in production before tonight's work.
+    {%- endcomment -%}
+    {%- comment -%}{%- render 'bb-alcohol-fee-reconciler' -%}{%- endcomment -%}
+
+    {%- liquid
+      assign requires_adult_signature = false
+      for item in cart.items
+        assign option_set_metafield = item.product.metafields.custom.option_set_v2
+        if option_set_metafield != blank
+          assign option_set_string = option_set_metafield | metafield_text
+          if option_set_string contains 'Alcohol Signature'
+            assign requires_adult_signature = true
+            break
+          endif
+        endif
+      endfor
+    -%}
+    {%- if requires_adult_signature -%}
+      <script src="{{ 'adult-signature.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    {{ content_for_header }}
+
+    {{- 'theme.css' | asset_url | stylesheet_tag: preload: true -}}
+
+    {%- comment -%}
+    BB CRO overrides — layered after theme.css so these rules win cleanly.
+    Covers W1-07 price sizing, W1-08 review stars/count styling, W1-09 ATC button,
+    and the visual de-emphasis of collapsed gift-option accordions.
+    Single rollback surface: remove this line to revert all CRO visual tweaks.
+    {%- endcomment -%}
+    {{- 'bb-cro-overrides.css' | asset_url | stylesheet_tag -}}
+  </head>
+
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX_BOUNTY"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  
+  <body class="{% if settings.zoom_image_on_hover %}zoom-image--enabled{% endif %}">
+    {%- render 'shadow-dom-templates' -%}
+
+    {%- comment -%}
+      BB Cart Hardening 2026-05-04 — Modal removed.
+      The legacy adult-signature-modal popped up when customers clicked the
+      remove "X" on the fee line, but snippets/line-item.liquid already hides
+      that control entirely for fee lines (search "is_adult_signature"). The
+      modal was unreachable. The snippet file is retained at
+      snippets/adult-signature-modal.liquid for possible reuse.
+    {%- endcomment -%}
+
+    <a href="#main" class="skip-to-content sr-only">{{ 'general.accessibility.skip_to_content' | t }}</a>
+
+    {%- comment -%}
+    This placeholder will be filled to screen readers for any kind of announcements
+    {%- endcomment -%}
+    <div class="sr-only" role="status" aria-live="polite" aria-atomic="true">
+      <span id="status-announcement"></span>
+    </div>
+
+    <div class="sr-only" role="alert" aria-live="assertive" aria-atomic="true">
+      <span id="error-announcement"></span>
+    </div>
+
+    {%- if request.page_type != 'password' -%}
+      {%- sections 'header-group' -%}
+      {%- sections 'overlay-group' -%}
+
+      {%- if settings.cart_type == 'popover' -%}
+        <cart-notification-drawer open-from="bottom" class="quick-buy-drawer drawer"></cart-notification-drawer>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if request.page_type == 'customers/account' or request.page_type == 'customers/order' or request.page_type == 'customers/addresses' -%}
+      {%- section 'account-banner' -%}
+    {%- endif -%}
+
+    <main role="main" id="main" class="anchor">
+      {{ content_for_layout }}
+
+      {%- comment -%}
+      IMPLEMENTATION NOTE: due to the very complex logic of margin/padding collapsing in Impact, the footer group is
+      added into the main element to ensure that dynamic sections added into the footer group are properly laid out.
+      {%- endcomment -%}
+      {%- if request.page_type != 'password' -%}
+        {%- sections 'footer-group' -%}
+      {%- endif -%}
+    </main>
+
+    {%- comment -%}
+    ------------------------------------------------------------------------------------------------------------------------
+    OPTIMIZED THIRD-PARTY SCRIPTS
+    Loads non-critical scripts after user interaction to improve initial page load performance
+    With error suppression for blocked services (ad blockers, privacy extensions)
+    Impact: Reduces blocking time by ~800-1200ms, improves FCP and LCP, eliminates console errors
+    ------------------------------------------------------------------------------------------------------------------------
+    {%- endcomment -%}
+    <script>
+      // Delay non-critical third-party scripts until user interaction
+      (function() {
+        'use strict';
+        
+        let scriptsLoaded = false;
+        
+        async function loadThirdPartyScripts() {
+          if (scriptsLoaded) return;
+          scriptsLoaded = true;
+          
+          try {
+            // Load HelpScout Beacon for customer support
+            // Wrapped in try-catch to handle blocking gracefully
+            if (typeof window.Beacon === 'undefined') {
+              !function(e,t,n){function a(){var e=t.getElementsByTagName("script")[0],n=t.createElement("script");n.type="text/javascript",n.async=!0,n.src="https://beacon-v2.helpscout.net",e.parentNode.insertBefore(n,e)}if(e.Beacon=n=function(t,n,a){e.Beacon.readyQueue.push({method:t,options:n,data:a})},n.readyQueue=[],"complete"===t.readyState)return a();e.attachEvent?e.attachEvent("onload",a):e.addEventListener("load",a,!1)}(window,document,window.Beacon||function(){});
+              
+              if (typeof window.Beacon === 'function') {
+                window.Beacon('init', '69d630c7-d939-44dd-87ce-5e288c4e9c14');
+              }
+            }
+          } catch (e) {
+            // Silently ignore - HelpScout is non-critical
+          }
+          
+          // Remove event listeners after scripts load
+          events.forEach(function(event) {
+            window.removeEventListener(event, loadThirdPartyScripts);
+          });
+        }
+        
+        // Trigger script loading on user interaction or after delay
+        const events = ['mousemove', 'scroll', 'keydown', 'click', 'touchstart'];
+        events.forEach(function(event) {
+          window.addEventListener(event, loadThirdPartyScripts, { once: true, passive: true });
+        });
+        
+        // Fallback: load after 5 seconds if no interaction (increased from 3s for better performance)
+        setTimeout(loadThirdPartyScripts, 5000);
+      })();
+    </script>
+
+    {%- comment -%}
+    --------------------------------------------------------------------------
+    BB Orphan Addon Sweeper (2026-05-19)
+    --------------------------------------------------------------------------
+    Removes addon line items (adult signature, engraving, gift card message,
+    etc.) whose parent product has been removed from the cart. Linkage is by
+    `properties.For == parent product title`. See assets/bb-orphan-addon-sweeper.js
+    for full rationale. Loads on every page because cart edits can happen
+    anywhere (drawer, cart page, on-page after navigation).
+    --------------------------------------------------------------------------
+    {%- endcomment -%}
+    <script src="{{ 'bb-orphan-addon-sweeper.js' | asset_url }}" defer></script>
+
+  </body>
+</html>

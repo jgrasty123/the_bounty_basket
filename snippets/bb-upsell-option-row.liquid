@@ -1,0 +1,45 @@
+{%- comment -%}
+Reusable upsell option row.
+
+Inputs:
+- input_type: checkbox | radio
+- input_name: required for radio (used as the name attribute)
+- variant_ref: a resolved product_variant reference from a metaobject
+{%- endcomment -%}
+
+{%- assign upsell_variant = variant_ref -%}
+{%- assign upsell_product = upsell_variant.product -%}
+{%- assign display_title  = upsell_variant.title -%}
+{%- if upsell_product != blank and upsell_variant.title == 'Default Title' -%}
+  {%- assign display_title = upsell_product.title -%}
+{%- endif -%}
+
+<label class="bb-upsells__option">
+  <input
+    type="{{ input_type | default: 'checkbox' }}"
+    {% if input_type == 'radio' and input_name != blank %}name="{{ input_name | handleize }}"{% endif %}
+    data-upsell-{{ input_type | default: 'checkbox' }}
+    data-variant-id="{{ upsell_variant.id }}"
+    data-title="{{ display_title | escape }}"
+    {% if upsell_variant.available == false %}disabled{% endif %}
+  >
+
+  {%- assign media_image = upsell_variant.featured_media | default: upsell_product.featured_media -%}
+  <span class="bb-upsells__option-card">
+    {%- if media_image != blank -%}
+      <span class="bb-upsells__option-media">
+        {{- media_image | image_url: width: 360 | image_tag: loading: 'lazy', widths: '180,240,360', sizes: '(max-width: 699px) 45vw, 220px', class: 'bb-upsells__option-image' -}}
+      </span>
+    {%- endif -%}
+
+    <span class="bb-upsells__option-content">
+      <span class="bb-upsells__option-title">{{ display_title }}</span>
+      {%- if upsell_variant.price > 0 -%}
+        <span class="bb-upsells__option-price">{{ upsell_variant.price | money }}</span>
+      {%- endif -%}
+      {%- unless upsell_variant.available -%}
+        <span class="bb-upsells__option-copy">Sold out</span>
+      {%- endunless -%}
+    </span>
+  </span>
+</label>

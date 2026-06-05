@@ -1,0 +1,38 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+                            "shopify": {
+                                "checkout": {
+                                    "shipping": {
+                                        "title": "Shipping",
+                                        "shipping_method_title": "Delivery method",
+                                        "waiting_on_rate_notice": "Getting available shipping rates…",
+                                        "no_rates_for_country_notice": "No shipping rates found for this address.",
+                                        "please_enter_your_shipping_information_notice": "Please enter your shipping information.",
+                                        "delivery_title":"Shipping address"
+                                    },
+                                    "contact": {
+                                        "shipping_address_title": "Shipping address"
+                                     },
+                                    "delivery_options": {
+                                        "shipping_address": "Shipping address"
+                                    },"general": {
+                                            "continue_to_shipping_method": "Continue to shipping"
+                                        },"order_summary": {
+                                        "shipping_label":"Shipping",
+                                        "free_shipping_discount_label": "Free shipping"
+                                    },
+                                    "review": {
+                                        "blocks": {
+                                            "shipping_address_title": "Ship to"
+                                        }
+                                    }
+                                }
+                            }}

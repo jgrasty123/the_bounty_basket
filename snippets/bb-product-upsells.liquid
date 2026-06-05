@@ -1,0 +1,814 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET PRODUCT UPSELLS (METAOBJECT-BASED)
+----------------------------------------------------------------------------------------------------------------------
+
+Reads product.metafields.custom.upsell (list.metaobject_reference → Upsell) and renders
+upsell option groups above the Add to Cart button.
+
+Metaobject fields (Upsell):
+  - name              (single_line_text_field)   Group heading
+  - description       (single_line_text_field)   Optional subtitle
+  - products          (list.variant_reference)   Variants rendered as Type inputs
+  - type              (single_line_text_field)    "Checkbox" | "Radio"
+  - modal_title       (single_line_text_field)    Optional – heading inside modal
+  - modal_description (single_line_text_field)    Optional – copy on toggle row
+  - modal_type        (single_line_text_field)    Optional – "Radio" (default, pick one) | "Checkbox" (pick many)
+  - modal_products    (list.variant_reference)    Optional – variants shown in modal
+
+This snippet registers each upsell selection in window.productAddons using bbUpsell_* keys,
+so the existing centralized handler (bb-product-addons.liquid) adds them in the same cart/add.js request.
+{%- endcomment -%}
+
+{%- assign upsell_groups = product.metafields.custom.upsell.value -%}
+{%- assign hide_header = hide_header | default: false -%}
+
+{%- if upsell_groups != blank and upsell_groups.size > 0 -%}
+  <div class="bb-upsells" data-bb-upsells data-product-title="{{ product.title | escape }}">
+    {%- unless hide_header -%}
+      <div class="bb-upsells__header">
+        <h3 class="bb-upsells__title">Make The Gift Extra Special</h3>
+        <p class="bb-upsells__subtitle">Select any add-ons below. They will be added with this gift.</p>
+      </div>
+    {%- endunless -%}
+
+    {%- for group in upsell_groups -%}
+      {%- assign group_name        = group.name.value -%}
+      {%- assign group_description  = group.description_optional.value -%}
+      {%- assign group_type         = group.type.value | default: 'Checkbox' -%}
+      {%- assign group_products     = group.products.value -%}
+      {%- assign modal_title        = group.modal_title_optional.value -%}
+      {%- assign modal_description  = group.modal_description_optional.value -%}
+      {%- assign modal_products     = group.modal_products_optional.value -%}
+      {%- assign modal_type_raw     = group.modal_type.value | default: 'Radio' -%}
+      {%- assign modal_input_type   = 'radio' -%}
+      {%- assign has_modal_products = false -%}
+      {%- assign has_group_products = false -%}
+      {%- if modal_type_raw == 'Checkbox' -%}
+        {%- assign modal_input_type = 'checkbox' -%}
+      {%- endif -%}
+      {%- assign group_input_type   = 'checkbox' -%}
+      {%- if group_type == 'Radio' -%}
+        {%- assign group_input_type = 'radio' -%}
+      {%- endif -%}
+      {%- if modal_products != blank and modal_products.size > 0 -%}
+        {%- assign has_modal_products = true -%}
+      {%- endif -%}
+      {%- if group_products != blank and group_products.size > 0 -%}
+        {%- assign has_group_products = true -%}
+      {%- endif -%}
+
+      <details class="bb-upsells__group accordion group" is="accordion-disclosure" data-upsell-group {% if open_by_default %}open{% endif %} aria-expanded="{% if open_by_default %}true{% else %}false{% endif %}">
+        <summary>
+          <div class="accordion__toggle bb-upsells__group-toggle">
+            <div class="bb-upsells__group-heading">
+              <span class="bb-upsells__group-check" aria-hidden="true">
+                <svg viewBox="0 0 20 20" width="20" height="20" focusable="false">
+                  <circle cx="10" cy="10" r="8" fill="currentColor"></circle>
+                  <path d="M8.9 12.2L6.9 10.3l-1.1 1.1 3.1 3 5.4-5.4-1.1-1.1z" fill="#fff"></path>
+                </svg>
+              </span>
+              <span class="bb-upsells__group-title">{{ group_name | default: 'Upsell options' }}</span>
+            </div>
+
+            <div class="bb-upsells__group-summary-wrap">
+              <span class="bb-upsells__group-summary" data-group-summary></span>
+              <span class="circle-chevron group-hover:colors group-expanded:colors group-expanded:rotate">{%- render 'icon' with 'chevron-bottom-small' -%}</span>
+            </div>
+          </div>
+        </summary>
+
+        <div class="accordion__content bb-upsells__group-content">
+          {%- if group_description != blank -%}
+            <p class="bb-upsells__group-description">{{ group_description }}</p>
+          {%- endif -%}
+
+          {%- comment -%} Modal row and standard products rendered together in the same card grid {%- endcomment -%}
+          {%- if has_modal_products or has_group_products -%}
+            <div class="bb-upsells__options-scroller">
+              {%- if group_input_type == 'radio' -%}
+                <fieldset class="bb-upsells__radio-group">
+              {%- endif -%}
+
+              <div class="bb-upsells__options-grid">
+                {%- if has_modal_products -%}
+                  {%- assign first_modal_variant = modal_products[0] -%}
+                  {%- assign modal_product_obj = first_modal_variant.product -%}
+
+                  <div class="bb-upsells__option bb-upsells__option--modal" data-modal-row>
+                    <input type="checkbox" data-mini-bottle-toggle data-modal-id="bb-modal-{{ product.id }}-{{ forloop.index }}" class="bb-upsells__modal-checkbox">
+                    <span class="bb-upsells__option-card">
+                      {%- if modal_product_obj != blank and modal_product_obj.featured_media != blank -%}
+                        <span class="bb-upsells__option-media">
+                          {{- modal_product_obj.featured_media | image_url: width: 360 | image_tag: loading: 'lazy', widths: '180,240,360', sizes: '(max-width: 699px) 45vw, 220px', class: 'bb-upsells__option-image' -}}
+                        </span>
+                      {%- endif -%}
+                      <span class="bb-upsells__option-content">
+                        <span class="bb-upsells__option-title">{{ modal_title | default: modal_product_obj.title | default: 'Choose an option' }}</span>
+                        {%- if modal_description != blank -%}
+                          <span class="bb-upsells__option-copy">{{ modal_description }}</span>
+                        {%- endif -%}
+                        <button type="button" class="bb-upsells__mini-button" data-open-mini-modal data-modal-target="bb-modal-{{ product.id }}-{{ forloop.index }}">Choose option</button>
+                        <span class="bb-upsells__mini-selected" data-mini-selected-label></span>
+                      </span>
+                    </span>
+                  </div>
+                  <span data-mini-selected-data hidden></span>
+                {%- endif -%}
+
+                {%- if has_group_products -%}
+                  {%- for variant in group_products -%}
+                    {%- render 'bb-upsell-option-row',
+                      input_type: group_input_type,
+                      input_name: group_name,
+                      variant_ref: variant
+                    -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+
+              {%- if group_input_type == 'radio' -%}
+                </fieldset>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </details>
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} Render one modal per group that has modal_products {%- endcomment -%}
+  {%- for group in upsell_groups -%}
+    {%- assign modal_products   = group.modal_products_optional.value -%}
+    {%- assign modal_title      = group.modal_title_optional.value | default: 'Choose an option' -%}
+    {%- assign modal_type_raw   = group.modal_type.value | default: 'Radio' -%}
+    {%- assign modal_input_type = 'radio' -%}
+    {%- if modal_type_raw == 'Checkbox' -%}
+      {%- assign modal_input_type = 'checkbox' -%}
+    {%- endif -%}
+
+    {%- if modal_products != blank and modal_products.size > 0 -%}
+      <div class="bb-upsells-modal" data-mini-modal data-modal-id="bb-modal-{{ product.id }}-{{ forloop.index }}" data-modal-type="{{ modal_input_type }}" hidden>
+        <div class="bb-upsells-modal__backdrop" data-close-mini-modal></div>
+        <div class="bb-upsells-modal__panel" role="dialog" aria-modal="true" aria-label="{{ modal_title | escape }}">
+          <div class="bb-upsells-modal__header">
+            <h4 class="bb-upsells-modal__title">{{ modal_title }}</h4>
+            <button type="button" class="bb-upsells-modal__close" aria-label="Close" data-close-mini-modal>&times;</button>
+          </div>
+          <div class="bb-upsells-modal__body">
+            {%- for variant in modal_products -%}
+              {%- assign variant_product = variant.product -%}
+              {%- assign variant_image = variant.featured_media | default: variant_product.featured_media -%}
+              {%- assign variant_display_title = variant.title -%}
+              {%- if variant.title == 'Default Title' and variant_product != blank -%}
+                {%- assign variant_display_title = variant_product.title -%}
+              {%- endif -%}
+              <label class="bb-upsells__option bb-upsells-modal__option">
+                <input
+                  type="{{ modal_input_type }}"
+                  name="bb-upsell-modal-{{ product.id }}-{{ forloop.parentloop.index }}"
+                  data-mini-option
+                  data-variant-id="{{ variant.id }}"
+                  data-title="{{ variant_display_title | escape }}"
+                  {% if variant.available == false %}disabled{% endif %}
+                >
+                <span class="bb-upsells__option-card">
+                  {%- if variant_image != blank -%}
+                    <span class="bb-upsells__option-media">
+                      {{- variant_image | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,180,240', sizes: '(max-width: 699px) 32vw, 140px', class: 'bb-upsells__option-image' -}}
+                    </span>
+                  {%- endif -%}
+                  <span class="bb-upsells__option-content">
+                    <span class="bb-upsells__option-title">{{ variant_display_title }}</span>
+                    <span class="bb-upsells__option-price">{{ variant.price | money }}</span>
+                    {% unless variant.available %}<span class="bb-upsells__option-copy">Sold out</span>{% endunless %}
+                  </span>
+                </span>
+              </label>
+            {%- endfor -%}
+          </div>
+          <div class="bb-upsells-modal__footer">
+            <button type="button" class="bb-upsells__mini-button bb-upsells__mini-button--secondary" data-close-mini-modal>Cancel</button>
+            <button type="button" class="bb-upsells__mini-button" data-confirm-mini-modal>Confirm selection</button>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+
+  <script>
+    (function() {
+      'use strict';
+
+      function initBroBasketUpsells() {
+        const wrappers = document.querySelectorAll('[data-bb-upsells]');
+        if (!wrappers.length) return;
+
+        window.productAddons = window.productAddons || {};
+
+        function syncUpsellGroupStates(scope) {
+          (scope || document).querySelectorAll('[data-upsell-group]').forEach(function(group) {
+            var selectedTitles = [];
+
+            group.querySelectorAll('[data-upsell-checkbox]:checked, [data-upsell-radio]:checked').forEach(function(input) {
+              if (input.dataset.title) selectedTitles.push(input.dataset.title);
+            });
+
+            group.querySelectorAll('[data-mini-selected-data]').forEach(function(dataEl) {
+              if (!dataEl.dataset.items) return;
+              try {
+                JSON.parse(dataEl.dataset.items).forEach(function(item) {
+                  if (item.title) selectedTitles.push(item.title);
+                });
+              } catch (e) {}
+            });
+
+            var summaryEl = group.querySelector('[data-group-summary]');
+            if (summaryEl) {
+              summaryEl.textContent = selectedTitles.length ? 'EDIT' : '';
+            }
+
+            group.classList.toggle('bb-upsells__group--active', selectedTitles.length > 0);
+          });
+        }
+
+        Object.keys(window.productAddons).forEach(function(key) {
+          if (key.indexOf('bbUpsell_') === 0) {
+            delete window.productAddons[key];
+          }
+        });
+
+        wrappers.forEach(function(wrapper, wrapperIndex) {
+          var productTitle = wrapper.dataset.productTitle || '';
+
+          function buildUpsellItem(variantId, itemTitle) {
+            return {
+              id: parseInt(variantId, 10),
+              properties: {
+                'For': productTitle,
+                'Upsell Item': itemTitle || 'Upsell Add-on'
+              }
+            };
+          }
+
+          function registerAddon(key, getItem, validate) {
+            window.productAddons[key] = {
+              getItem: getItem,
+              validate: validate || function() { return true; }
+            };
+          }
+
+          wrapper.querySelectorAll('[data-upsell-checkbox]').forEach(function(checkbox) {
+            var variantId = checkbox.dataset.variantId;
+            var itemTitle = checkbox.dataset.title || 'Upsell Add-on';
+            var addonKey = 'bbUpsell_checkbox_' + wrapperIndex + '_' + variantId;
+
+            registerAddon(addonKey, function() {
+              if (!checkbox.checked || !variantId) return null;
+              return buildUpsellItem(variantId, itemTitle);
+            });
+          });
+
+          wrapper.querySelectorAll('[data-upsell-radio]').forEach(function(radio) {
+            var variantId = radio.dataset.variantId;
+            var itemTitle = radio.dataset.title || 'Upsell Add-on';
+            var addonKey = 'bbUpsell_radio_' + wrapperIndex + '_' + variantId;
+
+            registerAddon(addonKey, function() {
+              if (!radio.checked || !variantId) return null;
+              return buildUpsellItem(variantId, itemTitle);
+            });
+          });
+
+          wrapper.querySelectorAll('[data-modal-row]').forEach(function(modalRow) {
+            var miniToggle = modalRow.querySelector('[data-mini-bottle-toggle]');
+            if (!miniToggle) return;
+            var modalId = miniToggle.dataset.modalId;
+            var group = modalRow.closest('.bb-upsells__group');
+
+            function findModal() {
+              return document.querySelector('[data-mini-modal][data-modal-id="' + modalId + '"]');
+            }
+
+            var initialModal = findModal();
+            if (initialModal && !initialModal.dataset.portalMounted) {
+              document.body.appendChild(initialModal);
+              initialModal.dataset.portalMounted = 'true';
+            }
+
+            function openMiniModal() {
+              var modal = findModal();
+              if (!modal) return;
+              if (!modal.dataset.portalMounted) {
+                document.body.appendChild(modal);
+                modal.dataset.portalMounted = 'true';
+              }
+              modal.hidden = false;
+              document.documentElement.classList.add('overflow-hidden');
+            }
+
+            function closeMiniModal() {
+              var modal = findModal();
+              if (!modal) return;
+              modal.hidden = true;
+              document.documentElement.classList.remove('overflow-hidden');
+            }
+
+            function findGroup() {
+              var t = document.querySelector('[data-mini-bottle-toggle][data-modal-id="' + modalId + '"]');
+              return t ? t.closest('.bb-upsells__group') : null;
+            }
+
+            registerAddon(
+              'bbUpsell_modal_' + wrapperIndex + '_' + modalId,
+              function() {
+                var grp = findGroup();
+                if (!grp) return null;
+                var toggle = grp.querySelector('[data-mini-bottle-toggle]');
+                if (!toggle || !toggle.checked) return null;
+                var dataEl = grp.querySelector('[data-mini-selected-data]');
+                if (!dataEl || !dataEl.dataset.items) return null;
+                var items = [];
+                try { items = JSON.parse(dataEl.dataset.items); } catch(e) { return null; }
+                if (!items.length) return null;
+                var results = [];
+                items.forEach(function(it) {
+                  if (it.variantId) results.push(buildUpsellItem(it.variantId, it.title || 'Modal Add-on'));
+                });
+                return results.length ? results : null;
+              },
+              function() {
+                var grp = findGroup();
+                if (!grp) return true;
+                var toggle = grp.querySelector('[data-mini-bottle-toggle]');
+                var dataEl = grp.querySelector('[data-mini-selected-data]');
+                var hasData = dataEl && dataEl.dataset.items;
+                if (toggle && toggle.checked && !hasData) {
+                  openMiniModal();
+                  return false;
+                }
+                return true;
+              }
+            );
+          });
+
+          syncUpsellGroupStates(wrapper);
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initBroBasketUpsells);
+      } else {
+        initBroBasketUpsells();
+      }
+
+      document.addEventListener('click', function(e) {
+        var openBtn = e.target.closest('[data-open-mini-modal]');
+        if (openBtn) {
+          var targetId = openBtn.dataset.modalTarget;
+          var m = document.querySelector('[data-mini-modal][data-modal-id="' + targetId + '"]');
+          if (m) {
+            if (!m.dataset.portalMounted) {
+              document.body.appendChild(m);
+              m.dataset.portalMounted = 'true';
+            }
+            m.hidden = false;
+            document.documentElement.classList.add('overflow-hidden');
+          }
+          return;
+        }
+
+        var closeBtn = e.target.closest('[data-close-mini-modal]');
+        var confirmBtn = e.target.closest('[data-confirm-mini-modal]');
+        if (!closeBtn && !confirmBtn) return;
+
+        var modal = e.target.closest('[data-mini-modal]');
+        if (!modal) return;
+        var modalId = modal.dataset.modalId;
+
+        if (confirmBtn) {
+          var allChecked = modal.querySelectorAll('[data-mini-option]:checked');
+          var toggleRow = document.querySelector('[data-mini-bottle-toggle][data-modal-id="' + modalId + '"]');
+          var parentGroup = toggleRow ? toggleRow.closest('.bb-upsells__group') : null;
+          if (!allChecked.length || !parentGroup) return;
+
+          var items = [];
+          allChecked.forEach(function(opt) {
+            items.push({ variantId: opt.dataset.variantId || '', title: opt.dataset.title || '' });
+          });
+
+          var dataEl = parentGroup.querySelector('[data-mini-selected-data]');
+          if (dataEl) dataEl.dataset.items = JSON.stringify(items);
+
+          var titles = items.map(function(i) { return i.title; });
+          var selLabel = parentGroup.querySelector('[data-mini-selected-label]');
+          var btnEl = parentGroup.querySelector('[data-open-mini-modal]');
+          if (selLabel) selLabel.textContent = 'Selected: ' + titles.join(', ');
+          if (btnEl) btnEl.textContent = 'Change selection';
+          if (toggleRow) toggleRow.checked = true;
+        }
+
+        modal.hidden = true;
+        document.documentElement.classList.remove('overflow-hidden');
+        document.querySelectorAll('[data-bb-upsells]').forEach(function(wrapper) {
+          wrapper.querySelectorAll('[data-upsell-group]').forEach(function(group) {
+            var summaryEl = group.querySelector('[data-group-summary]');
+            var hasSelection = group.querySelector('[data-upsell-checkbox]:checked, [data-upsell-radio]:checked') || group.querySelector('[data-mini-selected-data][data-items]');
+            if (summaryEl) summaryEl.textContent = hasSelection ? 'EDIT' : '';
+            group.classList.toggle('bb-upsells__group--active', !!hasSelection);
+          });
+        });
+      });
+
+      document.addEventListener('change', function(e) {
+        var toggle = e.target.closest('[data-mini-bottle-toggle]');
+        if (!toggle) return;
+        var modalId = toggle.dataset.modalId;
+        var group = toggle.closest('.bb-upsells__group');
+        if (!group) return;
+
+        if (!toggle.checked) {
+          var dataEl = group.querySelector('[data-mini-selected-data]');
+          if (dataEl) delete dataEl.dataset.items;
+          var selLabel = group.querySelector('[data-mini-selected-label]');
+          var btnEl = group.querySelector('[data-open-mini-modal]');
+          if (selLabel) selLabel.textContent = '';
+          if (btnEl) btnEl.textContent = 'Choose option';
+          var modal = document.querySelector('[data-mini-modal][data-modal-id="' + modalId + '"]');
+          if (modal) {
+            modal.querySelectorAll('[data-mini-option]:checked').forEach(function(c) { c.checked = false; });
+          }
+        } else {
+          var dataEl2 = group.querySelector('[data-mini-selected-data]');
+          if (!dataEl2 || !dataEl2.dataset.items) {
+            toggle.checked = false;
+            var m = document.querySelector('[data-mini-modal][data-modal-id="' + modalId + '"]');
+            if (m) {
+              if (!m.dataset.portalMounted) {
+                document.body.appendChild(m);
+                m.dataset.portalMounted = 'true';
+              }
+              m.hidden = false;
+              document.documentElement.classList.add('overflow-hidden');
+            }
+          }
+        }
+
+        var summaryEl = group.querySelector('[data-group-summary]');
+        var hasSelection = group.querySelector('[data-upsell-checkbox]:checked, [data-upsell-radio]:checked') || group.querySelector('[data-mini-selected-data][data-items]');
+        if (summaryEl) summaryEl.textContent = hasSelection ? 'EDIT' : '';
+        group.classList.toggle('bb-upsells__group--active', !!hasSelection);
+      });
+
+      document.addEventListener('change', function(e) {
+        if (!e.target.closest('[data-bb-upsells]')) return;
+        document.querySelectorAll('[data-bb-upsells]').forEach(function(wrapper) {
+          wrapper.querySelectorAll('[data-upsell-group]').forEach(function(group) {
+            var summaryEl = group.querySelector('[data-group-summary]');
+            var hasSelection = group.querySelector('[data-upsell-checkbox]:checked, [data-upsell-radio]:checked') || group.querySelector('[data-mini-selected-data][data-items]');
+            if (summaryEl) summaryEl.textContent = hasSelection ? 'EDIT' : '';
+            group.classList.toggle('bb-upsells__group--active', !!hasSelection);
+          });
+        });
+      });
+    })();
+  </script>
+
+  <style>
+    .bb-upsells {
+      margin-bottom: var(--spacing-4, 16px);
+    }
+
+    .bb-upsells__header {
+      margin-bottom: var(--spacing-4, 16px);
+    }
+
+    .bb-upsells__title {
+      margin: 0;
+      font-size: var(--text-sm, 14px);
+      font-weight: 600;
+    }
+
+    .bb-upsells__subtitle {
+      margin: var(--spacing-1, 4px) 0 0 0;
+      color: rgb(var(--text-secondary, 107, 114, 128));
+      font-size: var(--text-xs, 12px);
+    }
+
+    .bb-upsells {
+      margin: 0;
+    }
+
+    .bb-upsells__group + .bb-upsells__group {
+      margin-top: 0;
+      border-top: 1px solid rgb(var(--border-color, 229, 231, 235));
+    }
+
+    .bb-upsells__group {
+      border-radius: 0;
+      background: transparent;
+      overflow: visible;
+    }
+
+    .bb-upsells__group-toggle {
+      align-items: center;
+      gap: var(--spacing-3, 12px);
+      padding: var(--spacing-3, 12px) 0;
+    }
+
+    .bb-upsells__group-heading,
+    .bb-upsells__group-summary-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-2, 8px);
+    }
+
+    .bb-upsells__group-summary-wrap {
+      margin-inline-start: auto;
+    }
+
+    .bb-upsells__group-check {
+      color: rgb(var(--text-secondary, 156, 163, 175));
+      display: inline-flex;
+      line-height: 0;
+    }
+
+    .bb-upsells__group--active .bb-upsells__group-check {
+      color: rgb(var(--button-background));
+    }
+
+    .bb-upsells__group-title {
+      margin: 0;
+      font-size: var(--text-sm, 14px);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .bb-upsells__group-summary {
+      font-size: var(--text-xs, 12px);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: rgb(var(--text-secondary, 107, 114, 128));
+      text-transform: uppercase;
+    }
+
+    .bb-upsells__group-content {
+      padding: 0 0 var(--spacing-3, 12px);
+    }
+
+    .bb-upsells__group-description {
+      margin: 0 0 var(--spacing-2, 8px) 0;
+      font-size: var(--text-xs, 12px);
+      color: rgb(var(--text-secondary, 107, 114, 128));
+    }
+
+    .bb-upsells__options-scroller {
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+    }
+
+    .bb-upsells__options-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(148px, 148px);
+      gap: var(--spacing-3, 12px);
+      align-items: stretch;
+      contain: layout; /* prevents internal layout shifts from affecting elements outside the grid */
+    }
+
+    .bb-upsells__option {
+      display: block;
+      position: relative;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .bb-upsells__option input[type='checkbox'],
+    .bb-upsells__option input[type='radio'] {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      z-index: 2;
+      margin: 0;
+    }
+
+    .bb-upsells__option-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 220px; /* reserves space: ~128px image + content, prevents layout shift */
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgb(var(--background-primary, 255, 255, 255));
+      border: 2px solid transparent;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .bb-upsells__option input:checked + .bb-upsells__option-card {
+      border-color: rgb(var(--button-background));
+    }
+
+    .bb-upsells__option input:focus-visible + .bb-upsells__option-card {
+      outline: 2px solid rgb(var(--text-primary, 0, 0, 0));
+      outline-offset: 2px;
+    }
+
+    .bb-upsells__option input:disabled + .bb-upsells__option-card {
+      opacity: 0.5;
+    }
+
+    .bb-upsells__modal-checkbox {
+      pointer-events: auto;
+    }
+
+    .bb-upsells__option-media {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      padding: 10px;
+      min-height: 128px; /* fallback for browsers without aspect-ratio support */
+    }
+
+    .bb-upsells__option-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 12px;
+      background: rgb(var(--background-primary, 255, 255, 255));
+    }
+
+    .bb-upsells__option-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 10px 14px;
+      text-align: center;
+    }
+
+    .bb-upsells__option-title {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .bb-upsells__option-price {
+      font-size: 12px;
+      color: rgb(var(--text-secondary, 107, 114, 128));
+    }
+
+    .bb-upsells__option-copy {
+      font-size: var(--text-xs, 12px);
+      color: rgb(var(--text-secondary, 107, 114, 128));
+      line-height: 1.35;
+    }
+
+    .bb-upsells__radio-group {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    .bb-upsells__mini-button {
+      width: fit-content;
+      margin-top: var(--spacing-1, 4px);
+      border: 1px solid rgb(var(--text-primary, 0, 0, 0));
+      border-radius: 999px;
+      padding: var(--spacing-2, 8px) var(--spacing-3, 12px);
+      font-size: var(--text-xs, 12px);
+      font-family: inherit;
+      font-weight: 600;
+      background: rgb(var(--input-background, 255, 255, 255));
+      color: rgb(var(--text-primary, 0, 0, 0));
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+
+    .bb-upsells__mini-button:hover {
+      border-color: rgb(var(--text-primary, 0, 0, 0));
+    }
+
+    .bb-upsells__mini-button--secondary {
+      font-weight: 500;
+    }
+
+    .bb-upsells__mini-selected {
+      font-size: var(--text-xs, 12px);
+      color: rgb(var(--text-primary, 0, 0, 0));
+    }
+
+    .bb-upsells__option--modal .bb-upsells__option-content {
+      justify-content: center;
+      min-height: 110px;
+    }
+
+    .bb-upsells-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .bb-upsells-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .bb-upsells-modal__panel {
+      position: relative;
+      z-index: 1;
+      width: min(560px, calc(100vw - 32px));
+      margin: 0;
+      border-radius: var(--rounded-xs, 4px);
+      background: rgb(var(--background-primary, 255, 255, 255));
+      border: 1px solid rgb(var(--border-color, 229, 231, 235));
+      padding: var(--spacing-4, 16px);
+      max-height: calc(100vh - 32px);
+      overflow: auto;
+    }
+
+    .bb-upsells-modal__body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+      gap: 12px;
+    }
+
+    .bb-upsells-modal__option .bb-upsells__option-card {
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
+    .bb-upsells-modal__option .bb-upsells__option-media {
+      padding: 8px;
+    }
+
+    .bb-upsells-modal__option .bb-upsells__option-content {
+      gap: 4px;
+      padding: 10px 8px 12px;
+    }
+
+    .bb-upsells-modal__option .bb-upsells__option-title {
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .bb-upsells-modal__option .bb-upsells__option-price,
+    .bb-upsells-modal__option .bb-upsells__option-copy {
+      font-size: 11px;
+    }
+
+    .bb-upsells-modal__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--spacing-2, 8px);
+      margin-bottom: var(--spacing-3, 12px);
+    }
+
+    .bb-upsells-modal__title {
+      margin: 0;
+      font-size: var(--text-sm, 14px);
+      font-weight: 600;
+    }
+
+    .bb-upsells-modal__close {
+      border: 0;
+      background: transparent;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .bb-upsells-modal__footer {
+      margin-top: var(--spacing-4, 16px);
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--spacing-2, 8px);
+    }
+
+    @media screen and (max-width: 699px) {
+      .bb-upsells__options-grid {
+        grid-auto-columns: minmax(132px, 132px);
+        gap: 12px;
+      }
+
+      .bb-upsells__option-title {
+        font-size: 11px;
+      }
+
+      .bb-upsells-modal__body {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+{%- endif -%}

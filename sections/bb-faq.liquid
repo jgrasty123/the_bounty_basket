@@ -1,0 +1,183 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET FAQ ACCORDION (W4-04)
+----------------------------------------------------------------------------------------------------------------------
+
+Last-mile objection killer. Eight collapsible Q&A pairs pre-populated
+with the most common pre-purchase questions for gift baskets. Default
+state: all collapsed (one click to open).
+
+Behavior built with the native <details>/<summary> elements — zero
+JavaScript, zero external dependencies, accessible by default. Each
+<details> on a page operates independently so users can expand multiple
+answers at once.
+
+JSON-LD FAQPage schema is also emitted in the rendered HTML when the
+section is enabled, giving Google rich-result eligibility for the FAQ
+expansion in search results.
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign bg_color    = section.settings.background_color | default: '#ffffff' -%}
+{%- assign brand_color = section.settings.brand_color      | default: '#1a1a1a' -%}
+{%- assign accent_red  = section.settings.accent_color     | default: '#cd241d' -%}
+
+<section
+  class="bb-faq"
+  style="--bb-faq-bg: {{ bg_color }}; --bb-faq-brand: {{ brand_color }}; --bb-faq-accent: {{ accent_red }};"
+>
+  <div class="bb-faq__inner">
+    {%- if section.settings.section_title != blank -%}
+      <h2 class="bb-faq__title">{{ section.settings.section_title | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="bb-faq__subtitle">{{ section.settings.subtitle | escape }}</p>
+    {%- endif -%}
+
+    <div class="bb-faq__list">
+      {%- for i in (1..8) -%}
+        {%- case i -%}
+          {%- when 1 -%}
+            {%- assign q = section.settings.q_1 -%}
+            {%- assign a = section.settings.a_1 -%}
+          {%- when 2 -%}
+            {%- assign q = section.settings.q_2 -%}
+            {%- assign a = section.settings.a_2 -%}
+          {%- when 3 -%}
+            {%- assign q = section.settings.q_3 -%}
+            {%- assign a = section.settings.a_3 -%}
+          {%- when 4 -%}
+            {%- assign q = section.settings.q_4 -%}
+            {%- assign a = section.settings.a_4 -%}
+          {%- when 5 -%}
+            {%- assign q = section.settings.q_5 -%}
+            {%- assign a = section.settings.a_5 -%}
+          {%- when 6 -%}
+            {%- assign q = section.settings.q_6 -%}
+            {%- assign a = section.settings.a_6 -%}
+          {%- when 7 -%}
+            {%- assign q = section.settings.q_7 -%}
+            {%- assign a = section.settings.a_7 -%}
+          {%- when 8 -%}
+            {%- assign q = section.settings.q_8 -%}
+            {%- assign a = section.settings.a_8 -%}
+        {%- endcase -%}
+
+        {%- if q != blank and a != blank -%}
+          <details class="bb-faq__item">
+            <summary class="bb-faq__question">
+              <span class="bb-faq__q-text">{{ q | escape }}</span>
+              <span class="bb-faq__chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </span>
+            </summary>
+            <div class="bb-faq__answer">{{ a | newline_to_br }}</div>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{%- comment -%} JSON-LD for SEO rich results {%- endcomment -%}
+{%- capture faq_jsonld -%}
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {%- assign first = true -%}
+    {%- for i in (1..8) -%}
+      {%- case i -%}
+        {%- when 1 -%}{%- assign q = section.settings.q_1 -%}{%- assign a = section.settings.a_1 -%}
+        {%- when 2 -%}{%- assign q = section.settings.q_2 -%}{%- assign a = section.settings.a_2 -%}
+        {%- when 3 -%}{%- assign q = section.settings.q_3 -%}{%- assign a = section.settings.a_3 -%}
+        {%- when 4 -%}{%- assign q = section.settings.q_4 -%}{%- assign a = section.settings.a_4 -%}
+        {%- when 5 -%}{%- assign q = section.settings.q_5 -%}{%- assign a = section.settings.a_5 -%}
+        {%- when 6 -%}{%- assign q = section.settings.q_6 -%}{%- assign a = section.settings.a_6 -%}
+        {%- when 7 -%}{%- assign q = section.settings.q_7 -%}{%- assign a = section.settings.a_7 -%}
+        {%- when 8 -%}{%- assign q = section.settings.q_8 -%}{%- assign a = section.settings.a_8 -%}
+      {%- endcase -%}
+      {%- if q != blank and a != blank -%}
+        {%- unless first -%},{%- endunless -%}
+        {"@type":"Question","name":{{ q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ a | json }}}}
+        {%- assign first = false -%}
+      {%- endif -%}
+    {%- endfor -%}
+  ]
+}
+{%- endcapture -%}
+<script type="application/ld+json">{{ faq_jsonld | strip_newlines }}</script>
+
+{% schema %}
+{
+  "name": "FAQ accordion (W4-04)",
+  "tag": "section",
+  "class": "section--bb-faq",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Eight-item collapsible FAQ designed to address common pre-purchase objections. Pre-populated with sensible defaults; edit any Q/A in the customizer. Includes JSON-LD FAQPage schema for Google rich results."
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle (optional)"
+    },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color", "id": "background_color", "label": "Background colour", "default": "#ffffff" },
+    { "type": "color", "id": "brand_color",      "label": "Heading colour",    "default": "#1a1a1a" },
+    { "type": "color", "id": "accent_color",     "label": "Chevron / accent",  "default": "#cd241d" },
+
+    { "type": "header", "content": "Question 1" },
+    { "type": "text",     "id": "q_1", "label": "Question", "default": "How fast will my gift arrive?" },
+    { "type": "textarea", "id": "a_1", "label": "Answer",   "default": "Orders placed by 5pm EST ship the same business day. Standard ground delivery typically arrives in 3–6 business days. Need it sooner? Express options are available at checkout." },
+
+    { "type": "header", "content": "Question 2" },
+    { "type": "text",     "id": "q_2", "label": "Question", "default": "Can I pick a specific delivery date?" },
+    { "type": "textarea", "id": "a_2", "label": "Answer",   "default": "Yes. At checkout you can choose any future date for delivery, so the gift shows up exactly when you want it to — birthday, anniversary, holiday, or just a Tuesday." },
+
+    { "type": "header", "content": "Question 3" },
+    { "type": "text",     "id": "q_3", "label": "Question", "default": "Do you include a personalized greeting card?" },
+    { "type": "textarea", "id": "a_3", "label": "Answer",   "default": "Every basket ships with a free personalized greeting card. You write the message during checkout and we hand-write or print it to include in the box." },
+
+    { "type": "header", "content": "Question 4" },
+    { "type": "text",     "id": "q_4", "label": "Question", "default": "What if my recipient isn't home when it's delivered?" },
+    { "type": "textarea", "id": "a_4", "label": "Answer",   "default": "Carriers will leave the package at the door unless an adult signature is required (alcohol-containing baskets always require this). For ID-required deliveries, the recipient gets up to 3 delivery attempts, then can pick up at the local carrier facility." },
+
+    { "type": "header", "content": "Question 5" },
+    { "type": "text",     "id": "q_5", "label": "Question", "default": "Can I add my own engraving or custom touches?" },
+    { "type": "textarea", "id": "a_5", "label": "Answer",   "default": "Yes — many of our baskets include engraved glass options, premium add-ons, and snack upgrades. Look for the customization options on the product page just below the basket details." },
+
+    { "type": "header", "content": "Question 6" },
+    { "type": "text",     "id": "q_6", "label": "Question", "default": "What happens if something arrives damaged?" },
+    { "type": "textarea", "id": "a_6", "label": "Answer",   "default": "We guarantee your gift arrives looking awesome. If anything is damaged, missing, or not right — email us with a photo and we'll fix it for free, no questions asked." },
+
+    { "type": "header", "content": "Question 7" },
+    { "type": "text",     "id": "q_7", "label": "Question", "default": "Where do you ship to?" },
+    { "type": "textarea", "id": "a_7", "label": "Answer",   "default": "All 50 US states. Some baskets containing alcohol have state-specific shipping restrictions — those will be flagged at checkout if your recipient's state can't receive the contents." },
+
+    { "type": "header", "content": "Question 8" },
+    { "type": "text",     "id": "q_8", "label": "Question", "default": "Are these baskets really made by hand?" },
+    { "type": "textarea", "id": "a_8", "label": "Answer",   "default": "Yes. Every basket is hand-built to order by our small team in Ventura, California — using real spirits, real snacks, and quality accessories. Nothing is mass-pre-assembled overseas." }
+  ],
+  "presets": [
+    {
+      "name": "FAQ accordion (W4-04)",
+      "category": "Story & info"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product", "index", "page", "cart"]
+  }
+}
+{% endschema %}

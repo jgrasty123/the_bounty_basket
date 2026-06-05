@@ -1,0 +1,93 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "collection-banner",
+      "settings": {
+        "full_width": false,
+        "allow_transparent_header": false,
+        "enable_parallax": true,
+        "show_collection_title": true,
+        "show_collection_description": true,
+        "show_collection_image": true,
+        "collection_title_size": "h0",
+        "image_size": "auto",
+        "mobile_text_position": "place-self-center-start text-start",
+        "desktop_text_position": "sm:place-self-center-start sm:text-start",
+        "featured_product": "",
+        "featured_product_heading": "Featured product",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30
+      }
+    },
+    "bb_guarantee_strip_x4RQPq": {
+      "type": "bb-guarantee-strip",
+      "name": "Guarantee strip (W3-03)",
+      "settings": {
+        "compact_mode": true,
+        "section_title": "",
+        "background_color": "#fdf9f1",
+        "icon_color": "#cd241d",
+        "icon_1": "shield",
+        "headline_1": "100% Satisfaction Guaranteed",
+        "body_1": "If you're not happy with your basket, we'll make it right.",
+        "icon_2": "flag",
+        "headline_2": "Hand-Made to Order in the USA",
+        "body_2": "Each basket is built fresh by our in-house team.",
+        "icon_3": "package",
+        "headline_3": "Guaranteed to Arrive Looking Awesome",
+        "body_3": "Or we'll fix it for free."
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "promotion_image_D3dtXD": {
+          "type": "promotion_image",
+          "settings": {
+            "position": 3,
+            "column_span": "2",
+            "image": "shopify://shop_images/Customize-Your-Own-141587-gal1-1246x848.jpg",
+            "title": "Customize Your Own Basket",
+            "content": "<p>★ <strong>MOST POPULAR</strong></p><p>Give a gift that is crafted by you. Choose your liquor, accessories, snacks, mixers, and more to make your gift extra special.</p>",
+            "link_url": "/apps/gbb/easybundle/1",
+            "link_text": "Customize Now",
+            "heading_tag": "h4",
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 18
+          }
+        }
+      },
+      "block_order": [
+        "promotion_image_D3dtXD"
+      ],
+      "settings": {
+        "products_per_page": 50,
+        "products_per_row_mobile": "1",
+        "products_per_row_desktop": 3,
+        "filter_layout": "horizontal",
+        "show_sort_by": true,
+        "show_filters": true,
+        "show_filter_group_name": false,
+        "show_filter_values_count": false,
+        "open_first_filter_group": false
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "bb_guarantee_strip_x4RQPq",
+    "main"
+  ]
+}

@@ -1,0 +1,440 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET DRINKABLE CARD PICKER  v1.0
+Synced to main 2026-05-07 (re-trigger sync)
+----------------------------------------------------------------------------------------------------------------------
+
+Renders a grid of mini bottles for "drinkable card" products. Customer must select exactly one mini.
+On Add-to-Cart, both the card and the selected mini are added to the cart in a single /cart/add.js request
+via the centralized bb-product-addons.liquid form handler.
+
+PARAMETERS:
+  product               (required)  The parent card product (passed by product-info via {%- when 'drinkable_card_picker' -%})
+  product_form_id       (required)  The product form ID (used to find ATC button for disable/enable)
+  collection_handle     (optional)  Mini bottle collection handle. Defaults to 'mini-bottles'.
+  heading               (optional)  Heading text. Defaults to 'Pick Your Bottle'.
+  subheading            (optional)  Subheading text. Defaults to 'Required — choose one mini to fill your card.'
+
+REGISTERS:
+  window.productAddons.drinkableCardMini   — picked up by bb-product-addons.liquid handler
+    .getItem()  → { id, quantity, properties } | null
+    .validate() → boolean (false when no mini selected; surfaces inline error UI)
+{%- endcomment -%}
+
+{%- assign collection_handle = collection_handle | default: 'mini-bottles' -%}
+{%- assign heading = heading | default: 'Pick Your Bottle' -%}
+{%- assign subheading = subheading | default: 'Required — choose one mini to fill your card.' -%}
+{%- assign mini_collection = collections[collection_handle] -%}
+
+{%- if mini_collection != blank and mini_collection.products.size > 0 -%}
+  <div
+    class="bb-drinkable-card"
+    data-bb-drinkable-card
+    data-product-form-id="{{ product_form_id }}"
+    data-product-id="{{ product.id }}"
+  >
+    <div class="bb-drinkable-card__header">
+      <h3 class="bb-drinkable-card__title">{{ heading }}</h3>
+      <p class="bb-drinkable-card__subtitle">{{ subheading }}</p>
+    </div>
+
+    <div class="bb-drinkable-card__error" data-bb-drinkable-error role="alert" hidden>
+      Please select a mini bottle before adding to cart.
+    </div>
+
+    <div
+      class="bb-drinkable-card__grid"
+      role="radiogroup"
+      aria-label="{{ heading | escape }}"
+      data-bb-drinkable-grid
+    >
+      {%- for prod in mini_collection.products -%}
+        {%- for var in prod.variants -%}
+          {%- if var.available -%}
+            {%- assign display_title = prod.title -%}
+            {%- if prod.variants.size > 1 and var.title != 'Default Title' -%}
+              {%- assign display_title = prod.title | append: ' — ' | append: var.title -%}
+            {%- endif -%}
+            {%- assign tile_image = var.image | default: prod.featured_image -%}
+
+            <button
+              type="button"
+              class="bb-drinkable-card__tile"
+              role="radio"
+              aria-checked="false"
+              data-bb-drinkable-tile
+              data-variant-id="{{ var.id }}"
+              data-variant-price="{{ var.price }}"
+              data-variant-title="{{ display_title | escape }}"
+              data-product-handle="{{ prod.handle }}"
+            >
+              <span class="bb-drinkable-card__tile-check" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="14" height="14" focusable="false">
+                  <path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+                </svg>
+              </span>
+
+              {%- if tile_image -%}
+                <img
+                  class="bb-drinkable-card__tile-image"
+                  src="{{ tile_image | image_url: width: 240 }}"
+                  srcset="{{ tile_image | image_url: width: 240 }} 1x, {{ tile_image | image_url: width: 480 }} 2x"
+                  alt="{{ display_title | escape }}"
+                  loading="lazy"
+                  width="120"
+                  height="120"
+                >
+              {%- else -%}
+                <span class="bb-drinkable-card__tile-image bb-drinkable-card__tile-image--placeholder" aria-hidden="true"></span>
+              {%- endif -%}
+
+              <span class="bb-drinkable-card__tile-name">{{ display_title }}</span>
+              <span class="bb-drinkable-card__tile-price">{{ var.price | money }}</span>
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="bb-drinkable-card__totals" data-bb-drinkable-totals>
+      <div class="bb-drinkable-card__totals-row">
+        <span class="bb-drinkable-card__totals-label">{{ product.title }}</span>
+        <span class="bb-drinkable-card__totals-value">{{ product.price | money }}</span>
+      </div>
+      <div class="bb-drinkable-card__totals-row" data-bb-drinkable-mini-row hidden>
+        <span class="bb-drinkable-card__totals-label" data-bb-drinkable-mini-name>—</span>
+        <span class="bb-drinkable-card__totals-value" data-bb-drinkable-mini-price>—</span>
+      </div>
+      <div class="bb-drinkable-card__totals-row bb-drinkable-card__totals-row--total">
+        <span class="bb-drinkable-card__totals-label">Total</span>
+        <span class="bb-drinkable-card__totals-value" data-bb-drinkable-grand-total>{{ product.price | money }}</span>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .bb-drinkable-card {
+      margin: var(--spacing-4, 16px) 0;
+      padding: var(--spacing-4, 16px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: var(--border-radius-md, 8px);
+      background: rgba(0, 0, 0, 0.015);
+    }
+
+    .bb-drinkable-card--error {
+      border-color: #d23333;
+      box-shadow: 0 0 0 1px #d23333 inset;
+    }
+
+    .bb-drinkable-card__header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: var(--spacing-3, 12px);
+    }
+
+    .bb-drinkable-card__title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: 0.01em;
+    }
+
+    .bb-drinkable-card__subtitle {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0;
+    }
+
+    .bb-drinkable-card__error {
+      background: #fdecec;
+      color: #b71c1c;
+      border: 1px solid #f5c2c2;
+      padding: 10px 12px;
+      border-radius: var(--border-radius-md, 8px);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: var(--spacing-3, 12px);
+    }
+
+    .bb-drinkable-card__grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding: 4px;
+      margin: 0 -4px var(--spacing-3, 12px);
+      scrollbar-width: thin;
+    }
+
+    @media screen and (min-width: 600px) {
+      .bb-drinkable-card__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .bb-drinkable-card__tile {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 8px;
+      background: #fff;
+      border: 1.5px solid rgba(0, 0, 0, 0.1);
+      border-radius: var(--border-radius-md, 8px);
+      cursor: pointer;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+      text-align: center;
+      font-family: inherit;
+    }
+
+    .bb-drinkable-card__tile:hover {
+      border-color: rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    .bb-drinkable-card__tile:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
+
+    .bb-drinkable-card__tile:active {
+      transform: scale(0.98);
+    }
+
+    .bb-drinkable-card__tile--selected {
+      border-color: #000;
+      box-shadow: 0 0 0 1.5px #000 inset;
+    }
+
+    .bb-drinkable-card__tile-check {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .bb-drinkable-card__tile--selected .bb-drinkable-card__tile-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .bb-drinkable-card__tile-image {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      background: #fafafa;
+      border-radius: 4px;
+    }
+
+    .bb-drinkable-card__tile-image--placeholder {
+      display: block;
+    }
+
+    .bb-drinkable-card__tile-name {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 30px;
+    }
+
+    .bb-drinkable-card__tile-price {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .bb-drinkable-card__totals {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: var(--spacing-3, 12px);
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .bb-drinkable-card__totals-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 14px;
+      gap: 12px;
+    }
+
+    .bb-drinkable-card__totals-label {
+      color: rgba(0, 0, 0, 0.7);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .bb-drinkable-card__totals-row--total {
+      font-size: 16px;
+      font-weight: 700;
+      padding-top: 6px;
+      border-top: 1px dashed rgba(0, 0, 0, 0.12);
+      margin-top: 2px;
+    }
+
+    .bb-drinkable-card__totals-row--total .bb-drinkable-card__totals-label {
+      color: #000;
+    }
+  </style>
+
+  <script>
+    (function() {
+      'use strict';
+
+      function initDrinkableCardPicker() {
+        const wrapper = document.querySelector('[data-bb-drinkable-card][data-product-id="{{ product.id }}"]');
+        if (!wrapper) return;
+        if (wrapper.dataset.bbInitialized === 'true') return;
+        wrapper.dataset.bbInitialized = 'true';
+
+        const tiles = wrapper.querySelectorAll('[data-bb-drinkable-tile]');
+        const errorEl = wrapper.querySelector('[data-bb-drinkable-error]');
+        const miniRow = wrapper.querySelector('[data-bb-drinkable-mini-row]');
+        const miniNameEl = wrapper.querySelector('[data-bb-drinkable-mini-name]');
+        const miniPriceEl = wrapper.querySelector('[data-bb-drinkable-mini-price]');
+        const grandTotalEl = wrapper.querySelector('[data-bb-drinkable-grand-total]');
+        const productFormId = wrapper.dataset.productFormId;
+        const productId = wrapper.dataset.productId;
+
+        const cardPriceCents = {{ product.price | json }};
+        const cardTitle = {{ product.title | json }};
+        const moneyFormat = {{ shop.money_format | json }};
+
+        let selected = null; // { id, price, title }
+
+        function formatMoney(cents) {
+          const dollarsFixed = (cents / 100).toFixed(2);
+          const dollarsRounded = Math.round(cents / 100).toString();
+          const dollarsComma = dollarsFixed.replace('.', ',');
+          return moneyFormat
+            .replace(/\{\{\s*amount\s*\}\}/g, dollarsFixed)
+            .replace(/\{\{\s*amount_no_decimals\s*\}\}/g, dollarsRounded)
+            .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/g, dollarsComma)
+            .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/g, dollarsRounded);
+        }
+
+        function findATCButton() {
+          const form = document.getElementById(productFormId)
+            || document.querySelector('form[id*="product-form-' + productId + '"]');
+          if (!form) return null;
+          return form.querySelector('[type="submit"]');
+        }
+
+        function setATCDisabled(disabled) {
+          const btn = findATCButton();
+          if (!btn) return;
+          if (disabled) {
+            btn.setAttribute('disabled', 'disabled');
+            btn.setAttribute('aria-disabled', 'true');
+            btn.classList.add('bb-drinkable-atc-disabled');
+          } else {
+            btn.removeAttribute('disabled');
+            btn.removeAttribute('aria-disabled');
+            btn.classList.remove('bb-drinkable-atc-disabled');
+          }
+        }
+
+        function selectTile(tile) {
+          tiles.forEach(function(t) {
+            t.setAttribute('aria-checked', 'false');
+            t.classList.remove('bb-drinkable-card__tile--selected');
+          });
+          tile.setAttribute('aria-checked', 'true');
+          tile.classList.add('bb-drinkable-card__tile--selected');
+
+          const priceCents = parseInt(tile.dataset.variantPrice, 10);
+          selected = {
+            id: parseInt(tile.dataset.variantId, 10),
+            price: priceCents,
+            title: tile.dataset.variantTitle
+          };
+
+          miniRow.hidden = false;
+          miniNameEl.textContent = selected.title;
+          miniPriceEl.textContent = formatMoney(priceCents);
+          grandTotalEl.textContent = formatMoney(cardPriceCents + priceCents);
+
+          if (errorEl) errorEl.hidden = true;
+          wrapper.classList.remove('bb-drinkable-card--error');
+
+          setATCDisabled(false);
+        }
+
+        tiles.forEach(function(tile) {
+          tile.addEventListener('click', function() { selectTile(tile); });
+          tile.addEventListener('keydown', function(e) {
+            if (e.key === ' ' || e.key === 'Enter') {
+              e.preventDefault();
+              selectTile(tile);
+            }
+          });
+        });
+
+        // Default state: ATC disabled until selection
+        setATCDisabled(true);
+
+        // Register addon for centralized form handler (bb-product-addons.liquid)
+        window.productAddons = window.productAddons || {};
+        window.productAddons.drinkableCardMini = {
+          getItem: function() {
+            if (!selected) return null;
+            return {
+              id: selected.id,
+              quantity: 1,
+              properties: {
+                'Paired with': cardTitle,
+                '_drinkable_card_pairing': 'true'
+              }
+            };
+          },
+          validate: function() {
+            if (!selected) {
+              if (errorEl) errorEl.hidden = false;
+              wrapper.classList.add('bb-drinkable-card--error');
+              wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              return false;
+            }
+            return true;
+          }
+        };
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDrinkableCardPicker);
+      } else {
+        initDrinkableCardPicker();
+      }
+    })();
+  </script>
+
+{%- else -%}
+
+  {%- comment -%} Collection missing or empty — render nothing on storefront, surface a hint in the editor. {%- endcomment -%}
+  {%- if request.design_mode -%}
+    <div style="padding: 16px; border: 2px dashed #d23333; border-radius: 8px; color: #b71c1c; font-size: 13px;">
+      <strong>Drinkable Card Picker:</strong> The "<code>{{ collection_handle }}</code>" collection is empty or doesn't exist.
+      Create the collection or change the handle in the block settings.
+    </div>
+  {%- endif -%}
+
+{%- endif -%}

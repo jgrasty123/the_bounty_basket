@@ -1,0 +1,194 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET DELIVERY PROMISE (W2-01)
+----------------------------------------------------------------------------------------------------------------------
+
+Renders a live-updating delivery promise with countdown to the daily ship cutoff.
+
+Above fold in the buy box, this is the single biggest CVR lever for a gift vertical:
+gift buyers have a hard deadline (birthday, anniversary, Father's Day) and need to
+know when a product will arrive before they commit.
+
+Logic:
+  * Order cutoff is 2pm PT / 5pm ET, Monday–Friday
+  * If ordering before cutoff on a business day → ships today
+  * Otherwise → ships next business day
+  * Arrival date = ship date + transit_business_days (default 6 for conservative
+    nationwide promise — East Coast worst case)
+  * US holidays skipped
+
+Copy framing uses James's preferred "5pm EST" wording (most customers are East Coast
+even though operations are on PT).
+
+Supported block.settings:
+  * cutoff_hour_pt        — integer (default 14 = 2pm PT = 5pm ET)
+  * transit_business_days — integer (default 6)
+  * show_express_note     — boolean (default true)
+  * accent_color          — color (default #cd241d — BroBasket red)
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign cutoff_hour = block.settings.cutoff_hour_pt | default: 14 -%}
+{%- assign transit_days = block.settings.transit_business_days | default: 6 -%}
+{%- assign accent = block.settings.accent_color | default: '#cd241d' -%}
+
+<div
+  class="bb-delivery-promise"
+  data-bb-delivery-promise
+  data-cutoff-hour="{{ cutoff_hour }}"
+  data-transit-days="{{ transit_days }}"
+  style="--bb-dp-accent: {{ accent }};"
+  role="status"
+  aria-live="polite"
+>
+  <div class="bb-delivery-promise__row">
+    <span class="bb-delivery-promise__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 3h15v13H1zM16 8h4l3 4v5h-7V8z"/>
+        <circle cx="5.5" cy="18.5" r="2.5"/>
+        <circle cx="18.5" cy="18.5" r="2.5"/>
+      </svg>
+    </span>
+
+    <div class="bb-delivery-promise__text">
+      <span class="bb-delivery-promise__pre-cutoff" data-pre-cutoff>
+        Order within <strong data-countdown>—</strong>
+        for delivery by <strong data-arrival>—</strong>
+      </span>
+      <span class="bb-delivery-promise__post-cutoff" data-post-cutoff hidden>
+        Ships next business day · Delivery by <strong data-arrival-post>—</strong>
+      </span>
+    </div>
+  </div>
+
+  {%- if block.settings.show_express_note != false -%}
+    <div class="bb-delivery-promise__subline">
+      Get it there tomorrow with Express Options
+    </div>
+  {%- endif -%}
+
+  <noscript>
+    <div class="bb-delivery-promise__subline">
+      Orders placed by 5pm EST ship same business day. Express options available at checkout.
+    </div>
+  </noscript>
+</div>
+
+<script>
+  (function() {
+    'use strict';
+
+    var root = document.querySelector('.bb-delivery-promise[data-bb-delivery-promise]');
+    if (!root) return;
+    if (root.dataset.bbInit === 'true') return;
+    root.dataset.bbInit = 'true';
+
+    var cutoffHourPT = parseInt(root.dataset.cutoffHour, 10);
+    if (isNaN(cutoffHourPT)) cutoffHourPT = 14;
+    var transitDays = parseInt(root.dataset.transitDays, 10);
+    if (isNaN(transitDays)) transitDays = 6;
+
+    var countdownEl  = root.querySelector('[data-countdown]');
+    var arrivalEl    = root.querySelector('[data-arrival]');
+    var arrivalPost  = root.querySelector('[data-arrival-post]');
+    var preBlock     = root.querySelector('[data-pre-cutoff]');
+    var postBlock    = root.querySelector('[data-post-cutoff]');
+
+    // US shipping holidays — update each year
+    var HOLIDAYS = [
+      '2026-01-01','2026-01-19','2026-02-16','2026-05-25',
+      '2026-07-03','2026-07-04','2026-09-07','2026-10-12',
+      '2026-11-11','2026-11-26','2026-11-27','2026-12-24',
+      '2026-12-25','2026-12-31',
+      '2027-01-01','2027-01-18','2027-02-15','2027-05-31',
+      '2027-07-05','2027-09-06','2027-11-25','2027-11-26',
+      '2027-12-24','2027-12-25','2027-12-31'
+    ];
+
+    function toISODateLocal(d) {
+      var y = d.getFullYear();
+      var m = String(d.getMonth() + 1).padStart(2, '0');
+      var day = String(d.getDate()).padStart(2, '0');
+      return y + '-' + m + '-' + day;
+    }
+
+    function isBusinessDay(d) {
+      var day = d.getDay();
+      if (day === 0 || day === 6) return false;
+      return HOLIDAYS.indexOf(toISODateLocal(d)) === -1;
+    }
+
+    function addBusinessDays(from, days) {
+      var r = new Date(from.getTime());
+      var added = 0;
+      while (added < days) {
+        r.setDate(r.getDate() + 1);
+        if (isBusinessDay(r)) added++;
+      }
+      return r;
+    }
+
+    // Current time interpreted in Pacific time — works regardless of user's local tz
+    function nowInPacific() {
+      var now = new Date();
+      var ptString = now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+      return new Date(ptString);
+    }
+
+    function getCutoffToday(pt) {
+      var c = new Date(pt.getTime());
+      c.setHours(cutoffHourPT, 0, 0, 0);
+      return c;
+    }
+
+    function nextBusinessDay(pt) {
+      var d = new Date(pt.getTime());
+      d.setHours(0, 0, 0, 0);
+      do { d.setDate(d.getDate() + 1); } while (!isBusinessDay(d));
+      return d;
+    }
+
+    function getShipDate(pt) {
+      var cutoff = getCutoffToday(pt);
+      if (isBusinessDay(pt) && pt < cutoff) return pt;
+      return nextBusinessDay(pt);
+    }
+
+    function formatDate(d) {
+      var days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return days[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate();
+    }
+
+    function render() {
+      var pt       = nowInPacific();
+      var cutoff   = getCutoffToday(pt);
+      var shipDate = getShipDate(pt);
+      var arrival  = addBusinessDays(shipDate, transitDays);
+      var arrivalLabel = formatDate(arrival);
+
+      var preCutoff = isBusinessDay(pt) && pt < cutoff;
+
+      if (preCutoff) {
+        var diffMs  = cutoff - pt;
+        var hours   = Math.floor(diffMs / 3600000);
+        var minutes = Math.floor((diffMs % 3600000) / 60000);
+        if (countdownEl) countdownEl.textContent = hours + 'h ' + minutes + 'm';
+        if (arrivalEl)   arrivalEl.textContent   = arrivalLabel;
+
+        preBlock.hidden  = false;
+        postBlock.hidden = true;
+        root.dataset.state = 'pre-cutoff';
+      } else {
+        if (arrivalPost) arrivalPost.textContent = arrivalLabel;
+        preBlock.hidden  = true;
+        postBlock.hidden = false;
+        root.dataset.state = 'post-cutoff';
+      }
+    }
+
+    render();
+    // Refresh every 30s so the countdown stays current for long-lingering tabs.
+    setInterval(render, 30000);
+  })();
+</script>

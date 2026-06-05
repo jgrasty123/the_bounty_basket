@@ -1,0 +1,112 @@
+<section id="contact-form-section" class="d-contact">
+  <div class="container">
+    <div class="d-contact__form-wrap">
+      {%- form 'contact', id: 'ContactForm', class: 'contact__form' -%}
+        {%- if form.posted_successfully? -%}
+          {%- capture content -%}{{- 'contact.form.success_message' | t -}}{%- endcapture -%}
+          {%- render 'banner', status: 'success', content: content -%}
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          {%- capture content -%}{{ form.errors.translated_fields[form.errors.first] | capitalize }} {{ form.errors.messages[form.errors.first] }}{%- endcapture -%}
+          {%- render 'banner', status: 'error', content: content -%}
+        {%- endif -%}
+
+        <input type="hidden"
+               name="contact[Form Type]"
+               value="Donation Request">
+
+        <!-- Row 1: Name & Email -->
+        <div class="contact__form-row">
+          <label for="ContactForm-name" class="visually-hidden">Name</label>
+          <input
+            type="text"
+            id="ContactForm-name"
+            name="contact[name]"
+            class="input--clear input"
+            placeholder="Name"
+            required
+          >
+
+          <label for="ContactForm-email" class="visually-hidden">Email</label>
+          <input
+            type="email"
+            id="ContactForm-email"
+            name="contact[email]"
+            class="input--clear input"
+            placeholder="Email"
+            spellcheck="false"
+            autocapitalize="off"
+            aria-required="true"
+            required
+          >
+        </div>
+
+        <!-- Row 2: Organisation Name & Tax ID -->
+        <div class="contact__form-row">
+          <label for="ContactForm-organisation-name" class="visually-hidden">Organisation Name</label>
+          <input
+            type="text"
+            id="ContactForm-organisation-name"
+            name="contact[organisation_name]"
+            class="input--clear input"
+            placeholder="Organisation Name"
+            required
+          >
+
+          <label for="ContactForm-organisation-tax-id" class="visually-hidden">Organisation Tax ID</label>
+          <input
+            type="text"
+            id="ContactForm-organisation-tax-id"
+            name="contact[organisation_tax_id]"
+            class="input--clear input"
+            placeholder="Organisation Tax ID"
+            required
+          >
+        </div>
+
+        <!-- Row 3: Organisation Address -->
+        <div class="contact__form-row">
+          <label for="ContactForm-organisation-address" class="visually-hidden">Organisation Address</label>
+          <textarea
+            id="ContactForm-organisation-address"
+            name="contact[organisation_address]"
+            class="input--clear input"
+            rows="4"
+            placeholder="Full Address of Organisation"
+            required
+          ></textarea>
+        </div>
+
+        <!-- Row 4: Comments / Questions -->
+        <div class="contact__form-row">
+          <label for="ContactForm-body" class="visually-hidden">Comments or Questions</label>
+          <textarea
+            id="ContactForm-body"
+            name="contact[body]"
+            class="input--clear input"
+            rows="4"
+            placeholder="Comments / Questions"
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" class="contact__submit btn btn--secondary">
+          Submit
+        </button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Donation Form",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Donation Form"
+    }
+  ]
+}
+{% endschema %}

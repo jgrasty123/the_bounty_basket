@@ -1,0 +1,149 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET FOUNDER STORY (W4-01)
+----------------------------------------------------------------------------------------------------------------------
+
+"Why BroBasket exists" narrative section. Two-column layout (image left,
+copy right on desktop; stacks on mobile). All copy and the image are
+editable via section settings — defaults are placeholder text James
+will replace with the real founder story when ready.
+
+Three paragraph slots so the editor can keep one short or use all three
+for a fuller narrative. Optional pull-quote setting renders an offset
+quote between paragraphs 2 and 3 if filled.
+
+Default placement: a new About / Story page. Also enabled on PDP and
+homepage in case James wants to surface a condensed story-block lower
+on the funnel.
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign bg_color    = section.settings.background_color | default: '#fdf9f1' -%}
+{%- assign brand_color = section.settings.brand_color      | default: '#1a1a1a' -%}
+{%- assign accent_red  = section.settings.accent_color     | default: '#cd241d' -%}
+{%- assign image_side  = section.settings.image_side       | default: 'left' -%}
+
+<section
+  class="bb-story bb-story--image-{{ image_side }}"
+  style="--bb-story-bg: {{ bg_color }}; --bb-story-brand: {{ brand_color }}; --bb-story-accent: {{ accent_red }};"
+>
+  <div class="bb-story__inner">
+    <div class="bb-story__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1200 | image_tag:
+            loading: 'lazy',
+            widths: '400,600,800,1200',
+            sizes: '(min-width: 768px) 50vw, 100vw',
+            class: 'bb-story__image',
+            alt: section.settings.image.alt | default: section.settings.eyebrow }}
+      {%- else -%}
+        <div class="bb-story__image-placeholder" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span>Add a founder photo or behind-the-scenes shot in the section settings.</span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="bb-story__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="bb-story__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="bb-story__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.paragraph_1 != blank -%}
+        <p class="bb-story__paragraph">{{ section.settings.paragraph_1 | newline_to_br }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.paragraph_2 != blank -%}
+        <p class="bb-story__paragraph">{{ section.settings.paragraph_2 | newline_to_br }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.pull_quote != blank -%}
+        <blockquote class="bb-story__quote">
+          {{ section.settings.pull_quote | escape }}
+          {%- if section.settings.quote_attribution != blank -%}
+            <cite>— {{ section.settings.quote_attribution | escape }}</cite>
+          {%- endif -%}
+        </blockquote>
+      {%- endif -%}
+
+      {%- if section.settings.paragraph_3 != blank -%}
+        <p class="bb-story__paragraph">{{ section.settings.paragraph_3 | newline_to_br }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.signature != blank -%}
+        <p class="bb-story__signature">{{ section.settings.signature | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+        <a href="{{ section.settings.cta_url }}" class="bb-story__cta">
+          {{ section.settings.cta_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Founder story (W4-01)",
+  "tag": "section",
+  "class": "section--bb-story",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Two-column 'why we exist' story block. Replace the placeholder copy with your real founder story. Image picker accepts any photo — recommended: a behind-the-scenes shot of the warehouse, a team photo, or a portrait."
+    },
+
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "image_side",
+      "label": "Image position (desktop)",
+      "default": "left",
+      "options": [
+        { "value": "left",  "label": "Image left, copy right" },
+        { "value": "right", "label": "Image right, copy left" }
+      ]
+    },
+
+    { "type": "header", "content": "Image" },
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow (small label above heading)", "default": "Our Story" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Why we built The BroBasket" },
+    { "type": "textarea", "id": "paragraph_1", "label": "Paragraph 1", "default": "Most gift baskets are forgettable. A wicker basket. A red ribbon. Some no-name crackers and a tiny jar of jam. We've all sent one. We've all received one. Nobody talks about it the next day." },
+    { "type": "textarea", "id": "paragraph_2", "label": "Paragraph 2", "default": "We built BroBasket to fix that — for the dads, brothers, husbands, and friends who deserve a gift that actually lands. Real spirits. Real snacks. Real packaging that doesn't end up in the recycling on the way to the kitchen." },
+    { "type": "text", "id": "pull_quote", "label": "Pull quote (optional)" },
+    { "type": "text", "id": "quote_attribution", "label": "Pull quote attribution" },
+    { "type": "textarea", "id": "paragraph_3", "label": "Paragraph 3 (optional)", "default": "Every basket is hand-built to order in our Ventura, California warehouse. We pick the spirits. We curate the snacks. We pack each one like the recipient is somebody we know — because to the person sending it, they are." },
+    { "type": "text", "id": "signature", "label": "Signature line (optional)", "default": "— James, Founder" },
+
+    { "type": "header", "content": "Call to action (optional)" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop the baskets" },
+    { "type": "url",  "id": "cta_url",   "label": "Button link" },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color", "id": "background_color", "label": "Background colour", "default": "#fdf9f1" },
+    { "type": "color", "id": "brand_color",      "label": "Heading colour",    "default": "#1a1a1a" },
+    { "type": "color", "id": "accent_color",     "label": "Accent colour",     "default": "#cd241d" }
+  ],
+  "presets": [
+    {
+      "name": "Founder story (W4-01)",
+      "category": "Story & info"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product", "index", "page"]
+  }
+}
+{% endschema %}

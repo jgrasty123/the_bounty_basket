@@ -1,0 +1,225 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET REVIEW WALL (W3-02) — full-width section
+----------------------------------------------------------------------------------------------------------------------
+
+Curated 6-review grid. Lives as a top-level section on the product template
+so it spans the full page width (sibling to the main product section, not
+nested inside the right-hand product-info column).
+
+Six real 5-star reviews from James's Apr 2026 curation pass, pre-populated
+into section settings. Names changed to plausible first-name + last-initial.
+Photos optional via image_picker; blank slots render an initials-circle
+fallback that visually matches the hero review (W2-03).
+
+Layout:
+  * Desktop (>= 1000px): 3 columns × 2 rows
+  * Tablet  (640-999px): 2 columns × 3 rows
+  * Mobile  (< 640px):   1 column × 6 rows (stacks)
+
+Why ONE section with 6 review slots (vs 6 child blocks): the six distinct
+reviews are pre-loaded as section defaults, so adding the section in the
+theme editor instantly populates all six cards. James only swaps photos
+when sourced.
+
+Section settings: 39 total (3 globals + 6 review slots × 5 fields each + 6
+header dividers).
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign star_color = section.settings.star_color | default: "#F5A623" -%}
+{%- assign section_title = section.settings.section_title | default: "What customers are saying" -%}
+{%- assign bg_color = section.settings.background_color | default: "#fdf9f1" -%}
+
+<section
+  class="bb-review-wall-section"
+  style="--bb-rw-star: {{ star_color }}; --bb-rw-bg: {{ bg_color }};"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bb-review-wall-section__inner">
+    {%- if section_title != blank -%}
+      <h2 class="bb-review-wall-section__title">{{ section_title | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="bb-review-wall-section__subtitle">{{ section.settings.subtitle | escape }}</p>
+    {%- endif -%}
+
+    <div class="bb-review-wall-section__grid">
+      {%- for i in (1..6) -%}
+        {%- case i -%}
+          {%- when 1 -%}
+            {%- assign r_photo    = section.settings.photo_1 -%}
+            {%- assign r_headline = section.settings.headline_1 -%}
+            {%- assign r_quote    = section.settings.quote_1 -%}
+            {%- assign r_name     = section.settings.name_1 -%}
+            {%- assign r_meta     = section.settings.meta_1 -%}
+          {%- when 2 -%}
+            {%- assign r_photo    = section.settings.photo_2 -%}
+            {%- assign r_headline = section.settings.headline_2 -%}
+            {%- assign r_quote    = section.settings.quote_2 -%}
+            {%- assign r_name     = section.settings.name_2 -%}
+            {%- assign r_meta     = section.settings.meta_2 -%}
+          {%- when 3 -%}
+            {%- assign r_photo    = section.settings.photo_3 -%}
+            {%- assign r_headline = section.settings.headline_3 -%}
+            {%- assign r_quote    = section.settings.quote_3 -%}
+            {%- assign r_name     = section.settings.name_3 -%}
+            {%- assign r_meta     = section.settings.meta_3 -%}
+          {%- when 4 -%}
+            {%- assign r_photo    = section.settings.photo_4 -%}
+            {%- assign r_headline = section.settings.headline_4 -%}
+            {%- assign r_quote    = section.settings.quote_4 -%}
+            {%- assign r_name     = section.settings.name_4 -%}
+            {%- assign r_meta     = section.settings.meta_4 -%}
+          {%- when 5 -%}
+            {%- assign r_photo    = section.settings.photo_5 -%}
+            {%- assign r_headline = section.settings.headline_5 -%}
+            {%- assign r_quote    = section.settings.quote_5 -%}
+            {%- assign r_name     = section.settings.name_5 -%}
+            {%- assign r_meta     = section.settings.meta_5 -%}
+          {%- when 6 -%}
+            {%- assign r_photo    = section.settings.photo_6 -%}
+            {%- assign r_headline = section.settings.headline_6 -%}
+            {%- assign r_quote    = section.settings.quote_6 -%}
+            {%- assign r_name     = section.settings.name_6 -%}
+            {%- assign r_meta     = section.settings.meta_6 -%}
+        {%- endcase -%}
+
+        {%- if r_quote != blank and r_name != blank -%}
+          {%- assign name_parts = r_name | split: ' ' -%}
+          {%- capture initials -%}
+            {%- for part in name_parts limit: 2 -%}
+              {{- part | slice: 0 | upcase -}}
+            {%- endfor -%}
+          {%- endcapture -%}
+
+          <figure class="bb-rw-card">
+            <div class="bb-rw-card__head">
+              <div class="bb-rw-card__avatar" aria-hidden="true">
+                {%- if r_photo != blank -%}
+                  {{ r_photo | image_url: width: 120 | image_tag:
+                      loading: 'lazy',
+                      widths: '60,90,120',
+                      sizes: '54px',
+                      class: 'bb-rw-card__photo',
+                      alt: r_name | escape }}
+                {%- else -%}
+                  <span class="bb-rw-card__initials">{{ initials | strip }}</span>
+                {%- endif -%}
+              </div>
+              <div class="bb-rw-card__meta-block">
+                <div class="bb-rw-card__stars" role="img" aria-label="5 out of 5 stars">
+                  {%- for s in (1..5) -%}
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>
+                    </svg>
+                  {%- endfor -%}
+                </div>
+                <p class="bb-rw-card__name">{{ r_name | escape }}</p>
+              </div>
+            </div>
+
+            {%- if r_headline != blank -%}
+              <p class="bb-rw-card__headline">{{ r_headline | escape }}</p>
+            {%- endif -%}
+
+            <blockquote class="bb-rw-card__quote">{{ r_quote | escape }}</blockquote>
+
+            {%- if r_meta != blank -%}
+              <figcaption class="bb-rw-card__footer">{{ r_meta | escape }}</figcaption>
+            {%- endif -%}
+          </figure>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Review wall (W3-02)",
+  "tag": "section",
+  "class": "section--bb-review-wall",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Curated 6-review grid. Pre-populated with real 5-star reviews. Names changed to first-name + last-initial. Leave any photo blank to render an initials-circle fallback."
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section heading",
+      "default": "What customers are saying"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle (optional)"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star colour",
+      "default": "#F5A623"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#fdf9f1"
+    },
+
+    { "type": "header", "content": "Review 1" },
+    { "type": "image_picker", "id": "photo_1",    "label": "Photo" },
+    { "type": "text",         "id": "headline_1", "label": "Headline", "default": "Great service, awesome gift!" },
+    { "type": "textarea",     "id": "quote_1",    "label": "Quote",    "default": "The recipient contacted me right away to say nothing but great things about the products and the packaging. They loved it!" },
+    { "type": "text",         "id": "name_1",     "label": "Name",     "default": "Jennifer L." },
+    { "type": "text",         "id": "meta_1",     "label": "Meta",     "default": "Verified Customer" },
+
+    { "type": "header", "content": "Review 2" },
+    { "type": "image_picker", "id": "photo_2",    "label": "Photo" },
+    { "type": "text",         "id": "headline_2", "label": "Headline", "default": "Perfect delivery & presentation" },
+    { "type": "textarea",     "id": "quote_2",    "label": "Quote",    "default": "We ordered an engraved bottle to help a friend toast his departed brother. Exceptional quality, exceptional service, exceptional tribute." },
+    { "type": "text",         "id": "name_2",     "label": "Name",     "default": "Michael R." },
+    { "type": "text",         "id": "meta_2",     "label": "Meta",     "default": "Verified Customer" },
+
+    { "type": "header", "content": "Review 3" },
+    { "type": "image_picker", "id": "photo_3",    "label": "Photo" },
+    { "type": "text",         "id": "headline_3", "label": "Headline", "default": "Very pleased" },
+    { "type": "textarea",     "id": "quote_3",    "label": "Quote",    "default": "I got a basket for my dad and he absolutely loved it. The customer service was great as well. Will definitely order again." },
+    { "type": "text",         "id": "name_3",     "label": "Name",     "default": "David K." },
+    { "type": "text",         "id": "meta_3",     "label": "Meta",     "default": "Verified Customer" },
+
+    { "type": "header", "content": "Review 4" },
+    { "type": "image_picker", "id": "photo_4",    "label": "Photo" },
+    { "type": "text",         "id": "headline_4", "label": "Headline", "default": "Easy and thoughtful" },
+    { "type": "textarea",     "id": "quote_4",    "label": "Quote",    "default": "Loved the easy-to-add options in the basket. Made a great gift they truly enjoyed!" },
+    { "type": "text",         "id": "name_4",     "label": "Name",     "default": "Rachel S." },
+    { "type": "text",         "id": "meta_4",     "label": "Meta",     "default": "Verified Customer" },
+
+    { "type": "header", "content": "Review 5" },
+    { "type": "image_picker", "id": "photo_5",    "label": "Photo" },
+    { "type": "text",         "id": "headline_5", "label": "Headline", "default": "Awesome gift!" },
+    { "type": "textarea",     "id": "quote_5",    "label": "Quote",    "default": "My daughter's fiancé was amazed with the Sampler. A thoughtful gift for special loved ones!" },
+    { "type": "text",         "id": "name_5",     "label": "Name",     "default": "Linda T." },
+    { "type": "text",         "id": "meta_5",     "label": "Meta",     "default": "Verified Customer" },
+
+    { "type": "header", "content": "Review 6" },
+    { "type": "image_picker", "id": "photo_6",    "label": "Photo" },
+    { "type": "text",         "id": "headline_6", "label": "Headline", "default": "Truly surprised" },
+    { "type": "textarea",     "id": "quote_6",    "label": "Quote",    "default": "This gift was wonderful. My husband was truly surprised and enjoyed everything." },
+    { "type": "text",         "id": "name_6",     "label": "Name",     "default": "Karen B." },
+    { "type": "text",         "id": "meta_6",     "label": "Meta",     "default": "Verified Customer" }
+  ],
+  "presets": [
+    {
+      "name": "Review wall (W3-02)",
+      "category": "Reviews"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

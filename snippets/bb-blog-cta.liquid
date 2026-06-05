@@ -1,0 +1,165 @@
+{%- comment -%}
+  bb-blog-cta.liquid
+  Renders a product recommendation CTA block at the bottom of blog posts.
+  Place immediately after the share buttons block in sections/main-article.liquid.
+
+  Uses article.tags to match relevant collections. Falls back to a
+  general "Shop All" CTA if no tags match.
+{%- endcomment -%}
+
+{%- liquid
+  assign cta_heading = 'Looking for the perfect gift?'
+  assign cta_sub = 'We build every basket by hand in Ventura, CA. Same-day shipping on orders placed by 5PM EST.'
+  assign cta_url = '/collections/gift-baskets-for-men'
+  assign cta_label = 'Shop Gift Baskets'
+
+  for tag in article.tags
+    assign tag_lower = tag | downcase
+    if tag_lower contains 'bourbon' or tag_lower contains 'whiskey' or tag_lower contains 'scotch'
+      assign cta_heading = 'Shop Whiskey & Bourbon Gift Baskets'
+      assign cta_sub = 'Hand-selected spirits, curated add-ons, and same-day shipping. The gift he actually wants.'
+      assign cta_url = '/collections/whiskey-and-bourbon-gift-sets'
+      assign cta_label = 'Shop Whiskey Gifts'
+      break
+    endif
+    if tag_lower contains 'beer' or tag_lower contains 'craft beer'
+      assign cta_heading = 'Shop Beer Lover Gift Baskets'
+      assign cta_sub = 'Craft brews, koozies, snacks — everything a beer guy could want, packed and shipped same day.'
+      assign cta_url = '/collections/beer-gifts-for-men'
+      assign cta_label = 'Shop Beer Gifts'
+      break
+    endif
+    if tag_lower contains 'tequila'
+      assign cta_heading = 'Shop Tequila Gift Baskets'
+      assign cta_sub = 'Premium tequila gifted right. Every basket is hand-packed and ships same day.'
+      assign cta_url = '/collections/tequila-gifts'
+      assign cta_label = 'Shop Tequila Gifts'
+      break
+    endif
+    if tag_lower contains 'birthday'
+      assign cta_heading = 'Shop Birthday Gift Baskets for Men'
+      assign cta_sub = 'Make his birthday one he actually remembers. Ships same day — even last-minute orders.'
+      assign cta_url = '/collections/birthday-gifts-for-men'
+      assign cta_label = 'Shop Birthday Gifts'
+      break
+    endif
+    if tag_lower contains 'retirement'
+      assign cta_heading = 'Shop Retirement Gift Baskets'
+      assign cta_sub = "He survived the 9-to-5. Now it's time to celebrate. Ships same day."
+      assign cta_url = '/collections/retirement-gifts'
+      assign cta_label = 'Shop Retirement Gifts'
+      break
+    endif
+    if tag_lower contains 'golf'
+      assign cta_heading = 'Shop Golf Gift Baskets'
+      assign cta_sub = 'For the guy who lives on the course. Ships same day, lands like a hole-in-one.'
+      assign cta_url = '/collections/golf-gift-baskets'
+      assign cta_label = 'Shop Golf Gifts'
+      break
+    endif
+  endfor
+-%}
+
+<div class="bb-blog-cta">
+  <div class="bb-blog-cta__inner">
+    <div class="bb-blog-cta__content">
+      <p class="bb-blog-cta__eyebrow">The BroBasket</p>
+      <h3 class="bb-blog-cta__heading">{{ cta_heading }}</h3>
+      <p class="bb-blog-cta__sub">{{ cta_sub }}</p>
+      <div class="bb-blog-cta__badges">
+        <span class="bb-blog-cta__badge">✓ Same-day shipping</span>
+        <span class="bb-blog-cta__badge">✓ Made in the USA</span>
+        <span class="bb-blog-cta__badge">✓ 12,000+ reviews</span>
+      </div>
+      <a href="{{ cta_url }}" class="bb-blog-cta__btn">{{ cta_label }}</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .bb-blog-cta {
+    margin: 40px 0 8px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #1c1c1c;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .bb-blog-cta__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 0;
+    min-height: 220px;
+  }
+
+  .bb-blog-cta__content {
+    padding: 32px 36px;
+  }
+
+  .bb-blog-cta__eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #cd241d;
+    margin: 0 0 8px;
+  }
+
+  .bb-blog-cta__heading {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 10px;
+    line-height: 1.25;
+  }
+
+  .bb-blog-cta__sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    margin: 0 0 16px;
+    line-height: 1.55;
+  }
+
+  .bb-blog-cta__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .bb-blog-cta__badge {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    padding: 4px 10px;
+  }
+
+  .bb-blog-cta__btn {
+    display: inline-block;
+    background: #cd241d;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .bb-blog-cta__btn:hover {
+    background: #b01e18;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: 799px) {
+    .bb-blog-cta__content {
+      padding: 24px 20px;
+    }
+    .bb-blog-cta__heading {
+      font-size: 19px;
+    }
+  }
+</style>

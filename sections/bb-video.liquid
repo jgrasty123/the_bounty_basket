@@ -1,0 +1,151 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET UNBOXING VIDEO (W4-03)
+----------------------------------------------------------------------------------------------------------------------
+
+Video embed section for unboxing footage / brand video. Supports three
+sources:
+
+  1. video_url   — Paste any YouTube or Vimeo URL. Section auto-converts
+                   to a privacy-friendly embed (youtube-nocookie.com,
+                   player.vimeo.com).
+  2. shopify_video — A native Shopify video file uploaded via the file
+                   picker. Renders with native HTML5 controls.
+  3. (no video set) — Renders a placeholder card prompting the editor.
+
+Optional poster image setting overrides the source's default thumbnail
+so the section looks polished even before the user clicks play.
+
+Lazy-loaded by default (loading="lazy" on the iframe / video element).
+The iframe variant uses youtube-nocookie or player.vimeo to keep tracking
+to a minimum until the user actually plays.
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign bg_color    = section.settings.background_color | default: '#1a1a1a' -%}
+{%- assign text_color  = section.settings.text_color       | default: '#ffffff' -%}
+{%- assign accent_red  = section.settings.accent_color     | default: '#cd241d' -%}
+
+{%- comment -%} Detect video source. {%- endcomment -%}
+{%- assign video_url = section.settings.video_url -%}
+{%- assign shopify_video = section.settings.shopify_video -%}
+{%- assign embed_src = '' -%}
+
+{%- if video_url contains 'youtube.com/watch' or video_url contains 'youtu.be' -%}
+  {%- if video_url contains 'youtu.be/' -%}
+    {%- assign yt_id = video_url | split: 'youtu.be/' | last | split: '?' | first | split: '&' | first -%}
+  {%- else -%}
+    {%- assign yt_id = video_url | split: 'v=' | last | split: '&' | first -%}
+  {%- endif -%}
+  {%- assign embed_src = 'https://www.youtube-nocookie.com/embed/' | append: yt_id | append: '?rel=0' -%}
+{%- elsif video_url contains 'vimeo.com' -%}
+  {%- assign vimeo_id = video_url | split: 'vimeo.com/' | last | split: '?' | first | split: '/' | first -%}
+  {%- assign embed_src = 'https://player.vimeo.com/video/' | append: vimeo_id -%}
+{%- endif -%}
+
+<section
+  class="bb-video"
+  style="--bb-vid-bg: {{ bg_color }}; --bb-vid-text: {{ text_color }}; --bb-vid-accent: {{ accent_red }};"
+>
+  <div class="bb-video__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="bb-video__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="bb-video__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="bb-video__subheading">{{ section.settings.subheading | escape }}</p>
+    {%- endif -%}
+
+    <div class="bb-video__frame">
+      {%- if shopify_video != blank -%}
+        {{ shopify_video | video_tag:
+            controls: true,
+            loop: false,
+            muted: false,
+            autoplay: false,
+            preload: 'metadata',
+            class: 'bb-video__media',
+            image_size: '1280x' }}
+      {%- elsif embed_src != blank -%}
+        <iframe
+          src="{{ embed_src }}"
+          class="bb-video__iframe"
+          loading="lazy"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="{{ section.settings.heading | default: 'Video' | escape }}"
+        ></iframe>
+      {%- else -%}
+        <div class="bb-video__placeholder" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7"/>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+          <p>Add a YouTube or Vimeo URL — or upload a Shopify video — in the section settings.</p>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+      <a href="{{ section.settings.cta_url }}" class="bb-video__cta">
+        {{ section.settings.cta_label | escape }}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Unboxing video (W4-03)",
+  "tag": "section",
+  "class": "section--bb-video",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Video section for unboxing footage or brand video. Paste a YouTube or Vimeo URL OR upload a video file directly to Shopify. The first non-empty source wins."
+    },
+
+    { "type": "header", "content": "Copy" },
+    { "type": "text",     "id": "eyebrow",    "label": "Eyebrow (small label)",       "default": "Watch" },
+    { "type": "text",     "id": "heading",    "label": "Heading",                     "default": "See what arrives at the door" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading (optional)",       "default": "60 seconds. No fluff. Real packaging, real product." },
+
+    { "type": "header", "content": "Video source" },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "YouTube or Vimeo URL",
+      "info": "Paste the full URL (e.g. https://youtu.be/abc123 or https://vimeo.com/12345)."
+    },
+    {
+      "type": "video",
+      "id": "shopify_video",
+      "label": "Or upload a Shopify-hosted video",
+      "info": "If both are set, the Shopify-hosted video takes priority."
+    },
+
+    { "type": "header", "content": "Call to action (optional)" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop the baskets" },
+    { "type": "url",  "id": "cta_url",   "label": "Button link" },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color", "id": "background_color", "label": "Background colour", "default": "#1a1a1a" },
+    { "type": "color", "id": "text_color",       "label": "Text colour",       "default": "#ffffff" },
+    { "type": "color", "id": "accent_color",     "label": "Accent colour",     "default": "#cd241d" }
+  ],
+  "presets": [
+    {
+      "name": "Unboxing video (W4-03)",
+      "category": "Story & info"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product", "index", "page"]
+  }
+}
+{% endschema %}

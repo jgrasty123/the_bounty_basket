@@ -1,0 +1,106 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET DEFENSIVE SHIM v1.0   (May 2026)
+----------------------------------------------------------------------------------------------------------------------
+
+PURPOSE:
+  Catches "Cannot read properties of null (reading 'addEventListener')" errors that propagate from third-party
+  app scripts (Easy Bundle Builder, Klaviyo, etc.) and prevents them from cascading into broken UI behavior
+  such as a dead Add-to-Cart button.
+
+CONTEXT:
+  May 2 onwards, Microsoft Clarity recorded ~470 sessions throwing this exact error pattern (99% of all JS errors,
+  100% of Edge product-view sessions). The error fires 5x on every page load at ~2 seconds in, sitewide. The
+  source is a third-party app script we cannot directly modify. This shim provides a non-invasive guard.
+
+WHAT IT DOES:
+  Installs a window.addEventListener('error', ...) listener in capture phase BEFORE any other script runs.
+  When the addEventListener-on-null error fires, the shim:
+    1. Logs the first occurrence with full context (filename, line, column, stack) for debugging
+    2. Suppresses subsequent identical errors silently to prevent console spam
+    3. Calls event.preventDefault() to stop the error from bubbling to monitoring tools or causing visible
+       browser warnings to the user
+
+WHAT IT DOES NOT DO:
+  This shim does not "fix" the underlying broken code in the third-party script. The script that throws will
+  still throw, but the error becomes a no-op rather than a cascading failure. Browser will still halt execution
+  of the throwing script, but other independent scripts continue normally.
+
+DEPLOYMENT:
+  Rendered as the FIRST <script> in <head> from layout/theme.liquid, before GTM and any third-party tags.
+
+DEBUGGING:
+  Suppressed count is exposed via window.__bbShimSuppressedCount() for inspection.
+  Set window.__bbShimVerbose = true in console to log every occurrence (not just first).
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<script>
+(function() {
+  'use strict';
+
+  // Pattern matches Chrome/Edge/Safari/Firefox variants of the error message
+  var ADD_EVENT_LISTENER_NULL_PATTERN = /cannot read propert(y|ies) of (null|undefined) \(reading ['"]?addeventlistener['"]?\)|null is not an object \(evaluating .*\.addEventListener\)|undefined is not an object \(evaluating .*\.addEventListener\)/i;
+
+  var suppressedCount = 0;
+  var firstLogged = false;
+
+  function shouldSuppress(message) {
+    return ADD_EVENT_LISTENER_NULL_PATTERN.test(String(message || ''));
+  }
+
+  // Capture phase ensures we intercept before any other error handler
+  window.addEventListener('error', function(event) {
+    var message = event && event.message;
+    if (!shouldSuppress(message)) return;
+
+    suppressedCount++;
+
+    var verbose = window.__bbShimVerbose === true;
+    if (!firstLogged || verbose) {
+      firstLogged = true;
+      try {
+        console.warn(
+          '[Bounty Basket Co. Defensive Shim] addEventListener-on-null error suppressed.\n' +
+          '  Source: ' + (event.filename || 'unknown') + ':' + (event.lineno || '?') + ':' + (event.colno || '?') + '\n' +
+          '  Message: ' + message + '\n' +
+          '  Stack:\n' + ((event.error && event.error.stack) || '  (unavailable)') + '\n' +
+          '  Note: subsequent identical errors are silenced unless window.__bbShimVerbose = true.'
+        );
+      } catch (_) { /* console.warn failure is non-fatal */ }
+    }
+
+    // Prevent the error from being treated as uncaught.
+    // This stops it from cascading to window.onerror, monitoring tools, etc.
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    return true;
+  }, true); // capture phase
+
+  // Also catch unhandled promise rejections with the same pattern
+  window.addEventListener('unhandledrejection', function(event) {
+    var reason = event && event.reason;
+    var message = reason && (reason.message || reason.toString && reason.toString());
+    if (!shouldSuppress(message)) return;
+
+    suppressedCount++;
+
+    var verbose = window.__bbShimVerbose === true;
+    if (!firstLogged || verbose) {
+      firstLogged = true;
+      try {
+        console.warn(
+          '[Bounty Basket Co. Defensive Shim] addEventListener-on-null promise rejection suppressed.\n' +
+          '  Reason: ' + message + '\n' +
+          '  Stack:\n' + ((reason && reason.stack) || '  (unavailable)')
+        );
+      } catch (_) { /* non-fatal */ }
+    }
+
+    event.preventDefault();
+  });
+
+  // Diagnostic helper exposed for console debugging
+  window.__bbShimSuppressedCount = function() { return suppressedCount; };
+})();
+</script>

@@ -1,0 +1,69 @@
+{%- comment -%}
+  bb-delivery-date-picker.liquid
+  Custom delivery date picker — replaces ODD/identixweb.
+
+  Writes 4 cart attributes matching what ShipWorks reads:
+    Order Type    -> "Shipping"
+    Delivery Date -> "MM-DD-YYYY"
+    Delivery Day  -> "Wednesday"
+    Date Format   -> "mm-dd-yy"
+
+  All behavior in assets/bb-delivery-date-picker.js
+  All styling in assets/bb-delivery-date-picker.css
+
+  Render with optional overrides; sensible defaults otherwise:
+    {% render 'bb-delivery-date-picker' %}
+
+  Or fully configured:
+    {% render 'bb-delivery-date-picker',
+        cutoff_time: '14:00',
+        cutoff_timezone: 'America/Los_Angeles',
+        working_days: 'Mon,Tue,Wed,Thu,Fri',
+        max_days_out: 180,
+        holidays: '12/25/2025,01/01/2026,12/26/2025',
+        title: 'Pick a Delivery Date'
+    %}
+{%- endcomment -%}
+
+<div
+  class="bb-delivery-date-picker"
+  data-bb-date-picker
+  data-cutoff-time="{{ cutoff_time | default: settings.bb_dp_cutoff_time | default: '14:00' }}"
+  data-cutoff-timezone="{{ cutoff_timezone | default: settings.bb_dp_cutoff_timezone | default: 'America/Los_Angeles' }}"
+  data-working-days="{{ working_days | default: settings.bb_dp_working_days | default: 'Mon,Tue,Wed,Thu,Fri' }}"
+  data-min-lead-days="1"
+  data-max-days-out="{{ max_days_out | default: settings.bb_dp_max_days_out | default: 180 }}"
+  data-holidays="{{ holidays | default: settings.bb_dp_holidays | default: '' }}"
+  data-current-delivery-date="{{ cart.attributes['Delivery Date'] | default: '' }}"
+  data-current-delivery-day="{{ cart.attributes['Delivery Day'] | default: '' }}"
+  data-copy-before-cutoff="{{ copy_before_cutoff | escape }}"
+  data-copy-after-cutoff="{{ copy_after_cutoff | escape }}"
+  data-copy-selected="{{ copy_selected | escape }}"
+>
+  <h3 class="bb-delivery-date-picker__title">{{ title | default: 'Pick a Delivery Date' }}</h3>
+
+  <div class="bb-delivery-date-picker__calendar" data-bb-calendar>
+    {%- comment -%} JS renders the calendar grid here {%- endcomment -%}
+    <div class="bb-delivery-date-picker__loading">Loading available dates&hellip;</div>
+  </div>
+
+  <p class="bb-delivery-date-picker__helper" data-bb-helper>
+    Pick a date below or skip &mdash; checkout works either way.
+  </p>
+
+  <div class="bb-delivery-date-picker__actions">
+    <button type="button" class="bb-delivery-date-picker__clear" data-bb-clear style="display:none;">Clear date</button>
+  </div>
+
+  <p class="bb-delivery-date-picker__status" data-bb-status aria-live="polite"></p>
+
+  {%- comment -%} Hidden noscript fallback — if JS fails, customer can still call to place order {%- endcomment -%}
+  <noscript>
+    <p class="bb-delivery-date-picker__noscript">
+      Calendar requires JavaScript. You can complete checkout without picking a date, or call <strong>844-446-2443</strong> to choose a delivery date.
+    </p>
+  </noscript>
+</div>
+
+<link rel="stylesheet" href="{{ 'bb-delivery-date-picker.css' | asset_url }}">
+<script src="{{ 'bb-delivery-date-picker.js' | asset_url }}" defer></script>

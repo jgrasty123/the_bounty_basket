@@ -1,0 +1,408 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "bb_guarantee_strip_cfGHnY": {
+      "type": "bb-guarantee-strip",
+      "name": "Guarantee strip (W3-03)",
+      "settings": {
+        "compact_mode": true,
+        "section_title": "",
+        "background_color": "#fdf9f1",
+        "icon_color": "#cd241d",
+        "icon_1": "shield",
+        "headline_1": "100% Satisfaction Guaranteed",
+        "body_1": "If you're not happy with your basket, we'll make it right.",
+        "icon_2": "flag",
+        "headline_2": "Hand-Made to Order in the USA",
+        "body_2": "Each basket is built fresh by our in-house team.",
+        "icon_3": "package",
+        "headline_3": "Guaranteed to Arrive Looking Awesome",
+        "body_3": "Or we'll fix it for free."
+      }
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "judge_me_reviews_preview_badge_JPjzBp": {
+          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "heading_tag": "h3"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_taxes_notice": false
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "hide_sold_out_variants": true,
+            "stack_blocks": true,
+            "selector_style": "block",
+            "swatch_selector_style": "swatch",
+            "variant_image_options": "",
+            "size_chart_page": ""
+          }
+        },
+        "payment_terms": {
+          "type": "payment_terms",
+          "settings": {}
+        },
+        "engraving_options": {
+          "type": "engraving",
+          "settings": {
+            "open_by_default": true
+          }
+        },
+        "engraved_glass_options": {
+          "type": "engraved_glass",
+          "settings": {
+            "open_by_default": true
+          }
+        },
+        "gift_card_options": {
+          "type": "gift_card",
+          "settings": {
+            "open_by_default": true
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_payment_button": false,
+            "show_gift_card_recipient": true,
+            "atc_button_background": "",
+            "atc_button_text_color": "",
+            "payment_button_background": "",
+            "payment_button_text_color": ""
+          }
+        },
+        "bb_delivery_promise_ExaXXr": {
+          "type": "bb_delivery_promise",
+          "disabled": true,
+          "settings": {
+            "cutoff_hour_pt": 14,
+            "transit_business_days": 6,
+            "show_express_note": true,
+            "accent_color": "#cd241d"
+          }
+        },
+        "trust_badges_block": {
+          "type": "trust_badges",
+          "settings": {
+            "badge_1_icon": "gift",
+            "badge_1_text": "Includes your personalized gift message on a greeting card",
+            "badge_2_icon": "truck",
+            "badge_2_text": "Orders placed by 5PM EST ship same day",
+            "badge_3_icon": "calendar",
+            "badge_3_text": "Need it later? Choose a future delivery date",
+            "badge_4_icon": "usa",
+            "badge_4_text": "Made to order in the USA by our in-house team"
+          }
+        },
+        "bb_hero_review_x6mhTm": {
+          "type": "bb_hero_review",
+          "settings": {
+            "reviewer_photo": "shopify://shop_images/sarah-m-review.png",
+            "rating": 5,
+            "headline": "Best Christmas he's ever had!",
+            "quote": "My dad was beyond stoked. He said it was the best Christmas he's ever had. He's 83 and finding gifts he likes is a challenge — thank you for making his day special.",
+            "reviewer_name": "Sarah M.",
+            "review_meta": "Verified Customer",
+            "star_color": "#f5a623"
+          }
+        },
+        "adult_signature_options": {
+          "type": "adult_signature",
+          "settings": {
+            "open_by_default": false
+          }
+        },
+        "product_upsells_wpc38x": {
+          "type": "product_upsells",
+          "settings": {
+            "open_by_default": false
+          }
+        },
+        "separator": {
+          "type": "separator",
+          "settings": {}
+        },
+        "bundle_content_v2_37Cp4r": {
+          "type": "bundle_content_v2",
+          "settings": {}
+        },
+        "description_kMG9k8": {
+          "type": "description",
+          "settings": {
+            "icon": "none",
+            "icon_width": 20,
+            "collapse_content": true
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_preview_badge_JPjzBp",
+        "title",
+        "price",
+        "variant_picker",
+        "payment_terms",
+        "engraving_options",
+        "engraved_glass_options",
+        "gift_card_options",
+        "buy_buttons",
+        "bb_delivery_promise_ExaXXr",
+        "trust_badges_block",
+        "bb_hero_review_x6mhTm",
+        "adult_signature_options",
+        "product_upsells_wpc38x",
+        "separator",
+        "bundle_content_v2_37Cp4r",
+        "description_kMG9k8"
+      ],
+      "settings": {
+        "full_width": true,
+        "show_fixed_add_to_cart": true,
+        "desktop_media_width": 65,
+        "desktop_media_layout": "carousel_thumbnails_bottom",
+        "mobile_media_size": "expanded",
+        "mobile_carousel_control": "floating_dots",
+        "enable_video_autoplay": false,
+        "enable_video_looping": true,
+        "enable_image_zoom": true,
+        "max_image_zoom_level": 3,
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "input_background": "rgba(0,0,0,0)",
+        "input_text_color": ""
+      }
+    },
+    "bb_review_wall_BWXEyy": {
+      "type": "bb-review-wall",
+      "name": "Review wall (W3-02)",
+      "settings": {
+        "section_title": "What customers are saying",
+        "subtitle": "",
+        "star_color": "#f5a623",
+        "background_color": "#fdf9f1",
+        "photo_1": "shopify://shop_images/photo-1699899657680-421c2c2d5064.avif",
+        "headline_1": "Great service, awesome gift!",
+        "quote_1": "My client contacted me right away to say nothing but great things about the products and the packaging. They loved it!",
+        "name_1": "Jennifer L.",
+        "meta_1": "Verified Customer",
+        "photo_2": "shopify://shop_images/photo-1639747280929-e84ef392c69a.avif",
+        "headline_2": "Perfect delivery & presentation",
+        "quote_2": "We ordered an engraved bottle to help a friend toast his departed brother. Exceptional quality, exceptional service, exceptional tribute.",
+        "name_2": "Michael R.",
+        "meta_2": "Verified Customer",
+        "photo_3": "shopify://shop_images/photo-1603415526960-f7e0328c63b1.avif",
+        "headline_3": "Very pleased",
+        "quote_3": "I got a basket for my dad and he absolutely loved it. The customer service was great as well. Will definitely order again.",
+        "name_3": "David K.",
+        "meta_3": "Verified Customer",
+        "photo_4": "shopify://shop_images/premium_photo-1681489930334-b0d26fdb9ed8.avif",
+        "headline_4": "Easy and thoughtful",
+        "quote_4": "Loved the easy-to-add options in the basket. Made a great gift they truly enjoyed!",
+        "name_4": "Rachel S.",
+        "meta_4": "Verified Customer",
+        "photo_5": "shopify://shop_images/be76a08b-3d18-4a53-b5a8-df7452de5ed5.png",
+        "headline_5": "Awesome gift!",
+        "quote_5": "My daughter's fiancé was amazed with the Sampler. A thoughtful gift for special loved ones!",
+        "name_5": "Linda T.",
+        "meta_5": "Verified Customer",
+        "photo_6": "shopify://shop_images/c7d7c585-ccad-43ce-ac3d-f882022f5b05.png",
+        "headline_6": "Truly surprised",
+        "quote_6": "This gift was wonderful. My husband was truly surprised and enjoyed everything.",
+        "name_6": "Karen B.",
+        "meta_6": "Verified Customer"
+      }
+    },
+    "bb_vs_table_PWAzfj": {
+      "type": "bb-vs-table",
+      "name": "Comparison table (W4-02)",
+      "settings": {
+        "section_title": "The BroBasket vs. The Generic Gift",
+        "subtitle": "",
+        "us_column_label": "The BroBasket",
+        "them_column_label": "Generic Gift Baskets",
+        "footer_text": "Up your gifting game. Choose quality.",
+        "background_color": "#fdf9f1",
+        "brand_color": "#1a1a1a",
+        "accent_color": "#cd241d",
+        "category_1": "Food & Ingredients",
+        "us_icon_1": "ingredients",
+        "us_headline_1": "Real ingredients",
+        "us_body_1": "No stale, no-name junk.",
+        "them_icon_1": "junk-box",
+        "them_headline_1": "Stale, no-name junk",
+        "them_body_1": "Often mass-produced fillers.",
+        "category_2": "Made to Order",
+        "us_icon_2": "usa-flag",
+        "us_headline_2": "Made to order",
+        "us_body_2": "Hand-built fresh in the USA when you order.",
+        "them_icon_2": "factory",
+        "them_headline_2": "Mass-assembled overseas",
+        "them_body_2": "Cheap components shipped from far away.",
+        "category_3": "Speed & Fulfillment",
+        "us_icon_3": "rocket",
+        "us_headline_3": "Ships same day",
+        "us_body_3": "Order by 5pm EST and we ship the same business day.",
+        "them_icon_3": "snail",
+        "them_headline_3": "Slow processing",
+        "them_body_3": "Several days before your gift even ships.",
+        "category_4": "Personalization",
+        "us_icon_4": "sparkle",
+        "us_headline_4": "Personalized & customized",
+        "us_body_4": "Built the way you like it — engraving, custom message, future delivery date.",
+        "them_icon_4": "plain-box",
+        "them_headline_4": "One-size-fits-all",
+        "them_body_4": "Generic, pre-made assortments — same gift for everyone.",
+        "category_5": "Recipient Experience",
+        "us_icon_5": "thumbs-up",
+        "us_headline_5": "Curated for the bros",
+        "us_body_5": "Unique, cool items the men in your life actually want.",
+        "them_icon_5": "people-shrug",
+        "them_headline_5": "Generic & predictable",
+        "them_body_5": "A forgettable gift no one talks about."
+      }
+    },
+    "bb_faq_CBwVi8": {
+      "type": "bb-faq",
+      "name": "FAQ accordion (W4-04)",
+      "settings": {
+        "section_title": "Frequently Asked Questions",
+        "subtitle": "",
+        "background_color": "#ffffff",
+        "brand_color": "#1a1a1a",
+        "accent_color": "#cd241d",
+        "q_1": "How fast will my gift arrive?",
+        "a_1": "Orders placed by 5pm EST ship the same business day. Standard ground delivery typically arrives in 3–6 business days. Need it sooner? Express options are available at checkout.",
+        "q_2": "Can I pick a specific delivery date?",
+        "a_2": "Yes. At checkout you can choose any future date for delivery, so the gift shows up exactly when you want it to — birthday, anniversary, holiday, or just a Tuesday.",
+        "q_3": "Do you include a personalized greeting card?",
+        "a_3": "Every basket ships with a free personalized greeting card. You write the message during checkout and we hand-write or print it to include in the box.",
+        "q_4": "What if my recipient isn't home when it's delivered?",
+        "a_4": "Carriers will leave the package at the door unless an adult signature is required (alcohol-containing baskets always require this). For ID-required deliveries, the recipient gets up to 3 delivery attempts, then can pick up at the local carrier facility.",
+        "q_5": "Can I add my own engraving or custom touches?",
+        "a_5": "Yes — many of our baskets include engraved glass options, premium add-ons, and snack upgrades. Look for the customization options on the product page just below the basket details.",
+        "q_6": "What happens if something arrives damaged?",
+        "a_6": "We guarantee your gift arrives looking awesome. If anything is damaged, missing, or not right — email us with a photo and we'll fix it for free, no questions asked.",
+        "q_7": "Where do you ship to?",
+        "a_7": "All 50 US states. Some baskets containing alcohol have state-specific shipping restrictions — those will be flagged at checkout if your recipient's state can't receive the contents.",
+        "q_8": "Are these baskets really made by hand?",
+        "a_8": "Yes. Every basket is hand-built to order by our small team in Ventura, California — using real spirits, real snacks, and quality accessories. Nothing is mass-pre-assembled overseas."
+      }
+    },
+    "bb_story_TLhFT6": {
+      "type": "bb-story",
+      "name": "Founder story (W4-01)",
+      "settings": {
+        "image_side": "left",
+        "image": "shopify://shop_images/James-G-at-brobasket-Via-alondra-warehouse.webp",
+        "eyebrow": "Our Story",
+        "heading": "Why we built The BroBasket",
+        "paragraph_1": "Most gift baskets are forgettable. A wicker basket. A red ribbon. Some no-name crackers and a tiny jar of jam. We've all sent one. We've all received one. Nobody talks about it the next day.",
+        "paragraph_2": "We built BroBasket to fix that — for the dads, brothers, husbands, and friends who deserve a gift that actually lands. Real spirits. Real snacks. Real packaging that doesn't end up in the recycling on the way to the kitchen.",
+        "pull_quote": "",
+        "quote_attribution": "",
+        "paragraph_3": "Every basket is hand-built to order in our Ventura, California warehouse. We pick the spirits. We curate the snacks. We pack each one like the recipient is somebody we know — because to the person sending it, they are.",
+        "signature": "— James, Co-founder",
+        "cta_label": "Shop the baskets",
+        "cta_url": "",
+        "background_color": "#fdf9f1",
+        "brand_color": "#1a1a1a",
+        "accent_color": "#cd241d"
+      }
+    },
+    "rich_text_cGKYbQ": {
+      "type": "rich-text",
+      "blocks": {
+        "richtext_Na7wTq": {
+          "type": "richtext",
+          "disabled": true,
+          "settings": {
+            "content": "<p></p>{{ product.description }}"
+          }
+        }
+      },
+      "block_order": [
+        "richtext_Na7wTq"
+      ],
+      "settings": {
+        "full_width": true,
+        "content_width": "large",
+        "text_position": "start",
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "17400063553db9cd1c": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_YW98g3": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_YW98g3"
+      ],
+      "settings": {
+        "full_width": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false,
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "bb_video_qnKXwx": {
+      "type": "bb-video",
+      "disabled": true,
+      "name": "Unboxing video (W4-03)",
+      "settings": {
+        "eyebrow": "Watch",
+        "heading": "See what arrives at the door",
+        "subheading": "60 seconds. No fluff. Real packaging, real product.",
+        "video_url": "",
+        "cta_label": "Shop the baskets",
+        "cta_url": "",
+        "background_color": "#1a1a1a",
+        "text_color": "#ffffff",
+        "accent_color": "#cd241d"
+      }
+    }
+  },
+  "order": [
+    "bb_guarantee_strip_cfGHnY",
+    "main",
+    "bb_review_wall_BWXEyy",
+    "bb_vs_table_PWAzfj",
+    "bb_faq_CBwVi8",
+    "bb_story_TLhFT6",
+    "rich_text_cGKYbQ",
+    "17400063553db9cd1c",
+    "bb_video_qnKXwx"
+  ]
+}

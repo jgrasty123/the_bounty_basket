@@ -1,0 +1,95 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "1741731049c944abee": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_featured_carousel_PFJmTN": {
+          "type": "shopify://apps/judge-me-reviews/blocks/featured_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "disabled": true,
+          "settings": {
+            "maxwidth": 1080
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_featured_carousel_PFJmTN"
+      ],
+      "settings": {
+        "full_width": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false,
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "links": {
+          "type": "links",
+          "settings": {
+            "menu": "footer",
+            "show_menu_title": true,
+            "menu_title": "Quick Links"
+          }
+        },
+        "links_j3TAaM": {
+          "type": "links",
+          "settings": {
+            "menu": "",
+            "show_menu_title": true,
+            "menu_title": ""
+          }
+        },
+        "links_hMRTwb": {
+          "type": "links",
+          "settings": {
+            "menu": "shop-by-occasion",
+            "show_menu_title": true,
+            "menu_title": ""
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "title": "Disclaimers",
+            "content": "<p><strong>Contact Us</strong></p><p>Call us Monday-Friday, 9-5pm: <a href=\"tel:18444462443\" target=\"_blank\">1-844-446-2443</a></p><p><span style=\"text-decoration:underline\"><strong>Email us </strong></span>at <a href=\"mailto:info@thebountybasket.com\" target=\"_blank\"><strong>info@thebountybasket.com</strong></a></p><p><span style=\"text-decoration:underline\"><strong>Send us a Freaking Postcard</strong></span></p><p>2264 Goodywear Ave. Suite C, Ventura, CA 93001</p><p><span style=\"text-decoration:underline\"><strong>Alcohol Beverage Disclaimer</strong></span><br/><br/>Some of our gift baskets include alcoholic beverages. The Bounty Basket Co. only sells and ships to persons <strong>21 years of age or older</strong>.</p><p>By using this site, you confirm that you are at least 21 years old and legally permitted to purchase and receive alcoholic beverages in your jurisdiction.</p>",
+            "enable_follow_on_shop": true
+          }
+        }
+      },
+      "block_order": [
+        "links",
+        "links_j3TAaM",
+        "links_hMRTwb",
+        "text"
+      ],
+      "settings": {
+        "show_social_media": true,
+        "show_payment_icons": true,
+        "show_powered_by_shopify": true,
+        "show_policy_links": false,
+        "show_country_selector": true,
+        "show_country_flag": true,
+        "show_country_name": true,
+        "show_locale_selector": true
+      }
+    }
+  },
+  "order": [
+    "1741731049c944abee",
+    "footer"
+  ]
+}

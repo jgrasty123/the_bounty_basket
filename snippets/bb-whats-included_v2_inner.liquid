@@ -1,0 +1,51 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BB-WHATS-INCLUDED INNER (no accordion wrapper)
+----------------------------------------------------------------------------------------------------------------------
+
+Renders one What's Included category — a sub-heading followed by the
+product list — without wrapping it in a <details> element.
+
+Used inside a single outer accordion in product-info.liquid so all
+categories live under ONE expand/collapse instead of ten separate ones.
+
+Parameters:
+  * product         — product object
+  * name            — category display name (e.g. "The Liquor")
+  * metafield_name  — namespace key under product.metafields.custom
+
+Returns nothing visible if the product has no value for the metafield.
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign metafield_value = product.metafields.custom[metafield_name] -%}
+{%- if metafield_value != blank -%}
+  <div class="bb-wi-category">
+    <h4 class="bb-wi-category__title">{{ name | escape }}</h4>
+    <div class="bb-wi-category__items">
+      {%- for item in metafield_value.value -%}
+        {%- assign product_ref = item.product.value -%}
+        {%- assign quantity = item.quantity.value -%}
+        {%- if product_ref -%}
+          <div class="bb-wi-item">
+            {%- if product_ref.featured_media -%}
+              <img
+                class="bb-wi-item__image"
+                src="{{ product_ref.featured_media | image_url: width: 80 }}"
+                srcset="{{ product_ref.featured_media | image_url: width: 60 }} 60w, {{ product_ref.featured_media | image_url: width: 80 }} 80w, {{ product_ref.featured_media | image_url: width: 120 }} 120w"
+                sizes="40px"
+                width="40"
+                height="40"
+                loading="lazy"
+                alt="{{ product_ref.title | escape }}">
+            {%- endif -%}
+            <span class="bb-wi-item__label">
+              {%- if quantity and quantity > 1 -%}<span class="bb-wi-item__qty">{{ quantity }}×</span> {% endif -%}
+              {{ product_ref.title | escape }}
+            </span>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}

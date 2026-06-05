@@ -1,0 +1,305 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+CUSTOM ENGRAVING OPTIONS
+----------------------------------------------------------------------------------------------------------------------
+
+This snippet renders engraving options for products where custom.option_set_v2 metafield contains 
+"Engraved Bottle".
+
+When "Engraving Mandatory" is ALSO present, the engraving becomes required (no "No Engraving" option).
+Otherwise, the engraving is optional.
+
+When engraving is selected, the centralized handler (bb-product-addons.liquid) adds the engraving product 
+to cart with line item properties linking it to the main product.
+
+Engraving Product: handle "engraving" (ID: 9143479697644)
+Variants:
+  - Clear Engraving: 47248492069100 ($30)
+  - Gold Color Fill Engraving: 47248492101868 ($35)
+  - Silver Color Fill Engraving: 47248492134636 ($35)
+
+********************************************
+Supported variables
+********************************************
+
+* product: the product to check for option_set_v2 metafield
+* product_form_id: the ID of the main product form (passed to centralized handler)
+{%- endcomment -%}
+
+{%- assign engraving_product = all_products['engraving'] -%}
+
+{%- liquid
+  assign show_engraving = false
+  assign is_mandatory = false
+  assign option_set_metafield = product.metafields.custom.option_set_v2
+  if option_set_metafield != blank
+    assign option_set_string = option_set_metafield | metafield_text
+    if option_set_string contains 'Engraved Bottle'
+      assign show_engraving = true
+      if option_set_string contains 'Engraving Mandatory'
+        assign is_mandatory = true
+      endif
+    endif
+  endif
+-%}
+
+{%- if show_engraving and engraving_product != blank -%}
+  <div class="product-engraving" data-engraving-wrapper data-product-title="{{ product.title | escape }}" data-mandatory="{{ is_mandatory }}">
+    {%- comment -%}Engraving Type Selection{%- endcomment -%}
+    <div class="product-engraving__option">
+      
+      <div class="product-engraving__radio-group">
+        {%- comment -%}No Engraving Option - Only shown when not mandatory{%- endcomment -%}
+        {%- unless is_mandatory -%}
+          <label class="product-engraving__radio-item">
+            <input 
+              type="radio" 
+              name="engraving_type" 
+              value="none" 
+              data-engraving-radio
+              data-variant-id=""
+              data-price="0"
+              checked
+            >
+            <span class="product-engraving__radio-label">No Engraving</span>
+          </label>
+        {%- endunless -%}
+
+        {%- comment -%}Engraving Variant Options{%- endcomment -%}
+        {%- for variant in engraving_product.variants -%}
+          <label class="product-engraving__radio-item">
+            <input 
+              type="radio" 
+              name="engraving_type" 
+              value="{{ variant.id }}"
+              data-engraving-radio
+              data-variant-id="{{ variant.id }}"
+              data-price="{{ variant.price }}"
+              {% if is_mandatory and forloop.first %}checked{% endif %}
+            >
+            <span class="product-engraving__radio-label">
+              {{ variant.title }}
+              <span class="product-engraving__price">({{ variant.price | money }})</span>
+            </span>
+          </label>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%}Engraving Text Input - Shown immediately when mandatory, otherwise on selection{%- endcomment -%}
+    <div class="product-engraving__text-wrapper" data-engraving-text-wrapper {% unless is_mandatory %}style="display: none;"{% endunless %}>
+      <label class="product-engraving__label" for="engraving-text-{{ product.id }}">
+        Your Engraving Text <span class="product-engraving__required">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="engraving-text-{{ product.id }}"
+        class="product-engraving__input"
+        name="engraving_text"
+        data-engraving-text
+        placeholder="Initials or Short Messages | Email for Images or Logos"
+        maxlength="50"
+        {% if is_mandatory %}required{% endif %}
+      >
+      <p class="product-engraving__hint">Maximum 50 characters</p>
+    </div>
+
+    {%- comment -%}Hidden fields to store engraving data{%- endcomment -%}
+    <input type="hidden" data-engraving-variant-id value="{% if is_mandatory %}{{ engraving_product.variants.first.id }}{% endif %}">
+    <input type="hidden" data-engraving-product-title value="{{ product.title | escape }}">
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+      
+      function initEngraving() {
+        const wrapper = document.querySelector('[data-engraving-wrapper]');
+        if (!wrapper) return;
+        
+        const radios = wrapper.querySelectorAll('[data-engraving-radio]');
+        const textWrapper = wrapper.querySelector('[data-engraving-text-wrapper]');
+        const textInput = wrapper.querySelector('[data-engraving-text]');
+        const variantIdInput = wrapper.querySelector('[data-engraving-variant-id]');
+        const productTitle = wrapper.dataset.productTitle;
+        const isMandatory = wrapper.dataset.mandatory === 'true';
+        
+        // Handle radio button changes
+        radios.forEach(radio => {
+          radio.addEventListener('change', function() {
+            const selectedValue = this.value;
+            const variantId = this.dataset.variantId;
+            
+            variantIdInput.value = variantId || '';
+            
+            if (selectedValue === 'none' || !variantId) {
+              textWrapper.style.display = 'none';
+              textInput.removeAttribute('required');
+              textInput.value = '';
+            } else {
+              textWrapper.style.display = 'block';
+              textInput.setAttribute('required', 'required');
+            }
+          });
+        });
+        
+        // Remove error class on input
+        if (textInput) {
+          textInput.addEventListener('input', function() {
+            this.classList.remove('product-engraving__input--error');
+          });
+        }
+        
+        // Register engraving addon with the centralized handler
+        window.productAddons = window.productAddons || {};
+        window.productAddons.engraving = {
+          getItem: function() {
+            const selectedRadio = wrapper.querySelector('[data-engraving-radio]:checked');
+            const engravingVariantId = selectedRadio?.dataset.variantId;
+            
+            if (!engravingVariantId || selectedRadio.value === 'none') {
+              return null;
+            }
+            
+            const engravingText = textInput.value.trim();
+            return {
+              id: parseInt(engravingVariantId, 10),
+              properties: {
+                'For': productTitle,
+                'Engraving Text': engravingText
+              }
+            };
+          },
+          validate: function() {
+            const selectedRadio = wrapper.querySelector('[data-engraving-radio]:checked');
+            const engravingVariantId = selectedRadio?.dataset.variantId;
+            
+            // If mandatory and nothing selected, invalid
+            if (isMandatory && (!engravingVariantId || selectedRadio.value === 'none')) {
+              return false;
+            }
+            
+            // If not mandatory and nothing selected, valid
+            if (!engravingVariantId || selectedRadio.value === 'none') {
+              return true;
+            }
+            
+            // Engraving selected - text is required
+            const engravingText = textInput.value.trim();
+            if (!engravingText) {
+              textInput.focus();
+              textInput.classList.add('product-engraving__input--error');
+              return false;
+            }
+            return true;
+          }
+        };
+      }
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initEngraving);
+      } else {
+        initEngraving();
+      }
+    })();
+  </script>
+
+  <style>
+    .product-engraving {
+      margin-bottom: var(--spacing-4, 16px);
+    }
+    
+    .product-engraving__option {
+      margin-bottom: var(--spacing-4, 16px);
+    }
+    
+    .product-engraving__label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: var(--spacing-2, 8px);
+      font-size: var(--text-sm, 14px);
+    }
+    
+    .product-engraving__required {
+      color: rgb(var(--error-text, 220, 38, 38));
+    }
+    
+    .product-engraving__radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-3, 12px);
+    }
+    
+    .product-engraving__radio-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2, 8px);
+      cursor: pointer;
+      font-size: var(--text-sm, 14px);
+    }
+    
+    .product-engraving__radio-item input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+      accent-color: rgb(var(--text-primary, 0, 0, 0));
+    }
+    
+    .product-engraving__radio-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .product-engraving__price {
+      color: rgb(var(--text-secondary, 107, 114, 128));
+    }
+    
+    .product-engraving__text-wrapper {
+      margin-top: var(--spacing-4, 16px);
+    }
+    
+    .product-engraving__input {
+      width: 100%;
+      padding: var(--spacing-2-5, 10px) var(--spacing-3, 12px);
+      border: 1px solid rgb(var(--border-color, 229, 231, 235));
+      border-radius: var(--rounded-xs, 4px);
+      font-size: var(--text-base, 16px);
+      background: rgb(var(--input-background, 255, 255, 255));
+      color: rgb(var(--text-primary, 0, 0, 0));
+      transition: border-color 0.2s ease;
+    }
+    
+    .product-engraving__input:focus {
+      outline: none;
+      border-color: rgb(var(--text-primary, 0, 0, 0));
+    }
+    
+    .product-engraving__input::placeholder {
+      color: rgb(var(--text-secondary, 156, 163, 175));
+      font-size: var(--text-sm, 14px);
+    }
+    
+    .product-engraving__input--error {
+      border-color: rgb(var(--error-text, 220, 38, 38));
+    }
+    
+    .product-engraving__input--error:focus {
+      border-color: rgb(var(--error-text, 220, 38, 38));
+    }
+    
+    .product-engraving__hint {
+      margin-top: var(--spacing-1, 4px);
+      font-size: var(--text-xs, 12px);
+      color: rgb(var(--text-secondary, 107, 114, 128));
+    }
+    
+    @media screen and (max-width: 699px) {
+      .product-engraving__radio-group {
+        flex-direction: column;
+        gap: var(--spacing-2, 8px);
+      }
+    }
+  </style>
+{%- endif -%}

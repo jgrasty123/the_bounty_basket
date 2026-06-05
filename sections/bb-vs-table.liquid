@@ -1,0 +1,358 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET COMPARISON TABLE (W4-02) — "BroBasket vs the Generic Gift"
+----------------------------------------------------------------------------------------------------------------------
+
+Two-column comparison section that mirrors James's existing US-vs-them
+graphic so the on-page version reads as one consistent brand voice with
+the share-graphic version.
+
+Row anatomy (5 rows by default):
+   [BroBasket icon + statement]   |  [Category label]  |  [Generic icon + statement]
+
+Five category rows seeded as defaults:
+  1. Food & Ingredients     — Real ingredients vs. stale no-name junk
+  2. Made to Order          — Hand-made in USA vs. mass-assembled overseas
+  3. Speed & Fulfillment    — Ships same day vs. slow processing
+  4. Personalization        — Personalized & customized vs. one-size-fits-all
+  5. Recipient Experience   — Curated for "bros" vs. generic & predictable
+
+Layout:
+  * Desktop: 3-column row with center label, BroBasket left, Generic right
+  * Mobile:  Stacks per row — BroBasket card, then label, then Generic card
+
+Icons rendered as inline SVGs (same pattern as bb-guarantee-strip).
+A green check overlay is added to BroBasket icons; an X overlay to Generic.
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign bg_color    = section.settings.background_color | default: '#fdf9f1' -%}
+{%- assign brand_color = section.settings.brand_color      | default: '#1a1a1a' -%}
+{%- assign accent_red  = section.settings.accent_color     | default: '#cd241d' -%}
+
+<section
+  class="bb-vs-table"
+  style="--bb-vs-bg: {{ bg_color }}; --bb-vs-brand: {{ brand_color }}; --bb-vs-accent: {{ accent_red }};"
+>
+  <div class="bb-vs-table__inner">
+    {%- if section.settings.section_title != blank -%}
+      <h2 class="bb-vs-table__title">
+        {{ section.settings.section_title | replace: 'BroBasket', '<span class="bb-vs-table__brand">BroBasket</span>' | replace: 'Generic', '<span class="bb-vs-table__generic">Generic</span>' }}
+      </h2>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="bb-vs-table__subtitle">{{ section.settings.subtitle | escape }}</p>
+    {%- endif -%}
+
+    <div class="bb-vs-table__column-headers">
+      <div class="bb-vs-table__col-header bb-vs-table__col-header--us">
+        <span>{{ section.settings.us_column_label | default: 'The BroBasket' | escape }}</span>
+      </div>
+      <div class="bb-vs-table__col-header bb-vs-table__col-header--spacer" aria-hidden="true"></div>
+      <div class="bb-vs-table__col-header bb-vs-table__col-header--them">
+        <span>{{ section.settings.them_column_label | default: 'The Generic Gift' | escape }}</span>
+      </div>
+    </div>
+
+    <div class="bb-vs-table__rows">
+      {%- for i in (1..5) -%}
+        {%- case i -%}
+          {%- when 1 -%}
+            {%- assign category_label = section.settings.category_1 -%}
+            {%- assign us_icon = section.settings.us_icon_1 -%}
+            {%- assign us_headline = section.settings.us_headline_1 -%}
+            {%- assign us_body = section.settings.us_body_1 -%}
+            {%- assign them_icon = section.settings.them_icon_1 -%}
+            {%- assign them_headline = section.settings.them_headline_1 -%}
+            {%- assign them_body = section.settings.them_body_1 -%}
+          {%- when 2 -%}
+            {%- assign category_label = section.settings.category_2 -%}
+            {%- assign us_icon = section.settings.us_icon_2 -%}
+            {%- assign us_headline = section.settings.us_headline_2 -%}
+            {%- assign us_body = section.settings.us_body_2 -%}
+            {%- assign them_icon = section.settings.them_icon_2 -%}
+            {%- assign them_headline = section.settings.them_headline_2 -%}
+            {%- assign them_body = section.settings.them_body_2 -%}
+          {%- when 3 -%}
+            {%- assign category_label = section.settings.category_3 -%}
+            {%- assign us_icon = section.settings.us_icon_3 -%}
+            {%- assign us_headline = section.settings.us_headline_3 -%}
+            {%- assign us_body = section.settings.us_body_3 -%}
+            {%- assign them_icon = section.settings.them_icon_3 -%}
+            {%- assign them_headline = section.settings.them_headline_3 -%}
+            {%- assign them_body = section.settings.them_body_3 -%}
+          {%- when 4 -%}
+            {%- assign category_label = section.settings.category_4 -%}
+            {%- assign us_icon = section.settings.us_icon_4 -%}
+            {%- assign us_headline = section.settings.us_headline_4 -%}
+            {%- assign us_body = section.settings.us_body_4 -%}
+            {%- assign them_icon = section.settings.them_icon_4 -%}
+            {%- assign them_headline = section.settings.them_headline_4 -%}
+            {%- assign them_body = section.settings.them_body_4 -%}
+          {%- when 5 -%}
+            {%- assign category_label = section.settings.category_5 -%}
+            {%- assign us_icon = section.settings.us_icon_5 -%}
+            {%- assign us_headline = section.settings.us_headline_5 -%}
+            {%- assign us_body = section.settings.us_body_5 -%}
+            {%- assign them_icon = section.settings.them_icon_5 -%}
+            {%- assign them_headline = section.settings.them_headline_5 -%}
+            {%- assign them_body = section.settings.them_body_5 -%}
+        {%- endcase -%}
+
+        {%- if us_headline != blank or them_headline != blank -%}
+          <div class="bb-vs-table__row">
+            <div class="bb-vs-table__cell bb-vs-table__cell--us">
+              <div class="bb-vs-table__icon bb-vs-table__icon--us" aria-hidden="true">
+                {%- render 'bb-vs-table-icon', name: us_icon, fallback: 'check-circle' -%}
+              </div>
+              <div class="bb-vs-table__copy">
+                <h3 class="bb-vs-table__headline">{{ us_headline | escape }}</h3>
+                {%- if us_body != blank -%}
+                  <p class="bb-vs-table__body">{{ us_body | escape }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+
+            <div class="bb-vs-table__category">
+              <span>{{ category_label | escape }}</span>
+            </div>
+
+            <div class="bb-vs-table__cell bb-vs-table__cell--them">
+              <div class="bb-vs-table__icon bb-vs-table__icon--them" aria-hidden="true">
+                {%- render 'bb-vs-table-icon', name: them_icon, fallback: 'x-circle' -%}
+              </div>
+              <div class="bb-vs-table__copy">
+                <h3 class="bb-vs-table__headline">{{ them_headline | escape }}</h3>
+                {%- if them_body != blank -%}
+                  <p class="bb-vs-table__body">{{ them_body | escape }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.footer_text != blank -%}
+      <p class="bb-vs-table__footer">{{ section.settings.footer_text | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comparison table (W4-02)",
+  "tag": "section",
+  "class": "section--bb-vs-table",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Two-column 'BroBasket vs the Generic Gift' table mirroring the existing share-graphic. Pre-populated with five category rows. Default placement: PDP (between main product and review wall) and above the footer sitewide."
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "The BroBasket vs. The Generic Gift"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle (optional)"
+    },
+    {
+      "type": "text",
+      "id": "us_column_label",
+      "label": "Left column label",
+      "default": "The BroBasket"
+    },
+    {
+      "type": "text",
+      "id": "them_column_label",
+      "label": "Right column label",
+      "default": "The Generic Gift"
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer tagline (optional)",
+      "default": "Up your gifting game. Choose quality."
+    },
+
+    { "type": "header", "content": "Appearance" },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background colour",
+      "default": "#fdf9f1"
+    },
+    {
+      "type": "color",
+      "id": "brand_color",
+      "label": "Headings & 'BroBasket' accent",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Brand red accent",
+      "default": "#cd241d"
+    },
+
+    { "type": "header", "content": "Row 1 — Food & Ingredients" },
+    { "type": "text", "id": "category_1", "label": "Category label", "default": "Food & Ingredients" },
+    {
+      "type": "select", "id": "us_icon_1", "label": "BroBasket icon", "default": "ingredients",
+      "options": [
+        { "value": "ingredients", "label": "Ingredients (carrot/garlic)" },
+        { "value": "usa-flag",    "label": "USA flag with check" },
+        { "value": "rocket",      "label": "Rocket (fast)" },
+        { "value": "sparkle",     "label": "Sparkle (custom)" },
+        { "value": "thumbs-up",   "label": "Thumbs up (bros)" },
+        { "value": "check-circle","label": "Check circle (default ✓)" }
+      ]
+    },
+    { "type": "text", "id": "us_headline_1", "label": "BroBasket headline", "default": "Real ingredients" },
+    { "type": "textarea", "id": "us_body_1", "label": "BroBasket sub-line", "default": "No stale, no-name junk." },
+    {
+      "type": "select", "id": "them_icon_1", "label": "Generic icon", "default": "junk-box",
+      "options": [
+        { "value": "junk-box",    "label": "Junk box" },
+        { "value": "factory",     "label": "Factory" },
+        { "value": "snail",       "label": "Snail (slow)" },
+        { "value": "plain-box",   "label": "Plain box (one-size)" },
+        { "value": "people-shrug","label": "People (predictable)" },
+        { "value": "x-circle",    "label": "X circle (default ✗)" }
+      ]
+    },
+    { "type": "text", "id": "them_headline_1", "label": "Generic headline", "default": "Stale, no-name junk" },
+    { "type": "textarea", "id": "them_body_1", "label": "Generic sub-line", "default": "Often mass-produced fillers." },
+
+    { "type": "header", "content": "Row 2 — Made to Order" },
+    { "type": "text", "id": "category_2", "label": "Category label", "default": "Made to Order" },
+    {
+      "type": "select", "id": "us_icon_2", "label": "BroBasket icon", "default": "usa-flag",
+      "options": [
+        { "value": "ingredients", "label": "Ingredients" },
+        { "value": "usa-flag",    "label": "USA flag with check" },
+        { "value": "rocket",      "label": "Rocket" },
+        { "value": "sparkle",     "label": "Sparkle" },
+        { "value": "thumbs-up",   "label": "Thumbs up" },
+        { "value": "check-circle","label": "Check circle" }
+      ]
+    },
+    { "type": "text", "id": "us_headline_2", "label": "BroBasket headline", "default": "Made to order" },
+    { "type": "textarea", "id": "us_body_2", "label": "BroBasket sub-line", "default": "Hand-built fresh in the USA when you order." },
+    {
+      "type": "select", "id": "them_icon_2", "label": "Generic icon", "default": "factory",
+      "options": [
+        { "value": "junk-box",    "label": "Junk box" },
+        { "value": "factory",     "label": "Factory" },
+        { "value": "snail",       "label": "Snail" },
+        { "value": "plain-box",   "label": "Plain box" },
+        { "value": "people-shrug","label": "People shrug" },
+        { "value": "x-circle",    "label": "X circle" }
+      ]
+    },
+    { "type": "text", "id": "them_headline_2", "label": "Generic headline", "default": "Mass-assembled overseas" },
+    { "type": "textarea", "id": "them_body_2", "label": "Generic sub-line", "default": "Cheap components shipped from far away." },
+
+    { "type": "header", "content": "Row 3 — Speed & Fulfillment" },
+    { "type": "text", "id": "category_3", "label": "Category label", "default": "Speed & Fulfillment" },
+    {
+      "type": "select", "id": "us_icon_3", "label": "BroBasket icon", "default": "rocket",
+      "options": [
+        { "value": "ingredients", "label": "Ingredients" },
+        { "value": "usa-flag",    "label": "USA flag with check" },
+        { "value": "rocket",      "label": "Rocket" },
+        { "value": "sparkle",     "label": "Sparkle" },
+        { "value": "thumbs-up",   "label": "Thumbs up" },
+        { "value": "check-circle","label": "Check circle" }
+      ]
+    },
+    { "type": "text", "id": "us_headline_3", "label": "BroBasket headline", "default": "Ships same day" },
+    { "type": "textarea", "id": "us_body_3", "label": "BroBasket sub-line", "default": "Order by 5pm EST and we ship the same business day." },
+    {
+      "type": "select", "id": "them_icon_3", "label": "Generic icon", "default": "snail",
+      "options": [
+        { "value": "junk-box",    "label": "Junk box" },
+        { "value": "factory",     "label": "Factory" },
+        { "value": "snail",       "label": "Snail" },
+        { "value": "plain-box",   "label": "Plain box" },
+        { "value": "people-shrug","label": "People shrug" },
+        { "value": "x-circle",    "label": "X circle" }
+      ]
+    },
+    { "type": "text", "id": "them_headline_3", "label": "Generic headline", "default": "Slow processing" },
+    { "type": "textarea", "id": "them_body_3", "label": "Generic sub-line", "default": "Several days before your gift even ships." },
+
+    { "type": "header", "content": "Row 4 — Personalization" },
+    { "type": "text", "id": "category_4", "label": "Category label", "default": "Personalization" },
+    {
+      "type": "select", "id": "us_icon_4", "label": "BroBasket icon", "default": "sparkle",
+      "options": [
+        { "value": "ingredients", "label": "Ingredients" },
+        { "value": "usa-flag",    "label": "USA flag with check" },
+        { "value": "rocket",      "label": "Rocket" },
+        { "value": "sparkle",     "label": "Sparkle" },
+        { "value": "thumbs-up",   "label": "Thumbs up" },
+        { "value": "check-circle","label": "Check circle" }
+      ]
+    },
+    { "type": "text", "id": "us_headline_4", "label": "BroBasket headline", "default": "Personalized & customized" },
+    { "type": "textarea", "id": "us_body_4", "label": "BroBasket sub-line", "default": "Built the way you like it — engraving, custom message, future delivery date." },
+    {
+      "type": "select", "id": "them_icon_4", "label": "Generic icon", "default": "plain-box",
+      "options": [
+        { "value": "junk-box",    "label": "Junk box" },
+        { "value": "factory",     "label": "Factory" },
+        { "value": "snail",       "label": "Snail" },
+        { "value": "plain-box",   "label": "Plain box" },
+        { "value": "people-shrug","label": "People shrug" },
+        { "value": "x-circle",    "label": "X circle" }
+      ]
+    },
+    { "type": "text", "id": "them_headline_4", "label": "Generic headline", "default": "One-size-fits-all" },
+    { "type": "textarea", "id": "them_body_4", "label": "Generic sub-line", "default": "Generic, pre-made assortments — same gift for everyone." },
+
+    { "type": "header", "content": "Row 5 — Recipient Experience" },
+    { "type": "text", "id": "category_5", "label": "Category label", "default": "Recipient Experience" },
+    {
+      "type": "select", "id": "us_icon_5", "label": "BroBasket icon", "default": "thumbs-up",
+      "options": [
+        { "value": "ingredients", "label": "Ingredients" },
+        { "value": "usa-flag",    "label": "USA flag with check" },
+        { "value": "rocket",      "label": "Rocket" },
+        { "value": "sparkle",     "label": "Sparkle" },
+        { "value": "thumbs-up",   "label": "Thumbs up" },
+        { "value": "check-circle","label": "Check circle" }
+      ]
+    },
+    { "type": "text", "id": "us_headline_5", "label": "BroBasket headline", "default": "Curated for the bros" },
+    { "type": "textarea", "id": "us_body_5", "label": "BroBasket sub-line", "default": "Unique, cool items the men in your life actually want." },
+    {
+      "type": "select", "id": "them_icon_5", "label": "Generic icon", "default": "people-shrug",
+      "options": [
+        { "value": "junk-box",    "label": "Junk box" },
+        { "value": "factory",     "label": "Factory" },
+        { "value": "snail",       "label": "Snail" },
+        { "value": "plain-box",   "label": "Plain box" },
+        { "value": "people-shrug","label": "People shrug" },
+        { "value": "x-circle",    "label": "X circle" }
+      ]
+    },
+    { "type": "text", "id": "them_headline_5", "label": "Generic headline", "default": "Generic & predictable" },
+    { "type": "textarea", "id": "them_body_5", "label": "Generic sub-line", "default": "A forgettable gift no one talks about." }
+  ],
+  "presets": [
+    {
+      "name": "Comparison table (W4-02)",
+      "category": "Trust signals"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product", "index", "page"]
+  }
+}
+{% endschema %}

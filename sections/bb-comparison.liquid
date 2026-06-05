@@ -1,0 +1,458 @@
+{% comment %}
+  bb-comparison.liquid
+  "BroBasket vs Generic Gift" comparison widget for PDP.
+  All copy is editable via theme customizer.
+  Layout: side-by-side columns on desktop, stacked on mobile.
+{% endcomment %}
+
+{% liquid
+  assign s = section.settings
+%}
+
+<div class="bb-comparison" id="bb-comparison-{{ section.id }}">
+  {%- if s.heading != blank -%}
+    <h3 class="bb-comparison__heading">{{ s.heading }}</h3>
+  {%- endif -%}
+
+  <div class="bb-comparison__column-headers" aria-hidden="true">
+    <div class="bb-comparison__col-label bb-comparison__col-label--us">{{ s.us_label }}</div>
+    <div class="bb-comparison__col-label bb-comparison__col-label--them">{{ s.them_label }}</div>
+  </div>
+
+  <div class="bb-comparison__rows">
+
+    {%- for i in (1..5) -%}
+      {%- assign cat_key = 'row' | append: i | append: '_category' -%}
+      {%- assign us_title_key = 'row' | append: i | append: '_us_title' -%}
+      {%- assign us_text_key = 'row' | append: i | append: '_us_text' -%}
+      {%- assign them_title_key = 'row' | append: i | append: '_them_title' -%}
+      {%- assign them_text_key = 'row' | append: i | append: '_them_text' -%}
+
+      {%- assign cat = s[cat_key] -%}
+      {%- assign us_title = s[us_title_key] -%}
+      {%- assign us_text = s[us_text_key] -%}
+      {%- assign them_title = s[them_title_key] -%}
+      {%- assign them_text = s[them_text_key] -%}
+
+      {%- if cat != blank or us_title != blank or them_title != blank -%}
+        <div class="bb-comparison__row">
+          {%- if cat != blank -%}
+            <div class="bb-comparison__category">{{ cat }}</div>
+          {%- endif -%}
+          <div class="bb-comparison__cells">
+            <div class="bb-comparison__cell bb-comparison__cell--us">
+              <span class="bb-comparison__icon bb-comparison__icon--check" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12l5 5L20 7"/>
+                </svg>
+              </span>
+              <div class="bb-comparison__cell-content">
+                {%- if us_title != blank -%}<strong class="bb-comparison__cell-title">{{ us_title }}</strong>{%- endif -%}
+                {%- if us_text != blank -%}<span class="bb-comparison__cell-text">{{ us_text }}</span>{%- endif -%}
+              </div>
+            </div>
+            <div class="bb-comparison__cell bb-comparison__cell--them">
+              <span class="bb-comparison__icon bb-comparison__icon--x" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 6l12 12M18 6l-12 12"/>
+                </svg>
+              </span>
+              <div class="bb-comparison__cell-content">
+                {%- if them_title != blank -%}<strong class="bb-comparison__cell-title">{{ them_title }}</strong>{%- endif -%}
+                {%- if them_text != blank -%}<span class="bb-comparison__cell-text">{{ them_text }}</span>{%- endif -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+  </div>
+
+  {%- if s.tagline != blank -%}
+    <div class="bb-comparison__tagline">{{ s.tagline }}</div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+.bb-comparison {
+  padding: 24px 16px;
+  margin: 16px 0;
+  background: #f7f5f1;
+  border: 1px solid #e8e4dc;
+  border-radius: 8px;
+  font-family: inherit;
+  color: #1a1a1a;
+}
+
+.bb-comparison__heading {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 18px 0;
+  color: #1a1a1a;
+  line-height: 1.3;
+}
+
+.bb-comparison__column-headers {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .bb-comparison__column-headers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 0 0 12px 0;
+    border-bottom: 1px solid #e8e4dc;
+    margin-bottom: 16px;
+  }
+  .bb-comparison__col-label {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .bb-comparison__col-label--us {
+    color: #b91c1c;
+  }
+  .bb-comparison__col-label--them {
+    color: #888;
+  }
+}
+
+.bb-comparison__rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.bb-comparison__row {
+  padding: 14px 0;
+  border-bottom: 1px solid #e8e4dc;
+}
+
+.bb-comparison__row:last-child {
+  border-bottom: none;
+}
+
+.bb-comparison__category {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.bb-comparison__cells {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .bb-comparison__cells {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .bb-comparison__category {
+    margin-bottom: 12px;
+  }
+}
+
+.bb-comparison__cell {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.bb-comparison__icon {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.bb-comparison__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.bb-comparison__icon--check {
+  color: #16a34a;
+}
+
+.bb-comparison__icon--x {
+  color: #999;
+}
+
+.bb-comparison__cell-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bb-comparison__cell--us .bb-comparison__cell-title {
+  color: #1a1a1a;
+}
+
+.bb-comparison__cell--them .bb-comparison__cell-title {
+  color: #555;
+}
+
+.bb-comparison__cell-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.bb-comparison__cell--us .bb-comparison__cell-text {
+  color: #555;
+}
+
+.bb-comparison__cell--them .bb-comparison__cell-text {
+  color: #888;
+}
+
+.bb-comparison__cell-text {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.bb-comparison__tagline {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #e8e4dc;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #1a1a1a;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Comparison",
+  "tag": "section",
+  "class": "bb-comparison-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section heading and column labels"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main heading",
+      "default": "The BroBasket vs. The Generic Gift"
+    },
+    {
+      "type": "text",
+      "id": "us_label",
+      "label": "Left column label",
+      "default": "BroBasket"
+    },
+    {
+      "type": "text",
+      "id": "them_label",
+      "label": "Right column label",
+      "default": "Generic Gift"
+    },
+    {
+      "type": "header",
+      "content": "Row 1"
+    },
+    {
+      "type": "text",
+      "id": "row1_category",
+      "label": "Category",
+      "default": "Food and Ingredients"
+    },
+    {
+      "type": "text",
+      "id": "row1_us_title",
+      "label": "BroBasket title",
+      "default": "Real ingredients"
+    },
+    {
+      "type": "text",
+      "id": "row1_us_text",
+      "label": "BroBasket detail",
+      "default": "No stale, no-name fillers"
+    },
+    {
+      "type": "text",
+      "id": "row1_them_title",
+      "label": "Generic title",
+      "default": "Stale, no-name junk"
+    },
+    {
+      "type": "text",
+      "id": "row1_them_text",
+      "label": "Generic detail",
+      "default": "Mass-produced fillers"
+    },
+    {
+      "type": "header",
+      "content": "Row 2"
+    },
+    {
+      "type": "text",
+      "id": "row2_category",
+      "label": "Category",
+      "default": "Made to Order"
+    },
+    {
+      "type": "text",
+      "id": "row2_us_title",
+      "label": "BroBasket title",
+      "default": "Made to order"
+    },
+    {
+      "type": "text",
+      "id": "row2_us_text",
+      "label": "BroBasket detail",
+      "default": "Built fresh in California"
+    },
+    {
+      "type": "text",
+      "id": "row2_them_title",
+      "label": "Generic title",
+      "default": "Mass-assembled overseas"
+    },
+    {
+      "type": "text",
+      "id": "row2_them_text",
+      "label": "Generic detail",
+      "default": "Foreign components"
+    },
+    {
+      "type": "header",
+      "content": "Row 3"
+    },
+    {
+      "type": "text",
+      "id": "row3_category",
+      "label": "Category",
+      "default": "Speed and Fulfillment"
+    },
+    {
+      "type": "text",
+      "id": "row3_us_title",
+      "label": "BroBasket title",
+      "default": "Ships same day"
+    },
+    {
+      "type": "text",
+      "id": "row3_us_text",
+      "label": "BroBasket detail",
+      "default": "Fast processing"
+    },
+    {
+      "type": "text",
+      "id": "row3_them_title",
+      "label": "Generic title",
+      "default": "Slow processing"
+    },
+    {
+      "type": "text",
+      "id": "row3_them_text",
+      "label": "Generic detail",
+      "default": "Several days to ship"
+    },
+    {
+      "type": "header",
+      "content": "Row 4"
+    },
+    {
+      "type": "text",
+      "id": "row4_category",
+      "label": "Category",
+      "default": "Personalization"
+    },
+    {
+      "type": "text",
+      "id": "row4_us_title",
+      "label": "BroBasket title",
+      "default": "Personalized and customized"
+    },
+    {
+      "type": "text",
+      "id": "row4_us_text",
+      "label": "BroBasket detail",
+      "default": "Built the way you like it"
+    },
+    {
+      "type": "text",
+      "id": "row4_them_title",
+      "label": "Generic title",
+      "default": "One-size-fits-all"
+    },
+    {
+      "type": "text",
+      "id": "row4_them_text",
+      "label": "Generic detail",
+      "default": "Generic, pre-made assortments"
+    },
+    {
+      "type": "header",
+      "content": "Row 5"
+    },
+    {
+      "type": "text",
+      "id": "row5_category",
+      "label": "Category",
+      "default": "Recipient Experience"
+    },
+    {
+      "type": "text",
+      "id": "row5_us_title",
+      "label": "BroBasket title",
+      "default": "Curated for guys"
+    },
+    {
+      "type": "text",
+      "id": "row5_us_text",
+      "label": "BroBasket detail",
+      "default": "Unique, cool items men actually want"
+    },
+    {
+      "type": "text",
+      "id": "row5_them_title",
+      "label": "Generic title",
+      "default": "Generic and predictable"
+    },
+    {
+      "type": "text",
+      "id": "row5_them_text",
+      "label": "Generic detail",
+      "default": "Forgettable gift"
+    },
+    {
+      "type": "header",
+      "content": "Tagline"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Up your gifting game. Choose quality."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison"
+    }
+  ]
+}
+{% endschema %}

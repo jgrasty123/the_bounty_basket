@@ -1,0 +1,230 @@
+/**
+ * bb-delivery-date-picker.css
+ *
+ * Styling for custom delivery date picker.
+ * Designed to match Bounty Basket Co.'s existing cream/red theme.
+ */
+
+.bb-delivery-date-picker {
+  background: #ffffff;
+  border: 1px solid #e6e3dc;
+  border-radius: 12px;
+  padding: 20px 18px;
+  margin-bottom: 16px;
+  font-family: inherit;
+  color: #1a1a1a;
+}
+
+.bb-delivery-date-picker__title {
+  margin: 0 0 14px 0;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+.bb-delivery-date-picker__loading {
+  text-align: center;
+  color: #888;
+  padding: 28px 0;
+  font-size: 13px;
+}
+
+.bb-delivery-date-picker__helper {
+  margin: 14px 0 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.bb-delivery-date-picker__helper strong {
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+.bb-delivery-date-picker__actions {
+  margin: 10px 0 0 0;
+  text-align: center;
+  min-height: 28px;
+}
+
+.bb-delivery-date-picker__clear {
+  background: transparent;
+  border: 1px solid #d8d3c9;
+  color: #555;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.bb-delivery-date-picker__clear:hover {
+  background: #f5f2eb;
+  border-color: #bdb6a8;
+  color: #1a1a1a;
+}
+
+.bb-delivery-date-picker__status {
+  margin: 8px 0 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: #2a7a2a;
+  min-height: 16px;
+  font-style: italic;
+}
+
+.bb-delivery-date-picker__noscript {
+  background: #fff8e6;
+  border: 1px solid #f0d97a;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ---------- Calendar grid ---------- */
+
+.bb-cal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+
+.bb-cal__nav {
+  background: transparent;
+  border: 1px solid transparent;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #1a1a1a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.bb-cal__nav:hover:not(.is-disabled):not(:disabled) {
+  background: #f5f2eb;
+  border-color: #d8d3c9;
+}
+
+.bb-cal__nav.is-disabled,
+.bb-cal__nav:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.bb-cal__month-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: center;
+  flex: 1;
+}
+
+.bb-cal__dow-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 6px;
+  padding: 0 2px;
+}
+
+.bb-cal__dow {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  padding: 6px 0;
+  letter-spacing: 0.04em;
+}
+
+.bb-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 0 2px;
+}
+
+.bb-cal__cell {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 0;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1a1a1a;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  font-weight: 500;
+}
+
+.bb-cal__cell--blank {
+  cursor: default;
+  pointer-events: none;
+}
+
+.bb-cal__cell.is-available:hover {
+  background: #f5f2eb;
+  border-color: #d8d3c9;
+}
+
+.bb-cal__cell.is-today {
+  font-weight: 700;
+  border-color: #d8d3c9;
+}
+
+.bb-cal__cell.is-selected,
+.bb-cal__cell.is-selected:hover {
+  background: #1a1a1a;
+  color: #ffffff;
+  border-color: #1a1a1a;
+  font-weight: 700;
+}
+
+.bb-cal__cell.is-disabled,
+.bb-cal__cell:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  background: transparent;
+  border-color: transparent;
+  font-weight: 400;
+}
+
+.bb-cal__cell:focus-visible {
+  outline: 2px solid #dd1a1a;
+  outline-offset: 1px;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 480px) {
+  .bb-delivery-date-picker {
+    padding: 16px 12px;
+  }
+  .bb-delivery-date-picker__title {
+    font-size: 16px;
+  }
+  .bb-cal__cell {
+    height: 34px;
+    font-size: 13px;
+  }
+  .bb-cal__dow {
+    font-size: 10px;
+    padding: 4px 0;
+  }
+}

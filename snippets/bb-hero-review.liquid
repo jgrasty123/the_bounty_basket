@@ -1,0 +1,91 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+BROBASKET HERO REVIEW (W2-03)
+----------------------------------------------------------------------------------------------------------------------
+
+Single above-the-fold curated review. Photo + 5 stars + headline + quote + name.
+
+Why hard-coded vs. dynamic (Judge.me): the expert audit flagged that Judge.me's
+widget buries the best reviews under a firehose of everything. Hard-coding a hero
+review lets us CHOOSE the review that does the most work at the decision moment,
+rather than hoping the algorithm surfaces it.
+
+All content is block.settings so James can override per-product in the theme
+editor if a product family has a stronger review.
+
+Default content seeded from James's Apr 2026 curation pass:
+  * Real review text (shortened)
+  * Name changed to a plausible first-name + last-initial
+  * Stock photo picker — leave empty to render an initials-circle fallback
+
+Supported block.settings:
+  * reviewer_photo   — image_picker  (optional; initials fallback if blank)
+  * rating           — range 1–5     (default 5)
+  * headline         — text          (default "Best Christmas he's ever had!")
+  * quote            — textarea      (the review body)
+  * reviewer_name    — text          (default "Sarah M.")
+  * review_meta      — text          (default "Verified Customer · December 2025")
+  * star_color       — color         (default #F5A623, Google yellow)
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign rating      = block.settings.rating        | default: 5 -%}
+{%- assign headline    = block.settings.headline      | default: "Best Christmas he's ever had!" -%}
+{%- assign quote       = block.settings.quote         | default: "My dad was beyond stoked. He said it was the best Christmas he's ever had. He's 83 and finding gifts he likes is a challenge — thank you for making his day special." -%}
+{%- assign name        = block.settings.reviewer_name | default: "Sarah M." -%}
+{%- assign meta        = block.settings.review_meta   | default: "Verified Customer" -%}
+{%- assign star_color  = block.settings.star_color    | default: "#F5A623" -%}
+
+{%- comment -%} Build initials for fallback avatar {%- endcomment -%}
+{%- assign name_parts = name | split: ' ' -%}
+{%- capture initials -%}
+  {%- for part in name_parts limit: 2 -%}
+    {{- part | slice: 0 | upcase -}}
+  {%- endfor -%}
+{%- endcapture -%}
+
+<figure class="bb-hero-review" style="--bb-hr-star: {{ star_color }};">
+  <div class="bb-hero-review__avatar" aria-hidden="true">
+    {%- if block.settings.reviewer_photo != blank -%}
+      {{ block.settings.reviewer_photo | image_url: width: 160 | image_tag:
+          loading: 'lazy',
+          widths: '80,120,160',
+          sizes: '80px',
+          class: 'bb-hero-review__photo',
+          alt: name | escape }}
+    {%- else -%}
+      <span class="bb-hero-review__initials">{{ initials | strip }}</span>
+    {%- endif -%}
+  </div>
+
+  <div class="bb-hero-review__body">
+    <div class="bb-hero-review__stars" role="img" aria-label="{{ rating }} out of 5 stars">
+      {%- for i in (1..5) -%}
+        {%- if i <= rating -%}
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>
+          </svg>
+        {%- else -%}
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>
+          </svg>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if headline != blank -%}
+      <p class="bb-hero-review__headline">{{ headline | escape }}</p>
+    {%- endif -%}
+
+    <blockquote class="bb-hero-review__quote">
+      {{- quote | escape -}}
+    </blockquote>
+
+    <figcaption class="bb-hero-review__attribution">
+      <span class="bb-hero-review__name">— {{ name | escape }}</span>
+      {%- if meta != blank -%}
+        <span class="bb-hero-review__meta">{{ meta | escape }}</span>
+      {%- endif -%}
+    </figcaption>
+  </div>
+</figure>
