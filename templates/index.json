@@ -17,7 +17,7 @@
             "button_text": "Shop now",
             "button_link": "shopify://collections/all",
             "text_color": "#ffffff",
-            "button_background": "#e8638a",
+            "button_background": "#6b7c6e",
             "button_text_color": "#ffffff",
             "overlay_color": "#000000",
             "overlay_opacity": 20,
@@ -323,13 +323,13 @@
         "subheading_xxpAzU": {
           "type": "subheading",
           "settings": {
-            "text": "We're taking the term Bro Back"
+            "text": "Awesome gifting, since 2014"
           }
         },
         "heading_AnJfWd": {
           "type": "heading",
           "settings": {
-            "text": "The BroBasket Manifesto",
+            "text": "The Bounty Basket Co. Promise",
             "heading_tag": "h1",
             "text_color": "",
             "gradient": ""
@@ -338,7 +338,7 @@
         "richtext_7QedhG": {
           "type": "richtext",
           "settings": {
-            "content": "<p>When you see the term “Bro” you probably think of that party-loving, egotistical, frat boy who's always yellin' “woooooo!” for no reason at all. </p><p>We don't care for the typical nomenclature for “Bro” and we want to redefine it.</p><p>We are taking the term “Bro” back because, to us, a Bro is much more than that. A Bro is that friend you’ve known since you were 5 years old; your buddy from softball; your dad; your brother; your best friend; or maybe even your lover 😎</p><p>The BroBasket was created to be THE best gift for Men. Gifts that all the Bro’s in your life would love to receive. The guys that love beer, scotch, whiskey, tequila, wine, and/or beef jerky</p><p>Or maybe the occasional long-distance hug, hi-five, smooch or similar that only a BroBasket can provide will really make their freaking day!</p><p>Men love our unique alcohol-themed gifts with their favorite beer, wine, and or liquor in them, and we love making the best gifts for men, almost as much as they love receiving them. </p><p>These important relationships in life are what inspired us to create The BroBasket back in 2014. We know the men in your life need to be celebrated as much as the women. And they should be celebrated with something they really love. </p><p>Our idea was to create the ultimate gift basket for men, gift baskets that all the bros in your life would enjoy receiving. </p><p>So, whether its a birthday gift, Christmas gift basket, giving corporate gifts, get-well wishes, Father’s Day gifts, or just a lil something for the whiskey-lover in your life, the special gift basket we create for you is going to make some special men in your life nothing but happy. </p><p>It’s our goal to make gift-giving easy for you, and fun and cool for the guy who gets the gift. From our whiskey gifts to all the other spirits baskets we offer, we have you covered. From gin, tequila, vodka, scotch, bourbon, beer, wine, and of course whiskey, there’s a gift basket for every kind of sensibility. </p><p>We believe gift-giving should be fun, and you should be able to find a gift for the men in your life that they will love and feel as good as giving the gift as the receiver.</p><p>James</p><p>Co-Founder</p><p>TheBroBasket.com</p><p>Cheers - to all the Bros in your life! </p>"
+            "content": "<p>We&#8217;ve been helping people send awesome gifts since 2014. It started with The BroBasket &#8212; a simple idea that the people we love deserve a gift that actually feels like them, not another generic box. Tens of thousands of happy customers later, that idea grew bigger than we ever planned.</p><p>The Bounty Basket Co. is where that expertise opens up to everyone. Same obsessive curation, same fast and careful shipping, same in-house team that genuinely cares whether your gift lands &#8212; now built for men and women alike, for every occasion worth celebrating.</p><p>Because great gifting was never really about who it&#8217;s for. It&#8217;s about sending something thoughtful, beautiful, and a little bit fun &#8212; the kind of gift that makes someone feel genuinely seen.</p><p>That&#8217;s our promise: whoever you&#8217;re celebrating &#8212; a friend, your mom, your partner, a colleague who came through &#8212; we&#8217;ll help you send them something awesome. Every single time.</p><p>Cheers, to better gifting for everyone.</p><p><strong>James</strong><br>Co-Founder, The Bounty Basket Co.</p>"
           }
         }
       },
@@ -351,9 +351,9 @@
         "full_width": true,
         "content_width": "large",
         "text_position": "start",
-        "background": "#1a1a1a",
+        "background": "#fdf6f0",
         "background_gradient": "",
-        "text_color": "#fbf8f5"
+        "text_color": "#2b2330"
       }
     }
   },
