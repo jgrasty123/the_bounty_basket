@@ -1,0 +1,113 @@
+Handle,Command,Title,Body HTML,Sort Order,Published,Must Match,Rule: Product Column,Rule: Relation,Rule: Condition
+shop-all,MERGE,Shop All Gifts,"<p>Every gift we make, all in one place. Thoughtful, beautiful, and a little bit fun &#8212; for whoever you&#8217;re celebrating.</p>",best-selling,TRUE,all,Variant Price,Greater Than,0
+cocktail-kits,MERGE,Cocktail Kits,"<p>Everything you need to shake up something delicious at home &#8212; available with or without the alcohol. From lemon drop martinis to flavored margaritas, our kits bring the party (and the good mood) right to the door.</p>",best-selling,TRUE,any,Tag,Equals,cocktail-kit
+wine,MERGE,Wine Gifts,"<p>The perfect bottle, beautifully gifted. From crisp whites to easy-drinking ros&#233;, our wine gifts pair gorgeous bottles with snacks and glasses for an occasion worth slowing down for.</p>",best-selling,TRUE,any,Tag,Equals,wine
+wine-red,MERGE,Red Wine Gifts,"<p>Bold, warm, and made for cozy celebrations. Our red wine gift sets pair beautifully with chocolate, cheese, and good company.</p>",best-selling,TRUE,all,Tag,Equals,wine
+wine-red,MERGE,,,,,,Tag,Equals,red
+wine-white,MERGE,White Wine Gifts,"<p>Crisp, bright, and endlessly easy to love. White wine gifts that feel fresh for any occasion.</p>",best-selling,TRUE,all,Tag,Equals,wine
+wine-white,MERGE,,,,,,Tag,Equals,white
+wine-rose,MERGE,Ros&#233; Gifts,"<p>Ros&#233; all day. Our ros&#233; sets are the bright, blush-pink gift that says let&#8217;s enjoy this &#8212; perfect for showers, girls&#8217; nights, and just-because moments.</p>",best-selling,TRUE,all,Tag,Equals,wine
+wine-rose,MERGE,,,,,,Tag,Equals,rose
+champagne,MERGE,Champagne &amp; Sparkling,"<p>When the moment calls for a little sparkle. Bubbly paired with chocolate, brunch treats, and everything you need to toast the news worth celebrating.</p>",best-selling,TRUE,any,Tag,Equals,champagne
+non-alcoholic,MERGE,Non-Alcoholic Gifts,"<p>All the celebration, zero proof. Sweet treats, zero-proof bubbly, and indulgent chocolate that ships anywhere with no restrictions &#8212; so everyone gets to raise a glass.</p>",best-selling,TRUE,any,Tag,Equals,non-alcoholic
+spa-self-care,MERGE,Spa &amp; Self-Care,"<p>Permission to slow down, in a box. Soothing teas, hand-poured candles, chocolate, and little luxuries for the person who takes care of everyone else.</p>",best-selling,TRUE,any,Tag,Equals,spa
+chocolate,MERGE,Chocolate Gifts,"<p>For the one who saves room for dessert first. Rich, indulgent chocolate in every form.</p>",best-selling,TRUE,any,Tag,Equals,chocolate
+birthday-gifts,MERGE,Birthday Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+birthday-gifts,MERGE,,,,,,Type,Equals,Wine Set
+birthday-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+birthday-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+birthday-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+birthday-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+anniversary-gifts,MERGE,Anniversary Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+anniversary-gifts,MERGE,,,,,,Type,Equals,Wine Set
+anniversary-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+anniversary-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+anniversary-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+anniversary-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+thank-you-gifts,MERGE,Thank You Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+thank-you-gifts,MERGE,,,,,,Type,Equals,Wine Set
+thank-you-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+thank-you-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+thank-you-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+thank-you-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+congratulations-gifts,MERGE,Congratulations Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+congratulations-gifts,MERGE,,,,,,Type,Equals,Wine Set
+congratulations-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+congratulations-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+congratulations-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+congratulations-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+get-well-gifts,MERGE,Get Well Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+get-well-gifts,MERGE,,,,,,Type,Equals,Wine Set
+get-well-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+get-well-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+get-well-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+get-well-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+sympathy-gifts,MERGE,Sympathy Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+sympathy-gifts,MERGE,,,,,,Type,Equals,Wine Set
+sympathy-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+sympathy-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+sympathy-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+sympathy-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+housewarming-gifts,MERGE,Housewarming Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+housewarming-gifts,MERGE,,,,,,Type,Equals,Wine Set
+housewarming-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+housewarming-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+housewarming-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+housewarming-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+wedding-gifts,MERGE,Wedding Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+wedding-gifts,MERGE,,,,,,Type,Equals,Wine Set
+wedding-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+wedding-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+wedding-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+wedding-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+retirement-gifts,MERGE,Retirement Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+retirement-gifts,MERGE,,,,,,Type,Equals,Wine Set
+retirement-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+retirement-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+retirement-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+retirement-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+just-because-gifts,MERGE,Just Because Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+just-because-gifts,MERGE,,,,,,Type,Equals,Wine Set
+just-because-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+just-because-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+just-because-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+just-because-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+corporate-gifts,MERGE,Corporate Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+corporate-gifts,MERGE,,,,,,Type,Equals,Wine Set
+corporate-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+corporate-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+corporate-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+corporate-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+mothers-day-gifts,MERGE,Mother's Day Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+mothers-day-gifts,MERGE,,,,,,Type,Equals,Wine Set
+mothers-day-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+mothers-day-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+mothers-day-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+mothers-day-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+valentines-day-gifts,MERGE,Valentine's Day Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+valentines-day-gifts,MERGE,,,,,,Type,Equals,Wine Set
+valentines-day-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+valentines-day-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+valentines-day-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+valentines-day-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+christmas-gifts,MERGE,Christmas Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+christmas-gifts,MERGE,,,,,,Type,Equals,Wine Set
+christmas-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+christmas-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+christmas-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+christmas-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+easter-gifts,MERGE,Easter Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+easter-gifts,MERGE,,,,,,Type,Equals,Wine Set
+easter-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+easter-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+easter-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+easter-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+holiday-gifts,MERGE,Holiday Gift Baskets,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,any,Type,Equals,Cocktail Kit
+holiday-gifts,MERGE,,,,,,Type,Equals,Wine Set
+holiday-gifts,MERGE,,,,,,Type,Equals,Champagne Set
+holiday-gifts,MERGE,,,,,,Type,Equals,Chocolate Gift
+holiday-gifts,MERGE,,,,,,Type,Equals,Non-Alcoholic Gift
+holiday-gifts,MERGE,,,,,,Type,Equals,Spa Gift
+gifts-under-50,MERGE,Gifts Under $50,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,all,Variant Price,Less Than,50
+gifts-under-75,MERGE,Gifts Under $75,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,all,Variant Price,Less Than,75
+gifts-under-100,MERGE,Gifts Under $100,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,all,Variant Price,Less Than,100

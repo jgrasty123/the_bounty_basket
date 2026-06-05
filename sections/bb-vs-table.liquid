@@ -37,7 +37,7 @@ A green check overlay is added to BroBasket icons; an X overlay to Generic.
   <div class="bb-vs-table__inner">
     {%- if section.settings.section_title != blank -%}
       <h2 class="bb-vs-table__title">
-        {{ section.settings.section_title | replace: 'BroBasket', '<span class="bb-vs-table__brand">BroBasket</span>' | replace: 'Generic', '<span class="bb-vs-table__generic">Generic</span>' }}
+        {{ section.settings.section_title | replace: 'Bounty', '<span class="bb-vs-table__brand">Bounty</span>' | replace: 'Generic', '<span class="bb-vs-table__generic">Generic</span>' }}
       </h2>
     {%- endif -%}
 
@@ -47,7 +47,7 @@ A green check overlay is added to BroBasket icons; an X overlay to Generic.
 
     <div class="bb-vs-table__column-headers">
       <div class="bb-vs-table__col-header bb-vs-table__col-header--us">
-        <span>{{ section.settings.us_column_label | default: 'The BroBasket' | escape }}</span>
+        <span>{{ section.settings.us_column_label | default: 'The Bounty Basket Co.' | escape }}</span>
       </div>
       <div class="bb-vs-table__col-header bb-vs-table__col-header--spacer" aria-hidden="true"></div>
       <div class="bb-vs-table__col-header bb-vs-table__col-header--them">
@@ -154,7 +154,7 @@ A green check overlay is added to BroBasket icons; an X overlay to Generic.
       "type": "text",
       "id": "section_title",
       "label": "Section title",
-      "default": "The BroBasket vs. The Generic Gift"
+      "default": "The Bounty Basket Co. vs. The Generic Gift"
     },
     {
       "type": "text",
@@ -165,7 +165,7 @@ A green check overlay is added to BroBasket icons; an X overlay to Generic.
       "type": "text",
       "id": "us_column_label",
       "label": "Left column label",
-      "default": "The BroBasket"
+      "default": "The Bounty Basket Co."
     },
     {
       "type": "text",
@@ -330,7 +330,7 @@ A green check overlay is added to BroBasket icons; an X overlay to Generic.
       ]
     },
     { "type": "text", "id": "us_headline_5", "label": "BroBasket headline", "default": "Curated for the bros" },
-    { "type": "textarea", "id": "us_body_5", "label": "BroBasket sub-line", "default": "Unique, cool items the men in your life actually want." },
+    { "type": "textarea", "id": "us_body_5", "label": "BroBasket sub-line", "default": "Unique, cool items the people in your life actually want." },
     {
       "type": "select", "id": "them_icon_5", "label": "Generic icon", "default": "people-shrug",
       "options": [
