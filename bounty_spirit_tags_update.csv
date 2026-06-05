@@ -1,8 +1,8 @@
 Handle,Command,Tags,Tags Command
-lemon-drop-martini-kit,MERGE,vodka,ADD
-flavored-margarita-trio,MERGE,tequila,ADD
-cosmopolitan-cocktail-kit,MERGE,vodka,ADD
-vodka-martini-gift-set,MERGE,vodka,ADD
-moscow-mule-gift-set,MERGE,vodka,ADD
-bloody-mary-gift-set,MERGE,vodka,ADD
-classic-gin-tonic-set,MERGE,gin,ADD
+lemon-drop-martini-kit,MERGE,vodka,MERGE
+flavored-margarita-trio,MERGE,tequila,MERGE
+cosmopolitan-cocktail-kit,MERGE,vodka,MERGE
+vodka-martini-gift-set,MERGE,vodka,MERGE
+moscow-mule-gift-set,MERGE,vodka,MERGE
+bloody-mary-gift-set,MERGE,vodka,MERGE
+classic-gin-tonic-set,MERGE,gin,MERGE
