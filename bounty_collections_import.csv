@@ -111,3 +111,6 @@ holiday-gifts,MERGE,,,,,,Type,Equals,Spa Gift
 gifts-under-50,MERGE,Gifts Under $50,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,all,Variant Price,Less Than,50
 gifts-under-75,MERGE,Gifts Under $75,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,all,Variant Price,Less Than,75
 gifts-under-100,MERGE,Gifts Under $100,<p>The perfect way to celebrate the moment. Thoughtfully curated gifts that arrive ready to make someone&#8217;s day.</p>,best-selling,TRUE,all,Variant Price,Less Than,100
+tequila-gifts,MERGE,Tequila Gift Baskets,"<p>Margarita kits and tequila-forward gifts for the ones who bring the fiesta. Bright, fun, and made for celebrating.</p>",best-selling,TRUE,any,Tag,Equals,tequila
+gin-gifts,MERGE,Gin Gift Baskets,"<p>Crisp, botanical, and endlessly refreshing. Gin gift sets for the person with classic, elegant taste.</p>",best-selling,TRUE,any,Tag,Equals,gin
+vodka-gifts,MERGE,Vodka Gift Baskets,"<p>From cosmos to Moscow mules, our vodka gift sets bring the most versatile spirit to every celebration.</p>",best-selling,TRUE,any,Tag,Equals,vodka
