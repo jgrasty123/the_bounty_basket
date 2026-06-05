@@ -1,0 +1,16 @@
+Handle,Title,Body HTML,Vendor,Type,Tags,Published,Option1 Name,Option1 Value,Option2 Name,Option2 Value,Variant SKU,Variant Price,Variant Requires Shipping,Variant Inventory Policy,Variant Inventory Tracker,Google Shopping / Google Product Category
+special-card,Special Gift Card,<p>Add a free personalized message card to your gift. We&#8217;ll hand-write your note and tuck it inside.</p>,The Bounty Basket Co.,Add-on,"addon,gift-card,hidden",TRUE,Card Design,A Special Gift For You,,,BNTY-CARD-01,0.00,TRUE,continue,,Arts & Entertainment > Gift Giving
+special-card,,,,,,,Card Design,Happy Birthday,,,BNTY-CARD-02,0.00,TRUE,continue,,
+special-card,,,,,,,Card Design,Congratulations,,,BNTY-CARD-03,0.00,TRUE,continue,,
+special-card,,,,,,,Card Design,Thank You,,,BNTY-CARD-04,0.00,TRUE,continue,,
+special-card,,,,,,,Card Design,Thinking of You,,,BNTY-CARD-05,0.00,TRUE,continue,,
+special-card,,,,,,,Card Design,With Sympathy,,,BNTY-CARD-06,0.00,TRUE,continue,,
+engraved-glass,Engraved Glass,<p>Add a custom-engraved glass to your gift. Choose your glass and engraving style.</p>,The Bounty Basket Co.,Add-on,"addon,engraving,hidden",TRUE,Glass Type,Rocks Glass,Engraving,Clear Engraving,BNTY-EGLASS-01,30.00,TRUE,continue,,Arts & Entertainment > Gift Giving
+engraved-glass,,,,,,,Glass Type,Rocks Glass,Engraving,Gold Color Fill Engraving,BNTY-EGLASS-02,35.00,TRUE,continue,,
+engraved-glass,,,,,,,Glass Type,Rocks Glass,Engraving,Silver Color Fill Engraving,BNTY-EGLASS-03,35.00,TRUE,continue,,
+engraved-glass,,,,,,,Glass Type,Shot Glass,Engraving,Clear Engraving,BNTY-EGLASS-04,30.00,TRUE,continue,,
+engraved-glass,,,,,,,Glass Type,Shot Glass,Engraving,Gold Color Fill Engraving,BNTY-EGLASS-05,35.00,TRUE,continue,,
+engraved-glass,,,,,,,Glass Type,Shot Glass,Engraving,Silver Color Fill Engraving,BNTY-EGLASS-06,35.00,TRUE,continue,,
+engraving,Bottle Engraving,<p>Add custom engraving to the bottle in your gift.</p>,The Bounty Basket Co.,Add-on,"addon,engraving,hidden",TRUE,Engraving,Clear Engraving,,,BNTY-ENG-01,30.00,TRUE,continue,,Arts & Entertainment > Gift Giving
+engraving,,,,,,,Engraving,Gold Color Fill Engraving,,,BNTY-ENG-02,35.00,TRUE,continue,,
+engraving,,,,,,,Engraving,Silver Color Fill Engraving,,,BNTY-ENG-03,35.00,TRUE,continue,,
