@@ -110,7 +110,7 @@
       "settings": {
         "enable_sticky": true,
         "hide_on_scroll": false,
-        "logo": "shopify://shop_images/Logo_1.png",
+        "logo": "shopify://shop_images/bounty_Basket_Co-logo-no-bg.png",
         "logo_max_width": 65,
         "logo_mobile_max_width": 50,
         "menu": "main-menu",
@@ -126,8 +126,9 @@
         "show_country_flag": true,
         "show_country_name": false,
         "transparent_header_text_color": "#ffffff",
+        "transparent_logo": "shopify://shop_images/bounty_Basket_Co-logo.png",
         "reduce_padding": false,
-        "background_opacity": 100,
+        "background_opacity": 0,
         "background_blur_radius": 0
       }
     }
