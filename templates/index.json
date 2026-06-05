@@ -25,7 +25,7 @@
             "button_text": "Shop now",
             "button_link": "shopify://collections/all",
             "text_color": "#ffffff",
-            "button_background": "#6b7c6e",
+            "button_background": "#4a4c3d",
             "button_text_color": "#ffffff",
             "overlay_color": "#000000",
             "overlay_opacity": 20,
@@ -48,65 +48,6 @@
         "cycle_speed": 6,
         "background": "#f2f2f2",
         "background_gradient": "linear-gradient(60deg, rgba(60, 65, 68, 1), rgba(23, 29, 33, 1) 98%)"
-      }
-    },
-    "testimonials_PT7U3d": {
-      "type": "testimonials",
-      "blocks": {
-        "testimonial_LJE7bY": {
-          "type": "testimonial",
-          "settings": {
-            "round_avatar": true,
-            "show_rating": true,
-            "rating": 5,
-            "author": "Diana G.",
-            "title": "A Gift Worth Sharing",
-            "content": "<p>My dad is impossible to shop for because he has everything he needs. I came across BroBasket and sent him a basket with a bottle of Scotch. My Dad LOVED it. He’s even arranging a sampling with his friends! I Will definitely be buying again.</p>"
-          }
-        },
-        "testimonial_8xJndz": {
-          "type": "testimonial",
-          "settings": {
-            "round_avatar": true,
-            "show_rating": true,
-            "rating": 5,
-            "author": "Jared F.",
-            "title": "Mom LOVED it!!!",
-            "content": "<p>When my mom celebrated her birthday last month, I wanted to get her something different to the \"hope you like it\" gifts I normally get her. When her BroBasket arrived, she was on the phone to me straight away so excited with her California Wine and Coffee Gift Basket. Her love of a cheeky wine paired with her love of coffee was spot on! Great gift. Thanks so much BroBasket! Fabulous basket! You've got a customer for life in me! :)</p>"
-          }
-        },
-        "testimonial_tfhHnr": {
-          "type": "testimonial",
-          "settings": {
-            "round_avatar": true,
-            "show_rating": true,
-            "rating": 5,
-            "author": "Vanessa W.",
-            "title": "A Unique Way To Celebrate",
-            "content": "<p>My husband and I wanted to do something special for our son’s 25th birthday since we couldn’t celebrate together. Being the great parents we are, we sent our son a custom gift from BroBasket. He LOVED it! The ordering process was super easy and made his day a little more special. Thank you!</p>"
-          }
-        }
-      },
-      "block_order": [
-        "testimonial_LJE7bY",
-        "testimonial_8xJndz",
-        "testimonial_tfhHnr"
-      ],
-      "settings": {
-        "full_width": true,
-        "stack_testimonials": true,
-        "subheading": "Reviews",
-        "title": "10,000+ Customers Love The BroBasket",
-        "content": "",
-        "link_url": "",
-        "link_text": "",
-        "background": "",
-        "background_gradient": "",
-        "text_color": "",
-        "heading_color": "",
-        "heading_gradient": "",
-        "testimonial_card_background": "",
-        "testimonial_card_text_color": ""
       }
     },
     "text_with_icons_eihpRt": {
@@ -361,7 +302,6 @@
   },
   "order": [
     "slideshow",
-    "testimonials_PT7U3d",
     "text_with_icons_eihpRt",
     "multi_column_a3KmAb",
     "media_with_text_N9gqxm",
