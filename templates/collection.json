@@ -56,7 +56,6 @@
           "settings": {
             "position": 3,
             "column_span": "2",
-            "image": "shopify://shop_images/Customize-Your-Own-141587-gal1-1246x848.jpg",
             "title": "Customize Your Own Basket",
             "content": "<p>★ <strong>MOST POPULAR</strong></p><p>Give a gift that is crafted by you. Choose your liquor, accessories, snacks, mixers, and more to make your gift extra special.</p>",
             "link_url": "/apps/gbb/easybundle/1",
@@ -75,7 +74,7 @@
       "settings": {
         "products_per_page": 50,
         "products_per_row_mobile": "1",
-        "products_per_row_desktop": 3,
+        "products_per_row_desktop": 2,
         "filter_layout": "horizontal",
         "show_sort_by": true,
         "show_filters": true,
