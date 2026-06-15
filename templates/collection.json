@@ -53,6 +53,7 @@
       "blocks": {
         "promotion_image_D3dtXD": {
           "type": "promotion_image",
+          "disabled": true,
           "settings": {
             "position": 3,
             "column_span": "2",
