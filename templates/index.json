@@ -177,6 +177,7 @@
         "image_A7jNXz": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/06_champagne-campaign-champagne-gift-basket_hero.png",
             "media_width": 50,
             "media_position": "start",
             "text_position": "place-self-center text-center",
@@ -198,6 +199,7 @@
         "image_ymXX9D": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/30_espresso-martini-kit-gift_hero.png",
             "media_width": 50,
             "media_position": "start",
             "text_position": "place-self-center text-center",
@@ -218,6 +220,7 @@
         },
         "image_NCL7nM": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "media_width": 50,
             "media_position": "start",
@@ -281,7 +284,7 @@
         "richtext_7QedhG": {
           "type": "richtext",
           "settings": {
-            "content": "<p>We&#8217;ve been helping people send awesome gifts since 2014. It started with The BroBasket &#8212; a simple idea that the people we love deserve a gift that actually feels like them, not another generic box. Tens of thousands of happy customers later, that idea grew bigger than we ever planned.</p><p>The Bounty Basket Co. is where that expertise opens up to everyone. Same obsessive curation, same fast and careful shipping, same in-house team that genuinely cares whether your gift lands &#8212; now built for men and women alike, for every occasion worth celebrating.</p><p>Because great gifting was never really about who it&#8217;s for. It&#8217;s about sending something thoughtful, beautiful, and a little bit fun &#8212; the kind of gift that makes someone feel genuinely seen.</p><p>That&#8217;s our promise: whoever you&#8217;re celebrating &#8212; a friend, your mom, your partner, a colleague who came through &#8212; we&#8217;ll help you send them something awesome. Every single time.</p><p>Cheers, to better gifting for everyone.</p><p><strong>James</strong><br>Co-Founder, The Bounty Basket Co.</p>"
+            "content": "<p>We’ve been helping people send awesome gifts since 2014. It started with The BroBasket — a simple idea that the people we love deserve a gift that actually feels like them, not another generic box. Tens of thousands of happy customers later, that idea grew bigger than we ever planned.</p><p>The Bounty Basket Co. is where that expertise opens up to everyone. Same obsessive curation, same fast and careful shipping, same in-house team that genuinely cares whether your gift lands — now built for men and women alike, for every occasion worth celebrating.</p><p>Because great gifting was never really about who it’s for. It’s about sending something thoughtful, beautiful, and a little bit fun — the kind of gift that makes someone feel genuinely seen.</p><p>That’s our promise: whoever you’re celebrating — a friend, your mom, your partner, a colleague who came through — we’ll help you send them something awesome. Every single time.</p><p>Cheers, to better gifting for everyone.</p><p><strong>James</strong><br/>Founder, The Bounty Basket Co.</p>"
           }
         }
       },
