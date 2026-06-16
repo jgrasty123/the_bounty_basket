@@ -15,7 +15,7 @@
         "slide-1": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/the-bounty-basket-hero-v2.png",
+            "image": "shopify://shop_images/the-bounty-basket-hero-v3.png",
             "content_max_width": 780,
             "mobile_text_position": "place-self-start text-start",
             "desktop_text_position": "sm:place-self-start sm:text-start",
