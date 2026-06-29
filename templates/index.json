@@ -23,7 +23,7 @@
             "title": "Gift baskets worth celebrating",
             "heading_tag": "h0",
             "button_text": "Shop now",
-            "button_link": "shopify://collections/gift-baskets-for-women",
+            "button_link": "shopify://collections/shop-all",
             "text_color": "#ffffff",
             "button_background": "#4a4c3d",
             "button_text_color": "#ffffff",
@@ -118,10 +118,10 @@
           "settings": {
             "show_controls": false,
             "column_size": "3",
-            "title": "Show Him You Care",
+            "title": "Find Their Perfect Gift",
             "heading_tag": "h4",
-            "content": "<p>Make his freaking day!  Choose from our awesome selection of  ready to go gifts or create a truly unique gift he'll remember.</p>",
-            "link_url": "shopify://collections/gift-baskets-for-men",
+            "content": "<p>Make their whole day. Choose from our curated selection of ready-to-go gift baskets, or build something they'll never forget.</p>",
+            "link_url": "shopify://collections/shop-all",
             "link_text": "Shop Now",
             "link_style": "link"
           }
@@ -131,10 +131,10 @@
           "settings": {
             "show_controls": false,
             "column_size": "3",
-            "title": "Show Her You Care",
+            "title": "Made for Every Occasion",
             "heading_tag": "h4",
-            "content": "<p>Find or create a basket she'll love.  Choose from a pre-made basket or create your own.</p>",
-            "link_url": "shopify://collections/gift-baskets-for-her",
+            "content": "<p>Find or create a basket they'll love. Pick a ready-made favorite or customize your own.</p>",
+            "link_url": "shopify://collections/shop-all",
             "link_text": "Shop Now",
             "link_style": "link"
           }
@@ -146,8 +146,8 @@
             "column_size": "3",
             "title": "Share The Fun",
             "heading_tag": "h4",
-            "content": "<p>Celebrate the in style with baskets for family, friends, colleges or any group you want to acknowledge.</p>",
-            "link_url": "shopify://collections/shop-all-our-gifts",
+            "content": "<p>Celebrate in style with baskets for family, friends, colleagues, or any group worth acknowledging.</p>",
+            "link_url": "shopify://collections/shop-all",
             "link_text": "Shop Now",
             "link_style": "link"
           }
@@ -185,7 +185,7 @@
             "icon_width": 48,
             "subheading": "",
             "title": "Customize Your Basket",
-            "content": "<p>Sometimes you just can't find exactly what you want. Give a gift that is crafted by you. Choose your liquor, accessories, snacks, mixers, and more to make your gift extra special with engraving. Our Customize Your Own BroBasket is made to order by our expert Basket Builders to create a unique experience and memory for people important to you. Create corporate gift baskets and take the credit for this perfect gift!</p>",
+            "content": "<p>Sometimes you can't find exactly what you want — so build it yourself. Choose your spirits, mixers, snacks, accessories, and more, and make it extra special with engraving. Every custom basket is made to order by our expert Basket Builders to create a one-of-a-kind gift for the people who matter to you. Perfect for personal celebrations and corporate gifting alike.</p>",
             "link_text": "CUSTOMIZE NOW",
             "link_url": "/apps/gbb/easybundle/1",
             "background": "#f6f1eb",
@@ -207,9 +207,9 @@
             "icon_width": 48,
             "subheading": "",
             "title": "Most Popular Gift Sets",
-            "content": "<p>The best gifts for sending a BroBasket to celebrate holidays, Christmas, birthday, milestones, to any man, woman, family or group who you want to feel special. Whether you're sending for business or pleasure, our extensive liquor baskets range includes bourbon gifts, whiskey gifts, scotch gifts, vodka gifts, champagne gifts, beer gifts and wine gifts. In fact, if it's liquor, we've got you covered!</p>",
+            "content": "<p>The best way to celebrate holidays, birthdays, milestones, and everyday wins — for anyone you want to make feel special. Whether it's for business or pleasure, our gift baskets feature tequila, gin, vodka, wine, and champagne, plus alcohol-free options packed with treats. Thoughtfully curated, beautifully packaged, ready to send.</p>",
             "link_text": "ENGRAVE YOUR GIFT",
-            "link_url": "shopify://collections/gift-baskets-for-men",
+            "link_url": "shopify://collections/shop-all",
             "background": "#f6f1eb",
             "background_gradient": "",
             "text_color": "#000000",
