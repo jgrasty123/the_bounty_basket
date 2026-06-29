@@ -4,31 +4,18 @@
   Place immediately after the share buttons block in sections/main-article.liquid.
 
   Uses article.tags to match relevant collections. Falls back to a
-  general "Shop All" CTA if no tags match.
+  general "Shop All" CTA if no tags match. Recipient-neutral copy;
+  KEEP spirit policy only (tequila, gin, vodka, wine, champagne).
 {%- endcomment -%}
 
 {%- liquid
   assign cta_heading = 'Looking for the perfect gift?'
   assign cta_sub = 'We build every basket by hand in Ventura, CA. Same-day shipping on orders placed by 5PM EST.'
-  assign cta_url = '/collections/gift-baskets-for-men'
+  assign cta_url = '/collections/shop-all'
   assign cta_label = 'Shop Gift Baskets'
 
   for tag in article.tags
     assign tag_lower = tag | downcase
-    if tag_lower contains 'bourbon' or tag_lower contains 'whiskey' or tag_lower contains 'scotch'
-      assign cta_heading = 'Shop Whiskey & Bourbon Gift Baskets'
-      assign cta_sub = 'Hand-selected spirits, curated add-ons, and same-day shipping. The gift he actually wants.'
-      assign cta_url = '/collections/whiskey-and-bourbon-gift-sets'
-      assign cta_label = 'Shop Whiskey Gifts'
-      break
-    endif
-    if tag_lower contains 'beer' or tag_lower contains 'craft beer'
-      assign cta_heading = 'Shop Beer Lover Gift Baskets'
-      assign cta_sub = 'Craft brews, koozies, snacks — everything a beer guy could want, packed and shipped same day.'
-      assign cta_url = '/collections/beer-gifts-for-men'
-      assign cta_label = 'Shop Beer Gifts'
-      break
-    endif
     if tag_lower contains 'tequila'
       assign cta_heading = 'Shop Tequila Gift Baskets'
       assign cta_sub = 'Premium tequila gifted right. Every basket is hand-packed and ships same day.'
@@ -36,25 +23,67 @@
       assign cta_label = 'Shop Tequila Gifts'
       break
     endif
+    if tag_lower contains 'gin'
+      assign cta_heading = 'Shop Gin Gift Baskets'
+      assign cta_sub = 'Botanical gins and the perfect mixers, curated and ready to gift. Ships same day.'
+      assign cta_url = '/collections/gin-gifts'
+      assign cta_label = 'Shop Gin Gifts'
+      break
+    endif
+    if tag_lower contains 'vodka'
+      assign cta_heading = 'Shop Vodka Gift Baskets'
+      assign cta_sub = 'Smooth vodka, curated add-ons, and same-day shipping. The gift they actually want.'
+      assign cta_url = '/collections/vodka-gifts'
+      assign cta_label = 'Shop Vodka Gifts'
+      break
+    endif
+    if tag_lower contains 'cocktail'
+      assign cta_heading = 'Shop Cocktail Kits'
+      assign cta_sub = 'Everything for the perfect drink at home — spirits, mixers, and tools, packed and shipped same day.'
+      assign cta_url = '/collections/cocktail-kits'
+      assign cta_label = 'Shop Cocktail Kits'
+      break
+    endif
+    if tag_lower contains 'wine'
+      assign cta_heading = 'Shop Wine Gift Baskets'
+      assign cta_sub = 'Hand-selected reds, whites, and rosés paired with curated treats. Ships same day.'
+      assign cta_url = '/collections/wine'
+      assign cta_label = 'Shop Wine Gifts'
+      break
+    endif
+    if tag_lower contains 'champagne'
+      assign cta_heading = 'Shop Champagne Gift Baskets'
+      assign cta_sub = 'Celebrate in style with bubbly and curated add-ons. Hand-packed and shipped same day.'
+      assign cta_url = '/collections/champagne'
+      assign cta_label = 'Shop Champagne Gifts'
+      break
+    endif
     if tag_lower contains 'birthday'
-      assign cta_heading = 'Shop Birthday Gift Baskets for Men'
-      assign cta_sub = 'Make his birthday one he actually remembers. Ships same day — even last-minute orders.'
-      assign cta_url = '/collections/birthday-gifts-for-men'
+      assign cta_heading = 'Shop Birthday Gift Baskets'
+      assign cta_sub = 'Make their birthday one they actually remember. Ships same day — even last-minute orders.'
+      assign cta_url = '/collections/birthday-gifts'
       assign cta_label = 'Shop Birthday Gifts'
       break
     endif
     if tag_lower contains 'retirement'
       assign cta_heading = 'Shop Retirement Gift Baskets'
-      assign cta_sub = "He survived the 9-to-5. Now it's time to celebrate. Ships same day."
+      assign cta_sub = 'They survived the 9-to-5 — now it is time to celebrate. Ships same day.'
       assign cta_url = '/collections/retirement-gifts'
       assign cta_label = 'Shop Retirement Gifts'
       break
     endif
-    if tag_lower contains 'golf'
-      assign cta_heading = 'Shop Golf Gift Baskets'
-      assign cta_sub = 'For the guy who lives on the course. Ships same day, lands like a hole-in-one.'
-      assign cta_url = '/collections/golf-gift-baskets'
-      assign cta_label = 'Shop Golf Gifts'
+    if tag_lower contains 'spa' or tag_lower contains 'self-care'
+      assign cta_heading = 'Shop Spa & Self-Care Gift Baskets'
+      assign cta_sub = 'Thoughtful treats for rest and recharge. Hand-packed and shipped same day.'
+      assign cta_url = '/collections/spa-self-care'
+      assign cta_label = 'Shop Spa Gifts'
+      break
+    endif
+    if tag_lower contains 'non-alcoholic' or tag_lower contains 'zero-proof' or tag_lower contains 'alcohol-free'
+      assign cta_heading = 'Shop Alcohol-Free Gift Baskets'
+      assign cta_sub = 'All the joy, none of the booze — curated treats for everyone. Ships same day.'
+      assign cta_url = '/collections/non-alcoholic'
+      assign cta_label = 'Shop Alcohol-Free Gifts'
       break
     endif
   endfor
@@ -63,13 +92,13 @@
 <div class="bb-blog-cta">
   <div class="bb-blog-cta__inner">
     <div class="bb-blog-cta__content">
-      <p class="bb-blog-cta__eyebrow">The BroBasket</p>
+      <p class="bb-blog-cta__eyebrow">The Bounty Basket Co.</p>
       <h3 class="bb-blog-cta__heading">{{ cta_heading }}</h3>
       <p class="bb-blog-cta__sub">{{ cta_sub }}</p>
       <div class="bb-blog-cta__badges">
         <span class="bb-blog-cta__badge">✓ Same-day shipping</span>
         <span class="bb-blog-cta__badge">✓ Made in the USA</span>
-        <span class="bb-blog-cta__badge">✓ 12,000+ reviews</span>
+        <span class="bb-blog-cta__badge">✓ Hand-packed to order</span>
       </div>
       <a href="{{ cta_url }}" class="bb-blog-cta__btn">{{ cta_label }}</a>
     </div>
@@ -81,7 +110,7 @@
     margin: 40px 0 8px;
     border-radius: 16px;
     overflow: hidden;
-    background: #1c1c1c;
+    background: #2b2330;
     border: 1px solid rgba(255,255,255,0.08);
   }
 
@@ -102,7 +131,7 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #cd241d;
+    color: #b08d57;
     margin: 0 0 8px;
   }
 
@@ -138,7 +167,7 @@
 
   .bb-blog-cta__btn {
     display: inline-block;
-    background: #cd241d;
+    background: #4a4c3d;
     color: #fff;
     font-size: 14px;
     font-weight: 600;
@@ -149,7 +178,7 @@
   }
 
   .bb-blog-cta__btn:hover {
-    background: #b01e18;
+    background: #3a3c30;
     color: #fff;
     text-decoration: none;
   }
