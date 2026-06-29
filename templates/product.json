@@ -31,10 +31,6 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "judge_me_reviews_preview_badge_JPjzBp": {
-          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
-        },
         "title": {
           "type": "title",
           "settings": {
@@ -117,11 +113,10 @@
         "bb_hero_review_x6mhTm": {
           "type": "bb_hero_review",
           "settings": {
-            "reviewer_photo": "shopify://shop_images/sarah-m-review.png",
             "rating": 5,
-            "headline": "Best Christmas he's ever had!",
-            "quote": "My dad was beyond stoked. He said it was the best Christmas he's ever had. He's 83 and finding gifts he likes is a challenge — thank you for making his day special.",
-            "reviewer_name": "Sarah M.",
+            "headline": "Best Christmas she's ever had!",
+            "quote": "My Mom was ecstatic; she said it was the best Christmas she's ever had. She's 63 and finding gifts he likes is a challenge — thank you for making her day special.",
+            "reviewer_name": "Claire G.",
             "review_meta": "Verified Customer",
             "star_color": "#f5a623"
           }
@@ -156,7 +151,6 @@
         }
       },
       "block_order": [
-        "judge_me_reviews_preview_badge_JPjzBp",
         "title",
         "price",
         "variant_picker",
@@ -200,32 +194,26 @@
         "subtitle": "",
         "star_color": "#f5a623",
         "background_color": "#fdf9f1",
-        "photo_1": "shopify://shop_images/photo-1699899657680-421c2c2d5064.avif",
         "headline_1": "Great service, awesome gift!",
         "quote_1": "My client contacted me right away to say nothing but great things about the products and the packaging. They loved it!",
         "name_1": "Jennifer L.",
         "meta_1": "Verified Customer",
-        "photo_2": "shopify://shop_images/photo-1639747280929-e84ef392c69a.avif",
         "headline_2": "Perfect delivery & presentation",
         "quote_2": "We ordered an engraved bottle to help a friend toast his departed brother. Exceptional quality, exceptional service, exceptional tribute.",
         "name_2": "Michael R.",
         "meta_2": "Verified Customer",
-        "photo_3": "shopify://shop_images/photo-1603415526960-f7e0328c63b1.avif",
         "headline_3": "Very pleased",
         "quote_3": "I got a basket for my dad and he absolutely loved it. The customer service was great as well. Will definitely order again.",
         "name_3": "David K.",
         "meta_3": "Verified Customer",
-        "photo_4": "shopify://shop_images/premium_photo-1681489930334-b0d26fdb9ed8.avif",
         "headline_4": "Easy and thoughtful",
         "quote_4": "Loved the easy-to-add options in the basket. Made a great gift they truly enjoyed!",
         "name_4": "Rachel S.",
         "meta_4": "Verified Customer",
-        "photo_5": "shopify://shop_images/be76a08b-3d18-4a53-b5a8-df7452de5ed5.png",
         "headline_5": "Awesome gift!",
         "quote_5": "My daughter's fiancé was amazed with the Sampler. A thoughtful gift for special loved ones!",
         "name_5": "Linda T.",
         "meta_5": "Verified Customer",
-        "photo_6": "shopify://shop_images/c7d7c585-ccad-43ce-ac3d-f882022f5b05.png",
         "headline_6": "Truly surprised",
         "quote_6": "This gift was wonderful. My husband was truly surprised and enjoyed everything.",
         "name_6": "Karen B.",
@@ -313,7 +301,6 @@
       "name": "Founder story (W4-01)",
       "settings": {
         "image_side": "left",
-        "image": "shopify://shop_images/James-G-at-brobasket-Via-alondra-warehouse.webp",
         "eyebrow": "Our Story",
         "heading": "Why we built The BroBasket",
         "paragraph_1": "Most gift baskets are forgettable. A wicker basket. A red ribbon. Some no-name crackers and a tiny jar of jam. We've all sent one. We've all received one. Nobody talks about it the next day.",
@@ -354,20 +341,6 @@
     },
     "17400063553db9cd1c": {
       "type": "apps",
-      "blocks": {
-        "judge_me_reviews_review_widget_YW98g3": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "sample_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_review_widget_YW98g3"
-      ],
       "settings": {
         "full_width": true,
         "remove_vertical_spacing": false,
