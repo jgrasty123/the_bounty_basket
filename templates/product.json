@@ -113,7 +113,6 @@
         "bb_hero_review_x6mhTm": {
           "type": "bb_hero_review",
           "settings": {
-            "reviewer_photo": "",
             "rating": 5,
             "headline": "",
             "quote": "",
@@ -142,6 +141,10 @@
           "type": "bundle_content_v2",
           "settings": {}
         },
+        "bundle_content_gC9VCN": {
+          "type": "bundle_content",
+          "settings": {}
+        },
         "description_kMG9k8": {
           "type": "description",
           "settings": {
@@ -167,6 +170,7 @@
         "product_upsells_wpc38x",
         "separator",
         "bundle_content_v2_37Cp4r",
+        "bundle_content_gC9VCN",
         "description_kMG9k8"
       ],
       "settings": {
@@ -223,7 +227,6 @@
     },
     "bb_vs_table_PWAzfj": {
       "type": "bb-vs-table",
-      "disabled": true,
       "name": "Comparison table (W4-02)",
       "settings": {
         "section_title": "The Bounty Basket vs. The Generic Gift",

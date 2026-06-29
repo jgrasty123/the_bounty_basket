@@ -21,7 +21,7 @@
         "image_Y7c3WT": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/the-bros-at-via-alondra-brobasket-warehouse_9d4e57d4-45c7-4b8b-9965-4045079f901f.jpg",
+            "image": "shopify://shop_images/bounty_Basket_Co-logo-no-bg.png",
             "media_width": 60,
             "media_position": "end",
             "text_position": "place-self-center text-center",
@@ -29,7 +29,7 @@
             "icon_width": 48,
             "subheading": "Our Story",
             "title": "The brand we always meant to build",
-            "content": "<p>Go-To Gifting was founded on a bigger idea than any one brand. Back in 2014, a group of MBA classmates set out to build a whole family of gifting brands &mdash; thoughtful, memorable gifts for every kind of person and occasion. The first one out of the gate was The BroBasket: &ldquo;If women get flowers, what do men get? How about a bucket of beer.&rdquo; It worked. It worked so well, in fact, that running it consumed everything. The other brands we always dreamed of building stayed on the whiteboard for years.</p><p>Now, with James at the helm, we&rsquo;re finally doing what we set out to do from day one &mdash; launching the brands we always wanted to, under Go-To Gifting. The Bounty Basket Co. is the first.</p>",
+            "content": "<p>Go-To Gifting was founded on a bigger idea than any one brand. Back in 2014, a group of MBA classmates set out to build a whole family of gifting brands — thoughtful, memorable gifts for every kind of person and occasion. The first one out of the gate was The BroBasket: “If women get flowers, what do men get? How about a bucket of beer.” It worked. It worked so well, in fact, that running it consumed everything. The other brands we always dreamed of building stayed on the whiteboard for years.</p><p>Now, with James at the helm, we’re finally doing what we set out to do from day one — launching the brands we always wanted to, under Go-To Gifting. The Bounty Basket Co. is the first.</p>",
             "link_text": "",
             "link_url": "",
             "background": "#f6f1eb",
@@ -56,51 +56,51 @@
         "item_UCrLXf": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/c54638c2b1dfd188fe8fc433d4576cb4df58d83a570a75a3cef9805a673dc895.webp",
-            "icon": "none",
+            "image": "shopify://shop_images/Bucket_of_Beer-1.webp",
+            "icon": "picto-gift",
             "icon_width": 48,
             "title": "A bigger idea than one brand",
-            "content": "<p>Go-To Gifting started with a simple belief: great gifts shouldn&rsquo;t be for one kind of person. We wanted to build a family of brands, each one nailing a different recipient, occasion, and style. The plan was always more than one basket.</p>"
+            "content": "<p>Go-To Gifting started with a simple belief: great gifts shouldn’t be for one kind of person. We wanted to build a family of brands, each one nailing a different recipient, occasion, and style. The plan was always more than one basket.</p>"
           }
         },
         "item_WwkQQF": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/IMG_1388.webp",
-            "icon": "none",
+            "image": "shopify://shop_images/the-bros-at-via-alondra-brobasket-warehouse.jpg",
+            "icon": "picto-award-gift",
             "icon_width": 48,
-            "title": "BroBasket came first &mdash; and took off",
-            "content": "<p>Our first brand, The BroBasket, answered a question everyone seemed to be asking: if women get flowers, what do the guys get? Tens of thousands of happy customers later, the answer was clearly &ldquo;a BroBasket.&rdquo; It grew faster than we ever expected.</p>"
+            "title": "BroBasket came first - and took off",
+            "content": "<p>Our first brand, The BroBasket, answered a question everyone seemed to be asking: if women get flowers, what do the guys get? Tens of thousands of happy customers later, the answer was clearly “a BroBasket.” It grew faster than we ever expected.</p>"
           }
         },
         "item_tTYdgh": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/MG_2206_5afa8486-2067-4331-bd8f-01f9c51f5795.jpg",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_02_38_06_PM.png",
             "icon": "none",
             "icon_width": 48,
-            "title": "So busy we couldn&rsquo;t build the rest",
-            "content": "<p>Running a fast-growing business is all-consuming. The other brands we&rsquo;d dreamed up in that classroom &mdash; the ones for everyone BroBasket wasn&rsquo;t built for &mdash; kept getting pushed to &ldquo;someday.&rdquo; For years, someday never came.</p>"
+            "title": "So busy we couldn’t build the rest",
+            "content": "<p>Running a fast-growing business is all-consuming. The other brands we’d dreamed up in that classroom — the ones for everyone BroBasket wasn’t built for — kept getting pushed to “someday.” For years, someday never came.</p>"
           }
         },
         "item_HgwF4b": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/IMG_0633.webp",
+            "image": "shopify://shop_images/75f2b581-c128-4d49-b0d1-63c4d9313208.png",
             "icon": "none",
             "icon_width": 48,
             "title": "The question we kept getting",
-            "content": "<p>Through all of it, one question landed in our inbox thousands of times: &ldquo;If men get a BroBasket, what do women get?&rdquo; We never had a good answer. We knew we owed people one.</p>"
+            "content": "<p>Through all of it, one question landed in our inbox thousands of times: “If men get a BroBasket, what do women get?” We never had a good answer. We knew we owed people one.</p>"
           }
         },
         "item_FbWHzK": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/MG_8159_24986f72-8331-4f46-8b85-05d722157d44.jpg",
+            "image": "shopify://shop_images/James-bounty-basket-co.png",
             "icon": "none",
             "icon_width": 48,
             "title": "The answer is a Bounty Basket",
-            "content": "<p>With James now at the helm and Go-To Gifting back to its original mission, we finally built it. The Bounty Basket Co. is the answer &mdash; same hand-built quality, same in-house care, now crafted for everyone worth celebrating.</p>"
+            "content": "<p>With James now at the helm and Go-To Gifting back to its original mission, we finally built it. The Bounty Basket Co. is the answer — same hand-built quality, same in-house care, now crafted for everyone worth celebrating.</p>"
           }
         }
       },
@@ -155,7 +155,7 @@
         "slide_btjz4U": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/the-bros-at-via-alondra-brobasket-warehouse_9d4e57d4-45c7-4b8b-9965-4045079f901f.jpg",
+            "image": "shopify://shop_images/the-bros-at-via-alondra-brobasket-warehouse.jpg",
             "navigation_label": "2014",
             "subheading": "",
             "title": "Go-To Gifting is founded",
@@ -165,7 +165,6 @@
         "slide_NVVVRg": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/MG_2630-1-1246x831.webp",
             "navigation_label": "2014 - 2019",
             "subheading": "",
             "title": "BroBasket takes off",
@@ -175,17 +174,17 @@
         "slide_X4qPfX": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/MG_1717_1500x_fe537aa6-cf89-482f-b8af-97da5ee00790.jpg",
+            "image": "shopify://shop_images/screenshot-bro-basket.myshopify.com-2024.07.31-10_11_39_1.webp",
             "navigation_label": "2020",
             "subheading": "",
             "title": "Long-distance love",
-            "content": "<p>When the country couldn&rsquo;t be together, BroBasket helps people send &ldquo;Happy Birthday,&rdquo; &ldquo;I love you,&rdquo; and &ldquo;Merry Christmas&rdquo; across the miles.</p>"
+            "content": "<p>When the country couldn’t be together, BroBasket helps people send “Happy Birthday,” “I love you,” and “Merry Christmas” across the miles.</p>"
           }
         },
         "slide_XTdBFM": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/MG_3914_1500x_4737b7c9-5ad4-4e24-92ab-7f766a58f968.jpg",
+            "image": "shopify://shop_images/hand-shake-meeting.jpg",
             "navigation_label": "2021",
             "subheading": "",
             "title": "A change in hands",
@@ -195,7 +194,7 @@
         "slide_raeLz6": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/MG_7366_1500x_14468fde-8486-4eee-ad95-a4a70d59b055.jpg",
+            "image": "shopify://shop_images/man-fighting-back-tears.jpg",
             "navigation_label": "2022 - 2023",
             "subheading": "",
             "title": "Popularity wanes",
@@ -205,7 +204,7 @@
         "slide_LC7pmX": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/MG_2257_1500x_7e617750-25b5-45d2-9e9e-1cf85418634c.jpg",
+            "image": "shopify://shop_images/highfive-hands-only.jpg",
             "navigation_label": "2024",
             "subheading": "",
             "title": "Back to the founders",
@@ -215,11 +214,11 @@
         "slide_VxDr4M": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/MG_2235_1500x_594b3b2b-c6c0-4d1d-ae34-96f863cbbcde.jpg",
+            "image": "shopify://shop_images/James-bounty-basket-co.png",
             "navigation_label": "2026",
             "subheading": "",
             "title": "The original mission, realized",
-            "content": "<p>Under Go-To Gifting, James finally launches the brand we always wanted to build: The Bounty Basket Co. &mdash; the answer to &ldquo;what do women get?&rdquo;</p>"
+            "content": "<p>Under Go-To Gifting, James finally launches the brand we always wanted to build: The Bounty Basket Co. — the answer to “what do women get?”</p>"
           }
         }
       },
@@ -245,7 +244,7 @@
         "image_MA6XXW": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/James-G-at-brobasket-Via-alondra-warehouse.webp",
+            "image": "shopify://shop_images/06_champagne-campaign-champagne-gift-basket_hero.png",
             "media_width": 60,
             "media_position": "end",
             "text_position": "place-self-center text-center",
@@ -253,7 +252,7 @@
             "icon_width": 48,
             "subheading": "",
             "title": "Not sure where to start?",
-            "content": "<p>Explore our most-loved baskets &mdash; there&rsquo;s something for everyone you&rsquo;re celebrating.</p>",
+            "content": "<p>Explore our most-loved baskets — there’s something for everyone you’re celebrating.</p>",
             "link_text": "Shop Now",
             "link_url": "shopify://collections/shop-all",
             "background": "#f6f1eb",
