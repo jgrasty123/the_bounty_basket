@@ -113,6 +113,7 @@
         "bb_hero_review_x6mhTm": {
           "type": "bb_hero_review",
           "settings": {
+            "reviewer_photo": "shopify://shop_images/claire-g-review.png",
             "rating": 5,
             "headline": "Best Christmas she's ever had!",
             "quote": "My Mom was ecstatic; she said it was the best Christmas she's ever had. She's 63 and finding gifts he likes is a challenge — thank you for making her day special.",
@@ -222,6 +223,7 @@
     },
     "bb_vs_table_PWAzfj": {
       "type": "bb-vs-table",
+      "disabled": true,
       "name": "Comparison table (W4-02)",
       "settings": {
         "section_title": "The BroBasket vs. The Generic Gift",

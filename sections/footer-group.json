@@ -13,18 +13,6 @@
   "sections": {
     "1741731049c944abee": {
       "type": "apps",
-      "blocks": {
-        "judge_me_reviews_featured_carousel_PFJmTN": {
-          "type": "shopify://apps/judge-me-reviews/blocks/featured_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "disabled": true,
-          "settings": {
-            "maxwidth": 1080
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_featured_carousel_PFJmTN"
-      ],
       "settings": {
         "full_width": true,
         "remove_vertical_spacing": false,
@@ -56,7 +44,7 @@
         "links_hMRTwb": {
           "type": "links",
           "settings": {
-            "menu": "shop-by-occasion",
+            "menu": "",
             "show_menu_title": true,
             "menu_title": ""
           }
@@ -65,7 +53,7 @@
           "type": "text",
           "settings": {
             "title": "Disclaimers",
-            "content": "<p><strong>Contact Us</strong></p><p>Call us Monday-Friday, 9-5pm: <a href=\"tel:18444462443\" target=\"_blank\">1-844-446-2443</a></p><p><span style=\"text-decoration:underline\"><strong>Email us </strong></span>at <a href=\"mailto:info@thebountybasket.com\" target=\"_blank\"><strong>info@thebountybasket.com</strong></a></p><p><span style=\"text-decoration:underline\"><strong>Send us a Freaking Postcard</strong></span></p><p>2264 Goodywear Ave. Suite C, Ventura, CA 93001</p><p><span style=\"text-decoration:underline\"><strong>Alcohol Beverage Disclaimer</strong></span><br/><br/>Some of our gift baskets include alcoholic beverages. The Bounty Basket Co. only sells and ships to persons <strong>21 years of age or older</strong>.</p><p>By using this site, you confirm that you are at least 21 years old and legally permitted to purchase and receive alcoholic beverages in your jurisdiction.</p>",
+            "content": "<p><strong>Contact Us</strong></p><p>Call us Monday-Friday, 9-5pm: <a href=\"tel:18444462443\" target=\"_blank\">1-844-446-2443</a></p><p><span style=\"text-decoration:underline\"><strong>Email us </strong></span>at <a href=\"mailto:info@thebountybasket.com\" target=\"_blank\"><strong>info@thebountybasket.co</strong></a></p><p><span style=\"text-decoration:underline\"><strong>Send us a Freaking Postcard</strong></span></p><p>2264 Goodywear Ave. Suite C, Ventura, CA 93001</p><p><span style=\"text-decoration:underline\"><strong>Alcohol Beverage Disclaimer</strong></span><br/><br/>Some of our gift baskets include alcoholic beverages. The Bounty Basket Co. only sells and ships to persons <strong>21 years of age or older</strong>.</p><p>By using this site, you confirm that you are at least 21 years old and legally permitted to purchase and receive alcoholic beverages in your jurisdiction.</p>",
             "enable_follow_on_shop": true
           }
         }

@@ -51,7 +51,20 @@
     "font_scale_percent": 120,
     "checkout_accent_color": "#4a4c3d",
     "checkout_button_color": "#4a4c3d",
-    "content_for_index": []
+    "content_for_index": [],
+    "blocks": {
+      "6159598353363395418": {
+        "type": "shopify://apps/google-youtube/blocks/store_widget/14ec7bd0-ac77-49a9-9417-90752398bdff",
+        "disabled": false,
+        "settings": {
+          "widget_position": "LEFT_BOTTOM",
+          "side_margin": 36,
+          "bottom_margin": 36,
+          "mobile_side_margin": 16,
+          "mobile_bottom_margin": 46
+        }
+      }
+    }
   },
   "presets": {
     "Impact": {
