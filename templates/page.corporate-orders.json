@@ -1,1 +1,519 @@
-{"sections": {"main": {"type": "main-page", "disabled": true, "settings": {"content_width": "80ch"}}, "corporate_gifting_hero_7PH4Rb": {"type": "corporate-gifting-hero", "blocks": {"feature_pill_aTGV8q": {"type": "feature_pill", "settings": {"label": "Gifts for Employees", "url": "shopify://collections/corporate-gifts", "icon": "picto-happy"}}, "feature_pill_4gLcWg": {"type": "feature_pill", "settings": {"label": "Gifts for Clients", "url": "shopify://collections/corporate-gifts", "icon": "picto-award-gift"}}, "feature_pill_adHXHB": {"type": "feature_pill", "settings": {"label": "Gifts for Events", "url": "shopify://collections/corporate-gifts", "icon": "picto-gift"}}, "highlight_GtBeJn": {"type": "highlight", "settings": {"text": "Personalized For Your Team", "icon": "picto-star"}}, "highlight_YK6x4J": {"type": "highlight", "settings": {"text": "Dedicated Gifting Support", "icon": "picto-customer-support"}}, "highlight_8tCMxP": {"type": "highlight", "settings": {"text": "Custom Branding Available", "icon": "picto-building"}}}, "block_order": ["feature_pill_aTGV8q", "feature_pill_4gLcWg", "feature_pill_adHXHB", "highlight_GtBeJn", "highlight_YK6x4J", "highlight_8tCMxP"], "name": "Corporate Gifting Hero", "settings": {"image": "", "subheading": "Corporate & Business Gifts", "heading": "Corporate Gifting, Made Effortless", "subtitle": "Thank clients, celebrate employees, and mark every milestone with thoughtfully curated gift baskets your recipients will actually love. Boozy or alcohol-free, personalized to your brand.", "button_1_text": "Browse Corporate Gifts", "button_1_url": "shopify://collections/corporate-gifts", "button_2_text": "Talk to Our Gifting Team", "button_2_url": "shopify://pages/contact", "full_width": true, "accent_color": "#4a4c3d", "text_color": "#ffffff", "button_text_color": "#ffffff", "overlay_color": "#000000", "overlay_opacity": 60, "background": "rgba(0,0,0,0)", "background_gradient": ""}}, "17732726550880179c": {"type": "apps", "blocks": {"klaviyo_email_marketing_sms_form_embed_block_jEm7fU": {"type": "shopify://apps/klaviyo-email-marketing-sms/blocks/form-embed-block/2632fe16-c075-4321-a88b-50b567f42507", "settings": {"formId": "T67mgf"}}}, "block_order": ["klaviyo_email_marketing_sms_form_embed_block_jEm7fU"], "settings": {"full_width": true, "remove_vertical_spacing": false, "remove_horizontal_spacing": false, "background": "", "background_gradient": "", "text_color": ""}}, "rich_text_FyNwd3": {"type": "rich-text", "blocks": {"subheading_GdYkYU": {"type": "subheading", "settings": {"text": "Let's talk"}}, "heading_JJQPMm": {"type": "heading", "settings": {"text": "Prefer to Plan It Together?", "heading_tag": "h1", "text_color": "", "gradient": ""}}, "richtext_aCDemf": {"type": "richtext", "settings": {"content": "<p>Tell us about your team, your occasion, and your budget — our gifting specialists will help you build the perfect order, big or small.</p>"}}, "button_6HfCWx": {"type": "button", "settings": {"style": "fill", "size": "xl", "text": "Contact Our Gifting Team", "url": "shopify://pages/contact", "background": "", "text_color": ""}}}, "block_order": ["subheading_GdYkYU", "heading_JJQPMm", "richtext_aCDemf", "button_6HfCWx"], "name": "Rich text", "settings": {"full_width": true, "content_width": "small", "text_position": "center", "background": "#ffffff", "background_gradient": "", "text_color": ""}}, "media_with_text_ijMzF9": {"type": "media-with-text", "blocks": {"image_KkzWRX": {"type": "image", "settings": {"image": "", "media_width": 50, "media_position": "start", "text_position": "place-self-center text-center", "icon": "none", "icon_width": 48, "subheading": "", "title": "Get Personalized Support", "content": "<p>Not sure where to start? Our gifting team is here to help. Tell us who you're celebrating and what you have in mind, and we'll recommend the perfect baskets, handle the details, and make sure every gift lands beautifully.</p>", "link_text": "Talk to our gifting team", "link_url": "shopify://pages/contact", "background": "#4a4c3d", "background_gradient": "", "text_color": "#ffffff", "text_gradient": "", "button_background": "", "button_text_color": ""}}, "image_fCU9C3": {"type": "image", "settings": {"image": "", "media_width": 50, "media_position": "start", "text_position": "place-self-center text-center", "icon": "none", "icon_width": 48, "subheading": "", "title": "Build It Yourself", "content": "<p>Already know what you want? Browse our full range of baskets, bottles, and treats to create a custom corporate gift. Personalize it with engraving, tailor it to their taste, and add your company swag — boozy or alcohol-free, the choice is yours.</p>", "link_text": "Shop Corporate Gifts", "link_url": "shopify://collections/corporate-gifts", "background": "#4a4c3d", "background_gradient": "", "text_color": "#ffffff", "text_gradient": "", "button_background": "", "button_text_color": ""}}}, "block_order": ["image_KkzWRX", "image_fCU9C3"], "name": "Media with text", "settings": {"full_width": false, "alternate_media_position": true, "spacing": "small"}}, "rich_text_zW64a3": {"type": "rich-text", "blocks": {"subheading_K7yeic": {"type": "subheading", "disabled": true, "settings": {"text": "Subheading"}}, "heading_hXTJAi": {"type": "heading", "settings": {"text": "Your Own Custom Gifting Portal", "heading_tag": "h1", "text_color": "", "gradient": ""}}, "richtext_aHjWDr": {"type": "richtext", "disabled": false, "settings": {"content": "<p>Sending gifts to a whole team or client list? We'll build you a private, branded gifting portal — your logo, your curated selection, your budget. Your recipients pick what they love, and we handle packing, personalization, and delivery to every address.</p>"}}}, "block_order": ["subheading_K7yeic", "heading_hXTJAi", "richtext_aHjWDr"], "name": "Rich text", "settings": {"full_width": true, "content_width": "small", "text_position": "center", "background": "", "background_gradient": "", "text_color": ""}}, "video_cGQByN": {"type": "video", "blocks": {"heading_KJfVcx": {"type": "heading", "settings": {"text": "How Our Corporate Gifting Works", "heading_tag": "h1"}}, "play_z4MMQV": {"type": "play", "settings": {}}}, "block_order": ["heading_KJfVcx", "play_z4MMQV"], "name": "Video", "settings": {"full_width": true, "allow_transparent_header": false, "autoplay": false, "video_size": "auto", "video": "", "external_video_url": "", "text_color": "#ffffff", "overlay_color": "#000000", "overlay_opacity": 30}}, "multiple_images_with_text_LhFPbN": {"type": "multiple-images-with-text", "blocks": {"item_9DNmnp": {"type": "item", "settings": {"image": "", "image_rotation_degrees": -2, "subheading": "From 2 Gifts to 200", "title": "Bulk & Custom Corporate Orders", "content": "<p>Need to send gifts to a group? We make it simple. Place a single order for your whole list and we'll take care of the rest — personalized messages, scheduled delivery, and tracking, all handled for you.</p><p>✓ One order, as many recipients as you need</p><p>✓ Physical gift baskets or digital gift links recipients can redeem</p><p>✓ A personalized message on every gift</p><p>✓ Deliveries scheduled up to 8 weeks in advance</p><p>✓ Custom branded portal available for ongoing programs</p>", "button_url": "shopify://pages/contact", "button_text": "Start a Bulk Order"}}}, "block_order": ["item_9DNmnp"], "name": "Multiple images with text", "settings": {"full_width": true, "images_layout": "stacked", "collage_images_alignment": "middle", "background": "", "background_gradient": "", "text_color": "", "button_background": "", "button_text_color": ""}}, "multi_column_xXKMFk": {"type": "multi-column", "blocks": {"item_6CJeHG": {"type": "item", "settings": {"show_controls": false, "column_size": "3", "title": "Ship to Many Addresses", "heading_tag": "h4", "content": "<p>Check out to one place and we'll handle delivery to every recipient on your list.</p>", "link_url": "", "link_text": "", "link_style": "link"}}, "item_dmFXrF": {"type": "item", "settings": {"show_controls": false, "column_size": "3", "title": "Custom Engraving", "heading_tag": "h4", "content": "<p>Add personalized engraving to wine and spirit bottles for an extra-special touch.</p>", "link_url": "", "link_text": "", "link_style": "link"}}, "item_pp7kmz": {"type": "item", "settings": {"show_controls": false, "column_size": "3", "title": "Your Brand, Your Way", "heading_tag": "h4", "content": "<p>Add your company logo or swag to any gift basket for a branded finish.</p>", "link_url": "", "link_text": "", "link_style": "link"}}, "item_cTDfgc": {"type": "item", "settings": {"show_controls": false, "column_size": "3", "title": "Hands-On Support", "heading_tag": "h4", "content": "<p>Our gifting team makes ordering easy from start to finish.</p>", "link_url": "", "link_text": "", "link_style": "link"}}, "item_CqPWF8": {"type": "item", "settings": {"show_controls": false, "column_size": "3", "title": "Reliable Shipping", "heading_tag": "h4", "content": "<p>We deliver your corporate gifts where and when they're needed.</p>", "link_url": "", "link_text": "", "link_style": "link"}}, "item_i94YNw": {"type": "item", "settings": {"show_controls": false, "column_size": "3", "title": "Alcohol-Free Options", "heading_tag": "h4", "content": "<p>Plenty of alcohol-free baskets so there's something for everyone on your list.</p>", "link_url": "", "link_text": "", "link_style": "link"}}}, "block_order": ["item_6CJeHG", "item_dmFXrF", "item_pp7kmz", "item_cTDfgc", "item_CqPWF8", "item_i94YNw"], "name": "Multi-column", "settings": {"full_width": true, "stack_on_mobile": false, "gap": "medium", "text_alignment": "start", "subheading": "", "title": "We can do it all", "content": "<p>From large orders of curated gift baskets to one-off custom gifts featuring your logo and promotional items — if it's a memorable business gift you're after, you're in the right place.</p>", "background": "", "background_gradient": "", "text_color": ""}}, "faq_YLnTMY": {"type": "faq", "blocks": {"item_RGfdQj": {"type": "item", "settings": {"title": "What type of corporate gifts do you offer?", "content": "<p>We offer curated, personalized gifts for employees, clients, and events — from engraved bottles and standalone treats to fully customized gift baskets with a selection of goodies for any taste. Boozy or alcohol-free, we'll help you find the perfect fit.</p>"}}, "item_m3zPza": {"type": "item", "settings": {"title": "Can I add our company branding to the gifts?", "content": "<p>Absolutely. We can swap in unbranded items and add your company logo to the gift baskets at no extra cost. Your recipients will love a gift personalized with your brand.</p>"}}, "item_wJzK7m": {"type": "item", "settings": {"title": "How long will shipping take?", "content": "<p>Shipping times vary by destination. We work with major carriers to offer ground, two-day, and overnight options. Ground shipping typically takes 1–5 days depending on location — you'll see exact estimates at checkout.</p>"}}, "item_reVkby": {"type": "item", "settings": {"title": "Can I ship to multiple addresses within one transaction?", "content": "<p>Yes! Get in touch with our gifting team before or after your order with your list of addresses, and we'll make sure each gift reaches the right person. Just check out as if shipping to one location, and we'll handle the rest.</p>"}}, "item_3LYPtg": {"type": "item", "settings": {"title": "What if we don’t know all recipients’ addresses?", "content": "<p>No problem. If you don't have every address yet, just gather them and send them to our gifting team in time for us to ship. It's that easy.</p>"}}, "item_HpTFyJ": {"type": "item", "settings": {"title": "Have More Questions?", "content": "<p>Check out our full FAQ.</p>"}}}, "block_order": ["item_RGfdQj", "item_m3zPza", "item_wJzK7m", "item_reVkby", "item_3LYPtg", "item_HpTFyJ"], "name": "FAQ", "settings": {"full_width": true, "subheading": "", "title": "FAQs", "content": "<p>Just in case you’re curious</p>", "team_avatar_width": 160, "support_hours": "Our customer support is available Monday to Friday: 8am-8:30pm.", "answer_time": "Average answer time: 24h", "button_text": "", "button_url": "", "text_position": "center", "background": "", "background_gradient": "", "text_color": "", "heading_color": "", "heading_gradient": "", "button_background": "", "button_text_color": "", "accordion_background": "", "accordion_text_color": ""}}}, "order": ["main", "corporate_gifting_hero_7PH4Rb", "17732726550880179c", "rich_text_FyNwd3", "media_with_text_ijMzF9", "rich_text_zW64a3", "video_cGQByN", "multiple_images_with_text_LhFPbN", "multi_column_xXKMFk", "faq_YLnTMY"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "content_width": "80ch"
+      }
+    },
+    "corporate_gifting_hero_7PH4Rb": {
+      "type": "corporate-gifting-hero",
+      "blocks": {
+        "feature_pill_aTGV8q": {
+          "type": "feature_pill",
+          "disabled": true,
+          "settings": {
+            "label": "Gifts for Employees",
+            "url": "shopify://collections/corporate-gifts",
+            "icon": "picto-happy"
+          }
+        },
+        "feature_pill_4gLcWg": {
+          "type": "feature_pill",
+          "disabled": true,
+          "settings": {
+            "label": "Gifts for Clients",
+            "url": "shopify://collections/corporate-gifts",
+            "icon": "picto-award-gift"
+          }
+        },
+        "feature_pill_adHXHB": {
+          "type": "feature_pill",
+          "disabled": true,
+          "settings": {
+            "label": "Gifts for Events",
+            "url": "shopify://collections/corporate-gifts",
+            "icon": "picto-gift"
+          }
+        },
+        "highlight_GtBeJn": {
+          "type": "highlight",
+          "settings": {
+            "text": "Personalized For Your Team",
+            "icon": "picto-star"
+          }
+        },
+        "highlight_YK6x4J": {
+          "type": "highlight",
+          "settings": {
+            "text": "Dedicated Gifting Support",
+            "icon": "picto-customer-support"
+          }
+        },
+        "highlight_8tCMxP": {
+          "type": "highlight",
+          "settings": {
+            "text": "Custom Branding Available",
+            "icon": "picto-building"
+          }
+        }
+      },
+      "block_order": [
+        "feature_pill_aTGV8q",
+        "feature_pill_4gLcWg",
+        "feature_pill_adHXHB",
+        "highlight_GtBeJn",
+        "highlight_YK6x4J",
+        "highlight_8tCMxP"
+      ],
+      "name": "Corporate Gifting Hero",
+      "settings": {
+        "image": "shopify://shop_images/corp-hero-bbc.png",
+        "subheading": "Corporate & Business Gifts",
+        "heading": "Corporate Gifting, Made Effortless",
+        "subtitle": "Thank clients, celebrate employees, and mark every milestone with thoughtfully curated gift baskets your recipients will actually love. Boozy or alcohol-free, personalized to your brand.",
+        "button_1_text": "Browse Corporate Gifts",
+        "button_1_url": "shopify://collections/corporate-gifts",
+        "button_2_text": "Talk to Our Gifting Team",
+        "button_2_url": "shopify://pages/contact",
+        "full_width": true,
+        "accent_color": "#4a4c3d",
+        "text_color": "#ffffff",
+        "button_text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 49,
+        "background": "rgba(0,0,0,0)",
+        "background_gradient": ""
+      }
+    },
+    "17732726550880179c": {
+      "type": "apps",
+      "settings": {
+        "full_width": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false,
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "rich_text_FyNwd3": {
+      "type": "rich-text",
+      "blocks": {
+        "subheading_GdYkYU": {
+          "type": "subheading",
+          "settings": {
+            "text": "Let's talk"
+          }
+        },
+        "heading_JJQPMm": {
+          "type": "heading",
+          "settings": {
+            "text": "Prefer to Plan It Together?",
+            "heading_tag": "h1",
+            "text_color": "",
+            "gradient": ""
+          }
+        },
+        "richtext_aCDemf": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Tell us about your team, your occasion, and your budget — our gifting specialists will help you build the perfect order, big or small.</p>"
+          }
+        },
+        "button_6HfCWx": {
+          "type": "button",
+          "settings": {
+            "style": "fill",
+            "size": "xl",
+            "text": "Contact Our Gifting Team",
+            "url": "shopify://pages/contact",
+            "background": "",
+            "text_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "subheading_GdYkYU",
+        "heading_JJQPMm",
+        "richtext_aCDemf",
+        "button_6HfCWx"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "full_width": true,
+        "content_width": "small",
+        "text_position": "center",
+        "background": "#ffffff",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "media_with_text_ijMzF9": {
+      "type": "media-with-text",
+      "blocks": {
+        "image_KkzWRX": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Meat-cheese-bbc-corp-page.png",
+            "media_width": 50,
+            "media_position": "start",
+            "text_position": "place-self-center text-center",
+            "icon": "none",
+            "icon_width": 48,
+            "subheading": "",
+            "title": "Get Personalized Support",
+            "content": "<p>Not sure where to start? Our gifting team is here to help. Tell us who you're celebrating and what you have in mind, and we'll recommend the perfect baskets, handle the details, and make sure every gift lands beautifully.</p>",
+            "link_text": "Talk to our gifting team",
+            "link_url": "shopify://pages/contact",
+            "background": "#4a4c3d",
+            "background_gradient": "",
+            "text_color": "#ffffff",
+            "text_gradient": "",
+            "button_background": "",
+            "button_text_color": ""
+          }
+        },
+        "image_fCU9C3": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/palamoa-goft-basket-bbc-corp-3.png",
+            "media_width": 50,
+            "media_position": "start",
+            "text_position": "place-self-center text-center",
+            "icon": "none",
+            "icon_width": 48,
+            "subheading": "",
+            "title": "Build It Yourself",
+            "content": "<p>Already know what you want? Browse our full range of baskets, bottles, and treats to create a custom corporate gift. Personalize it with engraving, tailor it to their taste, and add your company swag — boozy or alcohol-free, the choice is yours.</p>",
+            "link_text": "Shop Corporate Gifts",
+            "link_url": "shopify://collections/corporate-gifts",
+            "background": "#4a4c3d",
+            "background_gradient": "",
+            "text_color": "#ffffff",
+            "text_gradient": "",
+            "button_background": "",
+            "button_text_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_KkzWRX",
+        "image_fCU9C3"
+      ],
+      "name": "Media with text",
+      "settings": {
+        "full_width": false,
+        "alternate_media_position": true,
+        "spacing": "small"
+      }
+    },
+    "rich_text_zW64a3": {
+      "type": "rich-text",
+      "blocks": {
+        "subheading_K7yeic": {
+          "type": "subheading",
+          "disabled": true,
+          "settings": {
+            "text": "Subheading"
+          }
+        },
+        "heading_hXTJAi": {
+          "type": "heading",
+          "settings": {
+            "text": "Your Own Custom Gifting Portal",
+            "heading_tag": "h1",
+            "text_color": "",
+            "gradient": ""
+          }
+        },
+        "richtext_aHjWDr": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Sending gifts to a whole team or client list? We'll build you a private, branded gifting portal — your logo, your curated selection, your budget. Your recipients pick what they love, and we handle packing, personalization, and delivery to every address.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "subheading_K7yeic",
+        "heading_hXTJAi",
+        "richtext_aHjWDr"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "full_width": true,
+        "content_width": "small",
+        "text_position": "center",
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "video_cGQByN": {
+      "type": "video",
+      "blocks": {
+        "heading_KJfVcx": {
+          "type": "heading",
+          "settings": {
+            "text": "How Our Corporate Gifting Works",
+            "heading_tag": "h1"
+          }
+        },
+        "play_z4MMQV": {
+          "type": "play",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "heading_KJfVcx",
+        "play_z4MMQV"
+      ],
+      "disabled": true,
+      "name": "Video",
+      "settings": {
+        "full_width": true,
+        "allow_transparent_header": false,
+        "autoplay": false,
+        "video_size": "auto",
+        "external_video_url": "",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30
+      }
+    },
+    "multiple_images_with_text_LhFPbN": {
+      "type": "multiple-images-with-text",
+      "blocks": {
+        "item_9DNmnp": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/corp-gifting-4.png",
+            "image_rotation_degrees": -2,
+            "subheading": "From 2 Gifts to 200",
+            "title": "Bulk & Custom Corporate Orders",
+            "content": "<p>Need to send gifts to a group? We make it simple. Place a single order for your whole list and we'll take care of the rest — personalized messages, scheduled delivery, and tracking, all handled for you.</p><p>✓ One order, as many recipients as you need</p><p>✓ Physical gift baskets or digital gift links recipients can redeem</p><p>✓ A personalized message on every gift</p><p>✓ Deliveries scheduled up to 8 weeks in advance</p><p>✓ Custom branded portal available for ongoing programs</p>",
+            "button_url": "shopify://pages/contact",
+            "button_text": "Start a Bulk Order"
+          }
+        }
+      },
+      "block_order": [
+        "item_9DNmnp"
+      ],
+      "name": "Multiple images with text",
+      "settings": {
+        "full_width": true,
+        "images_layout": "stacked",
+        "collage_images_alignment": "middle",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "button_background": "",
+        "button_text_color": ""
+      }
+    },
+    "multi_column_xXKMFk": {
+      "type": "multi-column",
+      "blocks": {
+        "item_6CJeHG": {
+          "type": "item",
+          "settings": {
+            "show_controls": false,
+            "column_size": "3",
+            "title": "Ship to Many Addresses",
+            "heading_tag": "h4",
+            "content": "<p>Check out to one place and we'll handle delivery to every recipient on your list.</p>",
+            "link_url": "",
+            "link_text": "",
+            "link_style": "link"
+          }
+        },
+        "item_dmFXrF": {
+          "type": "item",
+          "settings": {
+            "show_controls": false,
+            "column_size": "3",
+            "title": "Custom Engraving",
+            "heading_tag": "h4",
+            "content": "<p>Add personalized engraving to wine and spirit bottles for an extra-special touch.</p>",
+            "link_url": "",
+            "link_text": "",
+            "link_style": "link"
+          }
+        },
+        "item_pp7kmz": {
+          "type": "item",
+          "settings": {
+            "show_controls": false,
+            "column_size": "3",
+            "title": "Your Brand, Your Way",
+            "heading_tag": "h4",
+            "content": "<p>Add your company logo or swag to any gift basket for a branded finish.</p>",
+            "link_url": "",
+            "link_text": "",
+            "link_style": "link"
+          }
+        },
+        "item_cTDfgc": {
+          "type": "item",
+          "settings": {
+            "show_controls": false,
+            "column_size": "3",
+            "title": "Hands-On Support",
+            "heading_tag": "h4",
+            "content": "<p>Our gifting team makes ordering easy from start to finish.</p>",
+            "link_url": "",
+            "link_text": "",
+            "link_style": "link"
+          }
+        },
+        "item_CqPWF8": {
+          "type": "item",
+          "settings": {
+            "show_controls": false,
+            "column_size": "3",
+            "title": "Reliable Shipping",
+            "heading_tag": "h4",
+            "content": "<p>We deliver your corporate gifts where and when they're needed.</p>",
+            "link_url": "",
+            "link_text": "",
+            "link_style": "link"
+          }
+        },
+        "item_i94YNw": {
+          "type": "item",
+          "settings": {
+            "show_controls": false,
+            "column_size": "3",
+            "title": "Alcohol-Free Options",
+            "heading_tag": "h4",
+            "content": "<p>Plenty of alcohol-free baskets so there's something for everyone on your list.</p>",
+            "link_url": "",
+            "link_text": "",
+            "link_style": "link"
+          }
+        }
+      },
+      "block_order": [
+        "item_6CJeHG",
+        "item_dmFXrF",
+        "item_pp7kmz",
+        "item_cTDfgc",
+        "item_CqPWF8",
+        "item_i94YNw"
+      ],
+      "name": "Multi-column",
+      "settings": {
+        "full_width": true,
+        "stack_on_mobile": false,
+        "gap": "medium",
+        "text_alignment": "start",
+        "subheading": "",
+        "title": "We can do it all",
+        "content": "<p>From large orders of curated gift baskets to one-off custom gifts featuring your logo and promotional items — if it's a memorable business gift you're after, you're in the right place.</p>",
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "faq_YLnTMY": {
+      "type": "faq",
+      "blocks": {
+        "item_RGfdQj": {
+          "type": "item",
+          "settings": {
+            "title": "What type of corporate gifts do you offer?",
+            "content": "<p>We offer curated, personalized gifts for employees, clients, and events — from engraved bottles and standalone treats to fully customized gift baskets with a selection of goodies for any taste. Boozy or alcohol-free, we'll help you find the perfect fit.</p>"
+          }
+        },
+        "item_m3zPza": {
+          "type": "item",
+          "settings": {
+            "title": "Can I add our company branding to the gifts?",
+            "content": "<p>Absolutely. We can swap in unbranded items and add your company logo to the gift baskets at no extra cost. Your recipients will love a gift personalized with your brand.</p>"
+          }
+        },
+        "item_wJzK7m": {
+          "type": "item",
+          "settings": {
+            "title": "How long will shipping take?",
+            "content": "<p>Shipping times vary by destination. We work with major carriers to offer ground, two-day, and overnight options. Ground shipping typically takes 1–5 days depending on location — you'll see exact estimates at checkout.</p>"
+          }
+        },
+        "item_reVkby": {
+          "type": "item",
+          "settings": {
+            "title": "Can I ship to multiple addresses within one transaction?",
+            "content": "<p>Yes! Get in touch with our gifting team before or after your order with your list of addresses, and we'll make sure each gift reaches the right person. Just check out as if shipping to one location, and we'll handle the rest.</p>"
+          }
+        },
+        "item_3LYPtg": {
+          "type": "item",
+          "settings": {
+            "title": "What if we don’t know all recipients’ addresses?",
+            "content": "<p>No problem. If you don't have every address yet, just gather them and send them to our gifting team in time for us to ship. It's that easy.</p>"
+          }
+        },
+        "item_HpTFyJ": {
+          "type": "item",
+          "settings": {
+            "title": "Have More Questions?",
+            "content": "<p>Check out our full FAQ.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "item_RGfdQj",
+        "item_m3zPza",
+        "item_wJzK7m",
+        "item_reVkby",
+        "item_3LYPtg",
+        "item_HpTFyJ"
+      ],
+      "name": "FAQ",
+      "settings": {
+        "full_width": true,
+        "subheading": "",
+        "title": "FAQs",
+        "content": "<p>Just in case you’re curious</p>",
+        "team_avatar_width": 160,
+        "support_hours": "Our customer support is available Monday to Friday: 8am-8:30pm.",
+        "answer_time": "Average answer time: 24h",
+        "button_text": "",
+        "button_url": "",
+        "text_position": "center",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "button_background": "",
+        "button_text_color": "",
+        "accordion_background": "",
+        "accordion_text_color": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "corporate_gifting_hero_7PH4Rb",
+    "17732726550880179c",
+    "rich_text_FyNwd3",
+    "media_with_text_ijMzF9",
+    "rich_text_zW64a3",
+    "video_cGQByN",
+    "multiple_images_with_text_LhFPbN",
+    "multi_column_xXKMFk",
+    "faq_YLnTMY"
+  ]
+}
