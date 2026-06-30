@@ -91,7 +91,7 @@
         "text_color": "#ffffff",
         "button_text_color": "#ffffff",
         "overlay_color": "#000000",
-        "overlay_opacity": 49,
+        "overlay_opacity": 30,
         "background": "rgba(0,0,0,0)",
         "background_gradient": ""
       }
@@ -297,7 +297,7 @@
         "item_9DNmnp": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/corp-gifting-4.png",
+            "image": "shopify://shop_images/corp-gifting-4-2.png",
             "image_rotation_degrees": -2,
             "subheading": "From 2 Gifts to 200",
             "title": "Bulk & Custom Corporate Orders",
