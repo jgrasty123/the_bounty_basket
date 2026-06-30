@@ -103,6 +103,32 @@
     margin-bottom: 48px;
   }
 
+  /* Lift both CTA buttons off the photo for contrast */
+  .corporate-hero__cta-row .button {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Primary (filled) button: stronger weight so it reads on busy imagery.
+     The filled button has no modifier class, so target buttons that are NOT outline. */
+  .corporate-hero__cta-row .button:not(.button--outline) {
+    font-weight: 700;
+  }
+
+  /* Secondary (outline) button: explicit high-contrast treatment instead of a faint ghost */
+  .corporate-hero__cta-row .button--outline {
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+    font-weight: 700;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .corporate-hero__cta-row .button--outline:hover {
+    background: #ffffff;
+    color: {{ section.settings.accent_color }};
+  }
+
   .corporate-hero__highlights {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
