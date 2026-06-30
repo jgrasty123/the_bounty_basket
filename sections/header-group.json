@@ -108,7 +108,7 @@
         "mega_menu_Wqt97f"
       ],
       "settings": {
-        "enable_sticky": true,
+        "enable_sticky": false,
         "hide_on_scroll": false,
         "logo": "shopify://shop_images/bounty_Basket_Co-logo-no-bg.png",
         "logo_max_width": 65,
