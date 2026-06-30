@@ -305,6 +305,7 @@
       "name": "Founder story (W4-01)",
       "settings": {
         "image_side": "left",
+        "image": "shopify://shop_images/James-bounty-basket-co.png",
         "eyebrow": "Our Story",
         "heading": "From the creators of The BroBasket",
         "paragraph_1": "Back in 2014, we built The BroBasket on a simple idea: if women get flowers, why shouldn't the guys get something just as good? Tens of thousands of gifts later, one question kept landing in our inbox — “If the guys get a BroBasket, what do we get?”",
