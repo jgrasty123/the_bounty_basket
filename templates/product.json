@@ -89,7 +89,6 @@
         },
         "bb_delivery_promise_ExaXXr": {
           "type": "bb_delivery_promise",
-          "disabled": true,
           "settings": {
             "cutoff_hour_pt": 14,
             "transit_business_days": 6,
@@ -124,13 +123,13 @@
         "adult_signature_options": {
           "type": "adult_signature",
           "settings": {
-            "open_by_default": false
+            "open_by_default": true
           }
         },
         "product_upsells_wpc38x": {
           "type": "product_upsells",
           "settings": {
-            "open_by_default": false
+            "open_by_default": true
           }
         },
         "separator": {
@@ -148,7 +147,7 @@
         "description_kMG9k8": {
           "type": "description",
           "settings": {
-            "icon": "none",
+            "icon": "picto-comment",
             "icon_width": 20,
             "collapse_content": true
           }
