@@ -6,7 +6,7 @@ ALCOHOL FEE RECONCILER  v1.0  (BB Cart Hardening 2026-05-04)
 REPLACES: assets/adult-signature.js
 
 PURPOSE:
-  Maintains exactly 1 Adult Signature fee line item ($6.99, product 9143475339500)
+  Maintains exactly 1 Adult Signature fee line item ($5.99, product 9436776136950)
   in the cart whenever the cart contains products that require it. Eliminates the
   duplicate-fee bug caused by per-PDP-add fee insertion.
 
@@ -35,8 +35,8 @@ LOADED FROM: layout/theme.liquid (every page)
 {%- endcomment -%}
 
 {%- liquid
-  assign fee_product_id  = 9143475339500
-  assign fee_variant_id  = 47248470212844
+  assign fee_product_id  = 9436776136950
+  assign fee_variant_id  = 51099741126902
 
   assign alcohol_count = 0
   assign fee_count     = 0

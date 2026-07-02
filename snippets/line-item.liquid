@@ -21,24 +21,24 @@ Supported variables
   endif
 
   comment
-    Check if this line item is the adult signature product (product ID: 9143475339500)
+    Check if this line item is the adult signature product (product ID: 9436776136950)
     If so, we hide the remove controls since adult signature is required for all orders
   endcomment
   assign is_adult_signature = false
-  if line_item.product_id == 9143475339500
+  if line_item.product_id == 9436776136950
     assign is_adult_signature = true
   endif
 
   comment
     Check if this line item should NOT be clickable (no link to product page)
     These are addon/service products identified by product ID:
-    - Adult Signature: product_id = 9143475339500
+    - Adult Signature: product_id = 9436776136950
     - Engraving: product_id = 9143479697644
     - Special Card (Gift Message): product_id = 9141983150316
   endcomment
   assign is_non_clickable_item = false
 
-  if line_item.product_id == 9143475339500
+  if line_item.product_id == 9436776136950
     assign is_non_clickable_item = true
   elsif line_item.product_id == 9143479697644
     assign is_non_clickable_item = true

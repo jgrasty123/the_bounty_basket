@@ -9,8 +9,8 @@ This snippet renders an adult signature checkbox for products where custom.optio
 When checked, the centralized handler (bb-product-addons.liquid) adds the adult signature product 
 to cart with the main product.
 
-Adult Signature Product: handle "adult-signature-required-for-all-orders" (ID: 9143475339500)
-Adult Signature Variant ID: 47248470212844
+Adult Signature Product: handle "adult-signature-fee" (ID: 9436776136950)
+Adult Signature Variant ID: 51099741126902
 
 Displays price next to the checkbox label.
 
@@ -34,8 +34,8 @@ Supported variables
 -%}
 
 {%- if show_adult_signature -%}
-  {%- assign adult_signature_product = all_products['adult-signature-required-for-all-orders'] -%}
-  {%- assign adult_signature_variant_id = 47248470212844 -%}
+  {%- assign adult_signature_product = all_products['adult-signature-fee'] -%}
+  {%- assign adult_signature_variant_id = 51099741126902 -%}
   {%- assign adult_signature_price = adult_signature_product.price | default: 500 -%}
   
   <div class="product-adult-signature" data-adult-signature-wrapper data-product-title="{{ product.title | escape }}">
