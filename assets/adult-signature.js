@@ -5,15 +5,15 @@
  * when alcohol products are present. The adult signature is added to cart from the
  * product page via the centralized product addons handler (bb-product-addons.liquid).
  * 
- * Product ID: 9143475339500
- * Variant ID: 47248470212844
+ * Product ID: 9436776136950
+ * Variant ID: 51099741126902
  */
 
 (function() {
   'use strict';
 
-  const ADULT_SIGNATURE_PRODUCT_ID = 9143475339500;
-  const ADULT_SIGNATURE_VARIANT_ID = 47248470212844;
+  const ADULT_SIGNATURE_PRODUCT_ID = 9436776136950;
+  const ADULT_SIGNATURE_VARIANT_ID = 51099741126902;
   const WARNING_MESSAGE = 'Adult signature is required for all orders';
   const MODAL_DURATION = 4000; // Auto-hide after 4 seconds
   

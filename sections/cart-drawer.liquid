@@ -44,7 +44,7 @@
       BROBASKET CART DRAWER ADDITIONS (2026-05-15)
       --------------------------------------------------------------------------
       Adult signature disclosure — only renders if the adult signature variant
-      (47248470212844) is present in cart. Read-only by design: the signature
+      (51099741126902) is present in cart. Read-only by design: the signature
       is already a line item by the time the drawer opens (added on PDP ATC by
       bb-product-addons → window.productAddons.adultSignature). This is a
       visual confirmation, not an editable control. To remove the signature,
@@ -57,7 +57,7 @@
       --------------------------------------------------------------------------
       {%- endcomment -%}
       {%- liquid
-        assign bb_adult_sig_variant_id = 47248470212844
+        assign bb_adult_sig_variant_id = 51099741126902
         assign bb_has_adult_signature = false
         for bb_line in cart.items
           if bb_line.variant_id == bb_adult_sig_variant_id
