@@ -61,7 +61,7 @@
         "engraving_options": {
           "type": "engraving",
           "settings": {
-            "open_by_default": true
+            "open_by_default": false
           }
         },
         "engraved_glass_options": {
