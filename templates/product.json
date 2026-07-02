@@ -130,7 +130,7 @@
           "type": "product_upsells",
           "disabled": true,
           "settings": {
-            "open_by_default": true
+            "open_by_default": false
           }
         },
         "separator": {
