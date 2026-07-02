@@ -22,14 +22,14 @@ even though operations are on PT).
 
 Supported block.settings:
   * cutoff_hour_pt        — integer (default 14 = 2pm PT = 5pm ET)
-  * transit_business_days — integer (default 6)
+  * transit_business_days — integer (default 5)
   * show_express_note     — boolean (default true)
   * accent_color          — color (default #cd241d — BroBasket red)
 ----------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 {%- assign cutoff_hour = block.settings.cutoff_hour_pt | default: 14 -%}
-{%- assign transit_days = block.settings.transit_business_days | default: 6 -%}
+{%- assign transit_days = block.settings.transit_business_days | default: 5 -%}
 {%- assign accent = block.settings.accent_color | default: '#cd241d' -%}
 
 <div
@@ -86,7 +86,7 @@ Supported block.settings:
     var cutoffHourPT = parseInt(root.dataset.cutoffHour, 10);
     if (isNaN(cutoffHourPT)) cutoffHourPT = 14;
     var transitDays = parseInt(root.dataset.transitDays, 10);
-    if (isNaN(transitDays)) transitDays = 6;
+    if (isNaN(transitDays)) transitDays = 5;
 
     var countdownEl  = root.querySelector('[data-countdown]');
     var arrivalEl    = root.querySelector('[data-arrival]');

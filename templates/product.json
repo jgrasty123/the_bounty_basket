@@ -91,7 +91,7 @@
           "type": "bb_delivery_promise",
           "settings": {
             "cutoff_hour_pt": 14,
-            "transit_business_days": 6,
+            "transit_business_days": 5,
             "show_express_note": true,
             "accent_color": "#cd241d"
           }
