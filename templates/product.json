@@ -128,6 +128,7 @@
         },
         "product_upsells_wpc38x": {
           "type": "product_upsells",
+          "disabled": true,
           "settings": {
             "open_by_default": true
           }
