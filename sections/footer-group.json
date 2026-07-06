@@ -64,6 +64,10 @@
         "links_hMRTwb",
         "text"
       ],
+      "custom_css": [
+        ".footer a,.footer__block a,.footer a:visited {color: #FFFFFF !important; text-decoration: underline;}",
+        ".footer a:hover {color: #B08D57 !important; /* tan on hover */}"
+      ],
       "settings": {
         "show_social_media": true,
         "show_payment_icons": true,
