@@ -4,9 +4,9 @@
 {%- assign values_column_count = section.blocks | where: 'type', 'values' | size -%}
 
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-CSS
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  CSS
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <style>
@@ -43,9 +43,9 @@ CSS
 </style>
 
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-LIQUID
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  LIQUID
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <div {% render 'section-properties' %}>
@@ -66,7 +66,13 @@ LIQUID
           {{- section.settings.content -}}
 
           {%- if section.settings.button_text != blank -%}
-            {%- render 'button', size: 'lg', href: section.settings.button_url, content: section.settings.button_text, background: section.settings.button_background, text_color: section.settings.button_text_color -%}
+            {%- render 'button',
+              size: 'lg',
+              href: section.settings.button_url,
+              content: section.settings.button_text,
+              background: section.settings.button_background,
+              text_color: section.settings.button_text_color
+            -%}
           {%- endif -%}
         </div>
       </div>
@@ -94,7 +100,11 @@ LIQUID
             {%- assign heading_value = headings_block.settings[heading_key] -%}
 
             {%- comment -%}We only output the line if at least one value is defined{%- endcomment -%}
-            {%- if heading_value != blank and values_blocks[0].settings[value_key] != blank or values_blocks[1].settings[value_key] != blank or values_blocks[2].settings[value_key] != blank -%}
+            {%- if heading_value != blank
+              and values_blocks[0].settings[value_key] != blank
+              or values_blocks[1].settings[value_key] != blank
+              or values_blocks[2].settings[value_key] != blank
+            -%}
               {%- assign total_rows_count = total_rows_count | plus: 1 -%}
             {%- endif -%}
           {%- endfor -%}
@@ -193,10 +203,28 @@ LIQUID
             {%- assign heading_value = headings_block.settings[heading_key] -%}
 
             {%- comment -%}We only output the line if at least one value is defined{%- endcomment -%}
-            {%- if heading_value != blank and values_blocks[0].settings[value_key] != blank or values_blocks[1].settings[value_key] != blank or values_blocks[2].settings[value_key] != blank -%}
-              <div class="feature-chart__table-row" {% if outputted_count >= section.settings.max_rows %}hidden{% else %}{% endif %}>
+            {%- if heading_value != blank
+              and values_blocks[0].settings[value_key] != blank
+              or values_blocks[1].settings[value_key] != blank
+              or values_blocks[2].settings[value_key] != blank
+            -%}
+              <div
+                class="feature-chart__table-row"
+                {% if outputted_count >= section.settings.max_rows %}
+                  hidden
+                {% else %}
+
+                {% endif %}
+              >
                 {%- if heading_value != blank -%}
-                  <div class="feature-chart__heading bold" {% if outputted_count == 0 %}{{ headings_block.shopify_attributes }}{% endif %}>{{ heading_value }}</div>
+                  <div
+                    class="feature-chart__heading bold"
+                    {% if outputted_count == 0 %}
+                      {{- headings_block.shopify_attributes -}}
+                    {% endif %}
+                  >
+                    {{ heading_value }}
+                  </div>
                 {%- endif -%}
 
                 {%- for i in (0..2) -%}
@@ -204,7 +232,12 @@ LIQUID
                     {%- assign value = values_blocks[i].settings[value_key] -%}
                     {%- assign stripped_value = value | strip_html | strip -%}
 
-                    <div class="feature-chart__value prose text-subdued" {% if outputted_count == 0 %}{{ values_blocks[i].shopify_attributes }}{% endif %}>
+                    <div
+                      class="feature-chart__value prose text-subdued"
+                      {% if outputted_count == 0 %}
+                        {{- values_blocks[i].shopify_attributes -}}
+                      {% endif %}
+                    >
                       {%- if stripped_value == 'FALSE' -%}
                         <svg fill="none" class="icon offset-icon" width="16" height="16" viewBox="0 0 16 16" style="--icon-height: 16px">
                           <path d="m.94 3.06 12 12 2.12-2.12-12-12L.94 3.06Zm2.12 12 12-12L12.94.94l-12 12 2.12 2.12Z" fill="{{ section.settings.chart_true_false_color | default: section.settings.chart_text_color | default: settings.text_color }}"></path>
@@ -228,7 +261,12 @@ LIQUID
 
         {%- if outputted_count > section.settings.max_rows -%}
           <div class="feature-chart__toggle">
-            <button data-action="toggle-rows" data-view-more="{{ section.settings.view_all_text | escape }}" data-view-less="{{ section.settings.view_less_text | escape }}" class="text-with-icon group">
+            <button
+              data-action="toggle-rows"
+              data-view-more="{{ section.settings.view_all_text | escape }}"
+              data-view-less="{{ section.settings.view_less_text | escape }}"
+              class="text-with-icon group"
+            >
               <span class="feature-chart__toggle-text reversed-link">{{- section.settings.view_all_text | escape -}}</span>
               <span class="circle-chevron group-hover:colors">{%- render 'icon' with 'chevron-bottom-small' -%}</span>
             </button>

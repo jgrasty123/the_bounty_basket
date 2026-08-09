@@ -94,6 +94,9 @@
         "other": "الألوان المتاحة: {{ count }}"
       }
     },
+    "disclosures": {
+      "title": "إشعارات"
+    },
     "gallery": {
       "close": "إغلاق المعرض",
       "zoom": "تكبير",

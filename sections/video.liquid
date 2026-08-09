@@ -22,7 +22,12 @@
   {%- endunless -%}
 </style>
 
-<div {% render 'section-properties' %} {% if section.settings.allow_transparent_header %}allow-transparent-header{% endif %}>
+<div
+  {% render 'section-properties' %}
+  {% if section.settings.allow_transparent_header %}
+    allow-transparent-header
+  {% endif %}
+>
   {%- capture class -%}content-over-media {% if section.settings.video_size != 'auto' %}content-over-media--{{ section.settings.video_size }}{% endif %} {% if section.settings.full_width %}full-bleed{% else %}shadow-block rounded-lg{% endif %}{%- endcapture -%}
 
   <div {% render 'surface', class: class, text_color: section.settings.text_color %}>
@@ -44,26 +49,70 @@
 
       {%- if section.settings.mobile_video != blank -%}
         {%- assign poster_image = section.settings.poster | default: section.settings.mobile_video.preview_image -%}
-  
-        <video-media {% if section.settings.autoplay %}autoplay{% endif %} class="sm:hidden" {% if section.settings.video_size == 'auto' %}style="--aspect-ratio: {{ section.settings.mobile_video.aspect_ratio }}"{% endif %}>
-          {{- section.settings.mobile_video | video_tag: class: 'object-cover sm:hidden', controls: show_controls, playsinline: true, muted: section.settings.autoplay, loop: section.settings.autoplay, preload: 'metadata', image_size: '400x' -}}
+
+        <video-media
+          {% if section.settings.autoplay %}
+            autoplay
+          {% endif %}
+          class="sm:hidden"
+          {% if section.settings.video_size == 'auto' %}
+            style="--aspect-ratio: {{ section.settings.mobile_video.aspect_ratio }}"
+          {% endif %}
+        >
+          {{-
+            section.settings.mobile_video
+            | video_tag:
+              class: 'object-cover sm:hidden',
+              controls: show_controls,
+              playsinline: true,
+              muted: section.settings.autoplay,
+              loop: section.settings.autoplay,
+              preload: 'metadata',
+              image_size: '400x'
+          -}}
           {{- poster_image | image_url: width: poster_image.width | image_tag: sizes: '100vw', widths: '200,300,400,500,600,700,800,900,1000,1200' -}}
         </video-media>
       {%- endif -%}
 
-      <video-media {% if section.settings.autoplay %}autoplay{% endif %} {% if section.settings.mobile_video != blank %}class="hidden sm:block"{% endif %} {% if section.settings.video_size == 'auto' %}style="--aspect-ratio: {{ section.settings.video.aspect_ratio }}"{% endif %}>
-        {{- section.settings.video | video_tag: playsinline: true, preload: 'metadata', muted: section.settings.autoplay, loop: section.settings.autoplay, controls: show_controls, image_size: '800x' -}}
+      <video-media
+        {% if section.settings.autoplay %}
+          autoplay
+        {% endif %}
+        {% if section.settings.mobile_video != blank %}
+          class="hidden sm:block"
+        {% endif %}
+        {% if section.settings.video_size == 'auto' %}
+          style="--aspect-ratio: {{ section.settings.video.aspect_ratio }}"
+        {% endif %}
+      >
+        {{-
+          section.settings.video
+          | video_tag: playsinline: true, preload: 'metadata', muted: section.settings.autoplay, loop: section.settings.autoplay, controls: show_controls, image_size: '800x'
+        -}}
         {{- poster -}}
       </video-media>
     {%- else -%}
-      <video-media host="{{ section.settings.external_video_url.type }}" {% if section.settings.autoplay %}autoplay class="pointer-events-none"{% endif %}>
+      <video-media
+        host="{{ section.settings.external_video_url.type }}"
+        {% if section.settings.autoplay %}
+          autoplay class="pointer-events-none"
+        {% endif %}
+      >
         {{- poster -}}
 
         <template>
           {%- if section.settings.external_video_url.type == 'youtube' -%}
-            <iframe src="https://www.youtube.com/embed/{{ section.settings.external_video_url.id }}?playsinline=1&{% if section.settings.autoplay %}autoplay=1&controls=0&mute=1&loop=1&{% endif %}playlist={{ section.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" allow="autoplay; encrypted-media" allowfullscreen="allowfullscreen"></iframe>
+            <iframe
+              src="https://www.youtube.com/embed/{{ section.settings.external_video_url.id }}?playsinline=1&{% if section.settings.autoplay %}autoplay=1&controls=0&mute=1&loop=1&{% endif %}playlist={{ section.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}"
+              allow="autoplay; encrypted-media"
+              allowfullscreen="allowfullscreen"
+            ></iframe>
           {%- elsif section.settings.external_video_url.type == 'vimeo' -%}
-            <iframe src="https://player.vimeo.com/video/{{ section.settings.external_video_url.id }}?autopause=1&{% if section.settings.autoplay %}background=1&autoplay=1&loop=1&muted=1&{% endif %}transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.text_color | remove_first: '#' }}" allow="autoplay; encrypted-media;" allowfullscreen="allowfullscreen"></iframe>
+            <iframe
+              src="https://player.vimeo.com/video/{{ section.settings.external_video_url.id }}?autopause=1&{% if section.settings.autoplay %}background=1&autoplay=1&loop=1&muted=1&{% endif %}transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.text_color | remove_first: '#' }}"
+              allow="autoplay; encrypted-media;"
+              allowfullscreen="allowfullscreen"
+            ></iframe>
           {%- endif -%}
         </template>
       </video-media>
@@ -101,7 +150,15 @@
 
               {%- when 'button' -%}
                 {%- if block.settings.text != blank -%}
-                  {% render 'button', content: block.settings.text, href: block.settings.url, size: block.settings.size, style: block.settings.style, background: block.settings.background, text_color: block.settings.text_color, block: block %}
+                  {% render 'button',
+                    content: block.settings.text,
+                    href: block.settings.url,
+                    size: block.settings.size,
+                    style: block.settings.style,
+                    background: block.settings.background,
+                    text_color: block.settings.text_color,
+                    block: block
+                  %}
                 {%- endif -%}
             {%- endcase -%}
           {%- endfor -%}

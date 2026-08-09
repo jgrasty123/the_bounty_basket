@@ -1,21 +1,21 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-PRODUCT PRICE
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  PRODUCT PRICE
+  ----------------------------------------------------------------------------------------------------------------------
 
-This component generates price list for a given product. It handles the rendering of both price, compare at price,
-sale price and unit price
+  This component generates price list for a given product. It handles the rendering of both price, compare at price,
+  sale price and unit price
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* product: the product from which prices are rendered
-* variant: if a variant is specified, then only the price from this variant is rendered (used in product details)
-* line_item: if a line item is specified, then the price from this line item are rendered
-* hide_unit_price: if set to true, unit pricing are hidden (this is useful for elements that are very size constrained)
-* size: can be either "sm" or "lg". If none is passed it will use the standard size
-* alignment: can be "center" to align the prices
+  * product: the product from which prices are rendered
+  * variant: if a variant is specified, then only the price from this variant is rendered (used in product details)
+  * line_item: if a line item is specified, then the price from this line item are rendered
+  * hide_unit_price: if set to true, unit pricing are hidden (this is useful for elements that are very size constrained)
+  * size: can be either "sm" or "lg". If none is passed it will use the standard size
+  * alignment: can be "center" to align the prices
 {%- endcomment -%}
 
 {%- liquid
@@ -25,13 +25,13 @@ Supported variables
       assign on_sale_price_classes = 'text-lg text-on-sale'
       assign compare_at_price_classes = 'text-subdued line-through'
       assign unit_price_classes = 'text-subdued'
-  
+
     when 'sm'
       assign regular_price_classes = 'text-subdued text-sm'
       assign on_sale_price_classes = 'text-on-sale text-sm'
       assign compare_at_price_classes = 'text-subdued text-sm line-through'
       assign unit_price_classes = 'text-subdued text-sm'
-  
+
     else
       assign regular_price_classes = 'text-subdued'
       assign on_sale_price_classes = 'text-on-sale'
@@ -43,9 +43,9 @@ Supported variables
 <price-list class="price-list {% if size == 'lg' %}price-list--lg{% endif %} {% if text_alignment == 'center' %}justify-center{% endif %}">
   {%- if variant != blank -%}
     {%- comment -%}
-    --------------------------------------------------------------------------------------------------------------------
-    VARIANT CASE (used on product page, quick view...)
-    --------------------------------------------------------------------------------------------------------------------
+      --------------------------------------------------------------------------------------------------------------------
+      VARIANT CASE (used on product page, quick view...)
+      --------------------------------------------------------------------------------------------------------------------
     {%- endcomment -%}
     <sale-price class="{% if variant.compare_at_price > variant.price %}{{ on_sale_price_classes }}{% else %}{{ regular_price_classes }}{% endif %}">
       <span class="sr-only">{{ 'product.price.sale_price' | t }}</span>
@@ -70,9 +70,9 @@ Supported variables
     {%- endif -%}
   {%- elsif line_item != blank -%}
     {%- comment -%}
-    --------------------------------------------------------------------------------------------------------------------
-    LINE ITEM CASE (used on cart, order page...)
-    --------------------------------------------------------------------------------------------------------------------
+      --------------------------------------------------------------------------------------------------------------------
+      LINE ITEM CASE (used on cart, order page...)
+      --------------------------------------------------------------------------------------------------------------------
     {%- endcomment -%}
     <sale-price class="{% if line_item.original_line_price > line_item.final_line_price %}{{ on_sale_price_classes }}{% else %}{{ regular_price_classes }}{% endif %}">
       <span class="sr-only">{{ 'product.price.sale_price' | t }}</span>
@@ -97,9 +97,9 @@ Supported variables
     {%- endif -%}
   {%- else -%}
     {%- comment -%}
-    --------------------------------------------------------------------------------------------------------------------
-    PRODUCT CASE (used on card)
-    --------------------------------------------------------------------------------------------------------------------
+      --------------------------------------------------------------------------------------------------------------------
+      PRODUCT CASE (used on card)
+      --------------------------------------------------------------------------------------------------------------------
     {%- endcomment -%}
     {%- if product.price_varies and product.compare_at_price -%}
       {%- assign cheapest_variant = product.variants | sort: 'price' | first -%}
@@ -192,7 +192,9 @@ Supported variables
 
     {%- if unit_price_item.unit_price -%}
       <unit-price class="{{ unit_price_classes }}">
-        ({{- unit_price_item.unit_price | unit_price_with_measurement: unit_price_item.unit_price_measurement -}})
+        (
+        {{- unit_price_item.unit_price | unit_price_with_measurement: unit_price_item.unit_price_measurement -}}
+        )
       </unit-price>
     {%- endif -%}
   {%- endunless -%}

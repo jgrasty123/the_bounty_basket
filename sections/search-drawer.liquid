@@ -1,7 +1,22 @@
-<search-drawer {% if request.design_mode %}handle-section-events{% endif %} class="search-drawer {% if section.settings.full_width %}search-drawer--full{% endif %} drawer drawer--lg" id="search-drawer">
+<search-drawer
+  {% if request.design_mode %}
+    handle-section-events
+  {% endif %}
+  class="search-drawer {% if section.settings.full_width %}search-drawer--full{% endif %} drawer drawer--lg"
+  id="search-drawer"
+>
   <form action="{{ routes.search_url }}" method="get" class="v-stack gap-5 sm:gap-8" role="search">
     <div class="search-input">
-      <input type="search" name="q" placeholder="{{ 'search.general.search_placeholder' | t }}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="{{ 'search.general.title' | t | escape }}">
+      <input
+        type="search"
+        name="q"
+        placeholder="{{ 'search.general.search_placeholder' | t }}"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="{{ 'search.general.title' | t | escape }}"
+      >
       <button type="reset" class="text-subdued">{{ 'search.general.clear' | t }}</button>
       <button type="button" is="close-button">
         <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
@@ -76,7 +91,9 @@
 
                   {%- if section.settings.full_width -%}
                     <button type="submit" class="text-with-icon group">
-                      <span><span class="reversed-link">{{ 'search.general.view_all' | t }}</span></span>
+                      <span
+                        ><span class="reversed-link">{{ 'search.general.view_all' | t }}</span></span
+                      >
                       <span class="circle-chevron group-hover:colors">{%- render 'icon' with 'chevron-right-small', direction_aware: true -%}</span>
                     </button>
                   {%- endif -%}

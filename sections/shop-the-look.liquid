@@ -1,9 +1,9 @@
 {%- render 'section-spacing-collapsing' -%}
 
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-CSS
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  CSS
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <style>
@@ -14,15 +14,19 @@ CSS
 </style>
 
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-LIQUID
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  LIQUID
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <div {% render 'section-properties' %}>
   <div class="section-stack">
-
-    {%- render 'section-header', heading: section.settings.title, heading_color: section.settings.heading_color, heading_gradient: section.settings.heading_gradient, content: section.settings.content -%}
+    {%- render 'section-header',
+      heading: section.settings.title,
+      heading_color: section.settings.heading_color,
+      heading_gradient: section.settings.heading_gradient,
+      content: section.settings.content
+    -%}
 
     <div class="shop-the-look">
       <div class="relative">
@@ -57,15 +61,28 @@ LIQUID
           {%- assign horizontal_products_blends = true -%}
           {%- assign section_background = section.settings.background_gradient | default: section.settings.background | default: settings.background -%}
 
-          {%- if section.settings.product_card_mobile_background != blank and section.settings.product_card_mobile_background != 'rgba(0,0,0,0)' and section.settings.product_card_mobile_background != section_background -%}
+          {%- if section.settings.product_card_mobile_background != blank
+            and section.settings.product_card_mobile_background != 'rgba(0,0,0,0)'
+            and section.settings.product_card_mobile_background != section_background
+          -%}
             {%- assign horizontal_products_blends = false -%}
           {%- endif -%}
 
-          <scroll-carousel selector=".horizontal-product" class="shop-the-look__carousel sm:hidden {% unless section.settings.stack_mobile %}scroll-area bleed sm:unbleed{% endunless %}" id="scroll-carousel-{{ section.id }}" role="region">
+          <scroll-carousel
+            selector=".horizontal-product"
+            class="shop-the-look__carousel sm:hidden {% unless section.settings.stack_mobile %}scroll-area bleed sm:unbleed{% endunless %}"
+            id="scroll-carousel-{{ section.id }}"
+            role="region"
+          >
             <div class="horizontal-product-list {% if horizontal_products_blends %}border {% if section.settings.stack_mobile %}divide-y{% else %}divide-x{% endif %}{% else %}separate{% endif %}">
               {%- for block in section.blocks -%}
                 {%- if block.settings.product != blank -%}
-                  {%- render 'horizontal-product', product: block.settings.product, show_add_to_cart: true, background: section.settings.product_card_mobile_background, text_color: section.settings.product_card_mobile_text_color -%}
+                  {%- render 'horizontal-product',
+                    product: block.settings.product,
+                    show_add_to_cart: true,
+                    background: section.settings.product_card_mobile_background,
+                    text_color: section.settings.product_card_mobile_text_color
+                  -%}
                 {%- endif -%}
               {%- endfor -%}
             </div>
@@ -73,12 +90,26 @@ LIQUID
 
           <effect-carousel class="shop-the-look__carousel sm-max:hidden" id="effect-carousel-{{ section.id }}" role="region">
             {%- for block in section.blocks -%}
-              <div {% unless forloop.first %}class="reveal-invisible"{% endunless %} {{ block.shopify_attributes }}>
+              <div
+                {% unless forloop.first %}
+                  class="reveal-invisible"
+                {% endunless %}
+                {{ block.shopify_attributes }}
+              >
                 {%- if block.settings.product != blank -%}
-                  {%- render 'product-card', product: block.settings.product, background: section.settings.product_card_background, text_color: section.settings.product_card_text_color, show_badges: true -%}
+                  {%- render 'product-card',
+                    product: block.settings.product,
+                    background: section.settings.product_card_background,
+                    text_color: section.settings.product_card_text_color,
+                    show_badges: true
+                  -%}
                 {%- else -%}
                   {%- capture placeholder_image -%}product-{% cycle '1', '2', '3', '4', '5', '6' %}{%- endcapture -%}
-                  {%- render 'product-card-placeholder', placeholder_image: placeholder_image, background: section.settings.product_card_background, text_color: section.settings.product_card_text_color -%}
+                  {%- render 'product-card-placeholder',
+                    placeholder_image: placeholder_image,
+                    background: section.settings.product_card_background,
+                    text_color: section.settings.product_card_text_color
+                  -%}
                 {%- endif -%}
               </div>
             {%- endfor -%}
