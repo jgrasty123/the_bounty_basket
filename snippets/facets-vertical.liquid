@@ -1,26 +1,36 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-VERTICAL FACETING
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  VERTICAL FACETING
+  ----------------------------------------------------------------------------------------------------------------------
 
-Show the faceting in vertical mode (notably used on desktop for the sidebar and on mobile mode). This snippet supports
-the following options:
+  Show the faceting in vertical mode (notably used on desktop for the sidebar and on mobile mode). This snippet supports
+  the following options:
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* results: either collection or search drop to extract the filters from
-* show_sort_by: whether the sort by is added or not
-* show_filters: whether the filters are visible or not
-* update_on_change: if set to true the results will reload as soon as an option is changed
+  * results: either collection or search drop to extract the filters from
+  * show_sort_by: whether the sort by is added or not
+  * show_filters: whether the filters are visible or not
+  * update_on_change: if set to true the results will reload as soon as an option is changed
 {%- endcomment -%}
 
 {%- assign color_label_list = 'general.label.color' | t | replace: ', ', ',' | downcase | split: ',' -%}
 {%- capture context -%}{% if update_on_change %}sidebar{% else %}drawer{% endif %}{%- endcapture -%}
 {%- capture id_prefix -%}facets-{{ context }}-{{ section.id }}{%- endcapture -%}
 
-<form id="facet-form" is="facet-form" section-id="{{ section.id }}" {% if update_on_change %}update-on-change{% endif %} method="GET" action="{{ request.path }}" class="facets-vertical">
+<form
+  id="facet-form"
+  is="facet-form"
+  section-id="{{ section.id }}"
+  {% if update_on_change %}
+    update-on-change
+  {% endif %}
+  method="GET"
+  action="{{ request.path }}"
+  class="facets-vertical"
+>
   {%- comment -%}We always reset to the first page so that when criteria change, the page is restored to the first one{%- endcomment -%}
   <input type="hidden" name="page" value="">
   <input type="hidden" name="section_id" value="{{ section.id }}" disabled>
@@ -68,10 +78,28 @@ Supported variables
           <div class="accordion__toggle">
             {%- if filter.param_name == 'filter.v.availability' -%}
               <label for="{{ id_prefix }}-{{ filter.param_name }}" class="bold">{{- 'collection.faceting.availability_label' | t -}}</label>
-              <input id="{{ id_prefix }}-{{ filter.param_name }}" type="checkbox" class="switch" name="{{ filter.param_name }}" value="1" {% if filter.active_values.size > 0 %}checked{% endif %}>
+              <input
+                id="{{ id_prefix }}-{{ filter.param_name }}"
+                type="checkbox"
+                class="switch"
+                name="{{ filter.param_name }}"
+                value="1"
+                {% if filter.active_values.size > 0 %}
+                  checked
+                {% endif %}
+              >
             {%- else -%}
               <label for="{{ id_prefix }}-{{ filter.param_name }}" class="bold">{{- filter.label -}}</label>
-              <input id="{{ id_prefix }}-{{ filter.param_name }}" type="checkbox" class="switch" name="{{ filter.param_name }}" value="1" {% if filter.true_value.active %}checked{% endif %}>
+              <input
+                id="{{ id_prefix }}-{{ filter.param_name }}"
+                type="checkbox"
+                class="switch"
+                name="{{ filter.param_name }}"
+                value="1"
+                {% if filter.true_value.active %}
+                  checked
+                {% endif %}
+              >
             {%- endif -%}
           </div>
         </div>

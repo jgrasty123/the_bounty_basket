@@ -18,7 +18,11 @@
           >
         {%- endif -%}
 
-        {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: sizes: image_sizes_attribute, widths: '200,300,400,500,600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200', style: image_style_attribute -}}
+        {{-
+          block.settings.image
+          | image_url: width: block.settings.image.width
+          | image_tag: sizes: image_sizes_attribute, widths: '200,300,400,500,600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200', style: image_style_attribute
+        -}}
       </picture>
     </div>
   </div>

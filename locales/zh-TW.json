@@ -94,6 +94,9 @@
         "other": "有 {{ count }} 種顏色"
       }
     },
+    "disclosures": {
+      "title": "聲明"
+    },
     "gallery": {
       "close": "關閉圖片庫",
       "zoom": "縮放",

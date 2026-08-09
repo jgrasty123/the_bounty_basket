@@ -94,6 +94,9 @@
         "other": "{{ count }} culori disponibile"
       }
     },
+    "disclosures": {
+      "title": "Mențiuni"
+    },
     "gallery": {
       "close": "Închide galeria",
       "zoom": "Mărește",

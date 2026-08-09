@@ -37,18 +37,34 @@
 
   <div {% render 'section-properties' %}>
     <div class="section-stack">
-      {%- render 'section-header', subheading: section.settings.subheading, heading: section.settings.title, heading_color: section.settings.heading_color, heading_gradient: section.settings.heading_gradient, content: section.settings.content, link_text: section.settings.link_text, link_url: section.settings.link_url -%}
+      {%- render 'section-header',
+        subheading: section.settings.subheading,
+        heading: section.settings.title,
+        heading_color: section.settings.heading_color,
+        heading_gradient: section.settings.heading_gradient,
+        content: section.settings.content,
+        link_text: section.settings.link_text,
+        link_url: section.settings.link_url
+      -%}
 
       <div class="scrollable-with-controls">
         {%- assign scroll_area_id = 'scroll-area-' | append: section.id -%}
 
         <scroll-carousel id="{{ scroll_area_id }}" class="testimonial-list scroll-area bleed {% if section.blocks.size > 3 %}is-scrollable{% endif %}">
           {%- for block in section.blocks -%}
-            <div {% render 'surface', class: 'testimonial rounded-sm', background: section.settings.testimonial_card_background, text_color: section.settings.testimonial_card_text_color, background_fallback: 'bg-secondary' %} {{ block.shopify_attributes }}>
+            <div
+              {% render 'surface',
+                class: 'testimonial rounded-sm',
+                background: section.settings.testimonial_card_background,
+                text_color: section.settings.testimonial_card_text_color,
+                background_fallback: 'bg-secondary'
+              %}
+              {{ block.shopify_attributes }}
+            >
               {%- if block.settings.image != blank or block.settings.author != blank or block.settings.show_rating -%}
                 {%- liquid
-                  assign loading_strategy = nil
-        
+                  assign loading_strategy = null
+
                   if section.index > 3 or forloop.index > 3
                     assign loading_strategy = 'lazy'
                   endif
@@ -57,7 +73,11 @@
                 <div class="h-stack align-start gap-4 sm:gap-6">
                   {%- if block.settings.image != blank -%}
                     {%- capture image_class -%}testimonial__image {% if block.settings.round_avatar %}rounded-full{% endif %}{%- endcapture -%}
-                    {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: '(max-width: 699px) 40px, 56px', widths: '40,56,80,112,120,168', class: image_class -}}
+                    {{-
+                      block.settings.image
+                      | image_url: width: block.settings.image.width
+                      | image_tag: loading: loading_strategy, sizes: '(max-width: 699px) 40px, 56px', widths: '40,56,80,112,120,168', class: image_class
+                    -}}
                   {%- endif -%}
 
                   <div class="v-stack gap-2 sm:gap-2.5">

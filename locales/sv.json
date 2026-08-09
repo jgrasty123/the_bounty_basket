@@ -94,6 +94,9 @@
         "other": "{{ count }} färger tillgängliga"
       }
     },
+    "disclosures": {
+      "title": "Anmärkningar"
+    },
     "gallery": {
       "close": "Stäng bildgalleriet",
       "zoom": "Zooma",

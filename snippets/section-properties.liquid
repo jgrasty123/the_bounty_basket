@@ -1,25 +1,25 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-SECTION PROPERTIES
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  SECTION PROPERTIES
+  ----------------------------------------------------------------------------------------------------------------------
 
-This component setup the general colors and proper class based on whether the section.
+  This component setup the general colors and proper class based on whether the section.
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-By default, because section variables are available in snippet, the snippet will infer them from the section,
-but you can override them by manually passing a different value (although this should not be needed)
+  By default, because section variables are available in snippet, the snippet will infer them from the section,
+  but you can override them by manually passing a different value (although this should not be needed)
 
-* tight: if set to true, to vertical spacing will be reduced
-* narrow: if set to true, the horizontal spacing will be reduced
-* background_gradient: an optional gradient for the section
-* background: a background color for the section
-* text_color: a text color for the section
-* input_background: an optional color for input background
-* input_text_color: an optional color for input text color
-* full_width: a boolean saying if the section is full width or not
+  * tight: if set to true, to vertical spacing will be reduced
+  * narrow: if set to true, the horizontal spacing will be reduced
+  * background_gradient: an optional gradient for the section
+  * background: a background color for the section
+  * text_color: a text color for the section
+  * input_background: an optional color for input background
+  * input_text_color: an optional color for input text color
+  * full_width: a boolean saying if the section is full width or not
 {%- endcomment -%}
 
 {%- assign full_width = full_width | default: section.settings.full_width, allow_false: true -%}
@@ -64,7 +64,9 @@ but you can override them by manually passing a different value (although this s
 {%- endunless -%}
 
 {%- if class != blank -%}
-  class="section {% if tight %}section--tight{% endif %} {% if narrow %}section--narrow{% endif %} {{ class | strip }}"
+  class="section {% if tight %}section--tight{% endif %}
+  {% if narrow %}section--narrow{% endif %}
+  {{ class | strip }}"
 {%- endif -%}
 
 {%- if style_attributes != blank -%}

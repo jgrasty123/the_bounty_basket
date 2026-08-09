@@ -3,9 +3,9 @@
 {%- assign text_position = section.settings.text_position -%}
 
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-CSS
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  CSS
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <style>
@@ -18,9 +18,9 @@ CSS
 </style>
 
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-LIQUID
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  LIQUID
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <div {% render 'section-properties' %}>
@@ -54,14 +54,18 @@ LIQUID
             <picture>
               {%- if section.settings.before_image_mobile -%}
                 <source
-                    media="(max-width: 699px)"
-                    srcset="{{ section.settings.before_image_mobile | image_url: width: 400 }} 400w, {{ section.settings.before_image_mobile | image_url: width: 600 }} 600w, {{ section.settings.before_image_mobile | image_url: width: 800 }} 800w, {{ section.settings.before_image_mobile | image_url: width: 1000 }} 1000w"
-                    width="{{ section.settings.before_image_mobile.width }}"
-                    height="{{ section.settings.before_image_mobile.height }}"
+                  media="(max-width: 699px)"
+                  srcset="{{ section.settings.before_image_mobile | image_url: width: 400 }} 400w, {{ section.settings.before_image_mobile | image_url: width: 600 }} 600w, {{ section.settings.before_image_mobile | image_url: width: 800 }} 800w, {{ section.settings.before_image_mobile | image_url: width: 1000 }} 1000w"
+                  width="{{ section.settings.before_image_mobile.width }}"
+                  height="{{ section.settings.before_image_mobile.height }}"
                 >
               {%- endif -%}
 
-              {{- section.settings.before_image | image_url: width: section.settings.before_image.width | image_tag: sizes: sizes, widths: '300,400,500,600,800,1000,1200,1400,1600,1800,2000', draggable: false, class: 'rounded w-full' -}}
+              {{-
+                section.settings.before_image
+                | image_url: width: section.settings.before_image.width
+                | image_tag: sizes: sizes, widths: '300,400,500,600,800,1000,1200,1400,1600,1800,2000', draggable: false, class: 'rounded w-full'
+              -}}
             </picture>
           {%- else -%}
             {{- 'lifestyle-1' | placeholder_svg_tag: 'placeholder rounded' | replace: '<svg', '<svg preserveAspectRatio="xMinYMin slice"' -}}
@@ -79,14 +83,18 @@ LIQUID
             <picture>
               {%- if section.settings.after_image_mobile != blank -%}
                 <source
-                    media="(max-width: 699px)"
-                    srcset="{{ section.settings.after_image_mobile | image_url: width: 400 }} 400w, {{ section.settings.after_image_mobile | image_url: width: 600 }} 600w, {{ section.settings.after_image_mobile | image_url: width: 800 }} 800w, {{ section.settings.after_image_mobile | image_url: width: 1000 }} 1000w"
-                    width="{{ section.settings.after_image_mobile.width }}"
-                    height="{{ section.settings.after_image_mobile.height }}"
+                  media="(max-width: 699px)"
+                  srcset="{{ section.settings.after_image_mobile | image_url: width: 400 }} 400w, {{ section.settings.after_image_mobile | image_url: width: 600 }} 600w, {{ section.settings.after_image_mobile | image_url: width: 800 }} 800w, {{ section.settings.after_image_mobile | image_url: width: 1000 }} 1000w"
+                  width="{{ section.settings.after_image_mobile.width }}"
+                  height="{{ section.settings.after_image_mobile.height }}"
                 >
               {%- endif -%}
 
-              {{- section.settings.after_image | image_url: width: section.settings.after_image.width | image_tag: sizes: sizes, widths: '300,400,500,600,800,1000,1200,1400,1600,1800,2000', class: 'object-fill rounded', draggable: false -}}
+              {{-
+                section.settings.after_image
+                | image_url: width: section.settings.after_image.width
+                | image_tag: sizes: sizes, widths: '300,400,500,600,800,1000,1200,1400,1600,1800,2000', class: 'object-fill rounded', draggable: false
+              -}}
             </picture>
           {%- else -%}
             {{- 'lifestyle-2' | placeholder_svg_tag: 'bg-text filter-invert rounded' | replace: '<svg', '<svg preserveAspectRatio="xMinYMin slice"' -}}

@@ -1,32 +1,32 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-BUTTON COMPONENT
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  BUTTON COMPONENT
+  ----------------------------------------------------------------------------------------------------------------------
 
-Generate a button (or link styled as a button). It supports wide range of attributes that can be used to customize
-the appearance and functionality of the button.
+  Generate a button (or link styled as a button). It supports wide range of attributes that can be used to customize
+  the appearance and functionality of the button.
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* content: the content of the button
-* href: an optional link to set. If href is provided, then an "a" tag is generated, otherwise a "button"
-* size: can be "sm", "lg", "xl". If none is set, the default "base" size is used.
-* background: an optional background color to use that override the default
-* text_color: an optional text color to use that override the default
-* style: "fill" or "outline". If none is set "fill" is assumed
-* stretch: if passed to true, a full width button is generated
-* secondary: if set to true the button is of secondary style
-* subdued: if set to true, the button uses the subdued mode
-* type: when href is empty, can be either "button" or "submit" (default to button if none is set)
-* name: when the button is a real button, allow to set the name attribute that is submitted
-* icon: the name of an optional icon to render along the button
-* disabled: if set to true, the button is disabled
-* is: set the custom element bound to the element (if any)
-* form: the form ID that this button is linked to
-* external: if set to true and that a href is passed, it opens into a new window
-* aria_controls: the ID of the element controlled
+  * content: the content of the button
+  * href: an optional link to set. If href is provided, then an "a" tag is generated, otherwise a "button"
+  * size: can be "sm", "lg", "xl". If none is set, the default "base" size is used.
+  * background: an optional background color to use that override the default
+  * text_color: an optional text color to use that override the default
+  * style: "fill" or "outline". If none is set "fill" is assumed
+  * stretch: if passed to true, a full width button is generated
+  * secondary: if set to true the button is of secondary style
+  * subdued: if set to true, the button uses the subdued mode
+  * type: when href is empty, can be either "button" or "submit" (default to button if none is set)
+  * name: when the button is a real button, allow to set the name attribute that is submitted
+  * icon: the name of an optional icon to render along the button
+  * disabled: if set to true, the button is disabled
+  * is: set the custom element bound to the element (if any)
+  * form: the form ID that this button is linked to
+  * external: if set to true and that a href is passed, it opens into a new window
+  * aria_controls: the ID of the element controlled
 {%- endcomment -%}
 
 {% liquid

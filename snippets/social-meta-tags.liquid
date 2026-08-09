@@ -1,16 +1,16 @@
 {%- comment -%}
-Add Facebook and Pinterest Open Graph meta tags to product pages
-for friendly Facebook sharing and Pinterest pinning.
+  Add Facebook and Pinterest Open Graph meta tags to product pages
+  for friendly Facebook sharing and Pinterest pinning.
 
-More info Open Graph meta tags
-- https://developers.facebook.com/docs/opengraph/using-objects/
-- https://developers.pinterest.com/rich_pins/
+  More info Open Graph meta tags
+  - https://developers.facebook.com/docs/opengraph/using-objects/
+  - https://developers.pinterest.com/rich_pins/
 
-Use the Facebook Open Graph Debugger for validation (and cache clearing)
-- https://developers.facebook.com/tools/debug
+  Use the Facebook Open Graph Debugger for validation (and cache clearing)
+  - https://developers.facebook.com/tools/debug
 
-Validate your Pinterest rich pins
-- https://developers.pinterest.com/tools/url-debugger/
+  Validate your Pinterest rich pins
+  - https://developers.pinterest.com/tools/url-debugger/
 {%- endcomment -%}
 
 {%- if request.page_type == 'product' -%}
@@ -45,14 +45,14 @@ Validate your Pinterest rich pins
 <meta property="og:site_name" content="{{ shop.name }}">
 
 {%- comment -%}
-This snippet renders meta data needed to create a Twitter card
-for products and articles.
+  This snippet renders meta data needed to create a Twitter card
+  for products and articles.
 
-Your cards must be approved by Twitter to be activated
-- https://dev.twitter.com/docs/cards/validation/validator
+  Your cards must be approved by Twitter to be activated
+  - https://dev.twitter.com/docs/cards/validation/validator
 
-More information:
-- https://dev.twitter.com/cards/types/summary
+  More information:
+  - https://dev.twitter.com/cards/types/summary
 {%- endcomment -%}
 
 <meta name="twitter:card" content="summary">

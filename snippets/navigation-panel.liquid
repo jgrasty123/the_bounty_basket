@@ -1,27 +1,38 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-MEGA MENU PANEL
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  MEGA MENU PANEL
+  ----------------------------------------------------------------------------------------------------------------------
 
-This component is used to show the different links in different panel for the menu drawer
+  This component is used to show the different links in different panel for the menu drawer
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* main_menu: the menu to show for the primary menu
-* secondary_menu: the secondary menu (shown on mobile)
-* mega_menu_block: use when mega menu is set to drawer
-* is_mega_menu: set to true if mega menu is set to drawer
-* layout
+  * main_menu: the menu to show for the primary menu
+  * secondary_menu: the secondary menu (shown on mobile)
+  * mega_menu_block: use when mega menu is set to drawer
+  * is_mega_menu: set to true if mega menu is set to drawer
+  * layout
 {%- endcomment -%}
 
 <div class="panel-list__wrapper">
   <div class="panel">
-    <div class="panel__wrapper" {% if mega_menu_block.settings.promo_content_layout == 'grid' or mega_menu_block.settings.promo_content_layout == 'collage' %}style="--panel-wrapper-justify-content: flex-start"{% endif %}>
+    <div
+      class="panel__wrapper"
+      {% if mega_menu_block.settings.promo_content_layout == 'grid' or mega_menu_block.settings.promo_content_layout == 'collage' %}
+        style="--panel-wrapper-justify-content: flex-start"
+      {% endif %}
+    >
       <div class="panel__scroller v-stack gap-8">
         {%- if is_mega_menu -%}
-          <button is="close-button" aria-label="{{ 'general.accessibility.close' | t | escape }}" {%- if section.settings.opening_from == 'bottom' -%}class="sm-max:hidden"{%- endif -%}>
+          <button
+            is="close-button"
+            aria-label="{{ 'general.accessibility.close' | t | escape }}"
+            {%- if section.settings.opening_from == 'bottom' -%}
+              class="sm-max:hidden"
+            {%- endif -%}
+          >
             {%- render 'icon' with 'close', width: 19, height: 19 -%}
           </button>
         {%- endif -%}
@@ -40,14 +51,15 @@ Supported variables
                   if menu_item_downcase == link_title_downcase
                     assign mega_menu_block = block
 
-                  if block.settings.drawer_link_image == 'show'
-                    assign is_image_shown = true
-                    break
-                  endif
+                    if block.settings.drawer_link_image == 'show'
+                      assign is_image_shown = true
+                      break
+                    endif
 
                     break
                   endif
-                endfor %}
+                endfor
+              %}
 
             {%- else -%}
               {%- assign is_image_shown = false -%}
@@ -55,7 +67,6 @@ Supported variables
               {%- if mega_menu_block.settings.drawer_link_image == 'show' -%}
                 {%- assign is_image_shown = true -%}
               {%- endif -%}
-
             {%- endunless -%}
 
             <li class="h3 sm:h4">
@@ -66,7 +77,9 @@ Supported variables
                 </button>
               {%- else -%}
                 <a href="{{ link.url }}" class="group block w-full">
-                  <span><span class="reversed-link">{{ link.title }}</span></span>
+                  <span
+                    ><span class="reversed-link">{{ link.title }}</span></span
+                  >
                 </a>
               {%- endif -%}
             </li>
@@ -185,7 +198,11 @@ Supported variables
           <ul class="v-stack gap-3">
             {%- for link in secondary_menu.links -%}
               <li>
-                <a href="{{ link.url }}" class="h6 group"><span><span class="reversed-link">{{ link.title }}</span></span></a>
+                <a href="{{ link.url }}" class="h6 group"
+                  ><span
+                    ><span class="reversed-link">{{ link.title }}</span></span
+                  ></a
+                >
               </li>
             {%- endfor -%}
           </ul>
@@ -196,9 +213,9 @@ Supported variables
         {%- render 'navigation-promo-block', navigation_layout: layout, mega_menu_block: mega_menu_block, is_navigation_drawer: true, link_col: link.links.size -%}
       {%- else -%}
         {%- comment -%}
-        ----------------------------------------------------------------------------------------------------------------
-        SOCIAL MEDIA + LOCALIZATION
-        ----------------------------------------------------------------------------------------------------------------
+          ----------------------------------------------------------------------------------------------------------------
+          SOCIAL MEDIA + LOCALIZATION
+          ----------------------------------------------------------------------------------------------------------------
         {%- endcomment -%}
 
         {%- if section.settings.show_social_media -%}

@@ -94,6 +94,9 @@
         "other": "{{ count }} צבעים זמינים"
       }
     },
+    "disclosures": {
+      "title": "הודעות"
+    },
     "gallery": {
       "close": "סגירת גלריה",
       "zoom": "תקריב",

@@ -51,17 +51,27 @@
       {%- endif -%}
 
       <div class="text-with-icons">
-        <scroll-carousel class="text-with-icons__list scroll-area full-bleed {% if section.blocks.size <= 3 %}md:unbleed{% else %}lg:unbleed{% endif %}" id="carousel-{{ section.id }}" role="region">
+        <scroll-carousel
+          class="text-with-icons__list scroll-area full-bleed {% if section.blocks.size <= 3 %}md:unbleed{% else %}lg:unbleed{% endif %}"
+          id="carousel-{{ section.id }}"
+          role="region"
+        >
           {%- for block in section.blocks -%}
             {%- liquid
-              assign loading_strategy = nil
-    
+              assign loading_strategy = null
+
               if section.index > 3 or forloop.index > 3
                 assign loading_strategy = 'lazy'
               endif
             -%}
 
-            <div id="block-{{ section.id }}-{{ block.id }}" class="text-with-icons__item snap-center" role="group" aria-label="{{ 'general.accessibility.item_nth_of_count' | t: index: forloop.index, count: section.blocks.size }}" {{ block.shopify_attributes }}>
+            <div
+              id="block-{{ section.id }}-{{ block.id }}"
+              class="text-with-icons__item snap-center"
+              role="group"
+              aria-label="{{ 'general.accessibility.item_nth_of_count' | t: index: forloop.index, count: section.blocks.size }}"
+              {{ block.shopify_attributes }}
+            >
               {%- capture icon -%}
                 {%- if block.settings.custom_icon != blank -%}
                   {%- capture sizes -%}{{ block.settings.icon_width }}px{%- endcapture -%}
@@ -81,7 +91,14 @@
                   </div>
                 {%- else -%}
                   {%- capture surface_class -%}icon-block {% if block.settings.icon_background_type == 'circle' %}rounded-full{% endif %}{%- endcapture -%}
-                  <div {% render 'surface', class: surface_class, background: block.settings.icon_background, text_color: block.settings.icon_color, background_fallback: 'bg-secondary' %}>
+                  <div
+                    {% render 'surface',
+                      class: surface_class,
+                      background: block.settings.icon_background,
+                      text_color: block.settings.icon_color,
+                      background_fallback: 'bg-secondary'
+                    %}
+                  >
                     {{- icon -}}
                   </div>
                 {%- endif -%}
