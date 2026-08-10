@@ -3,7 +3,7 @@
     "name": "theme_info",
     "theme_name": "Impact",
     "theme_author": "Maestrooo",
-    "theme_version": "7.0.1",
+    "theme_version": "7.2.0",
     "theme_documentation_url": "https://support.maestrooo.com/",
     "theme_support_url": "https://support.maestrooo.com/article/203-contact-us"
   },
@@ -394,7 +394,7 @@
         "id": "heading_font",
         "label": "Font",
         "info": "Selecting different fonts can affect the speed of your online store. Learn more about [system fonts.](https://help.shopify.com/en/manual/online-store/os/store-speed/improving-speed#fonts)",
-        "default": "assistant_n4"
+        "default": "helvetica_n4"
       },
       {
         "type": "select",
@@ -455,7 +455,7 @@
         "id": "text_font",
         "label": "Font",
         "info": "Selecting different fonts can affect the speed of your online store. Learn more about [system fonts.](https://help.shopify.com/en/manual/online-store/os/store-speed/improving-speed#fonts)",
-        "default": "assistant_n4"
+        "default": "helvetica_n4"
       },
       {
         "type": "range",
@@ -823,7 +823,8 @@
         "id": "cart_free_shipping_threshold",
         "label": "Free shipping minimum amount",
         "info": "Indicate the value in your store main currency.",
-        "default": "50"
+        "default": "50",
+        "visible_if": "{{ settings.cart_show_free_shipping_threshold }}"
       }
     ]
   },
