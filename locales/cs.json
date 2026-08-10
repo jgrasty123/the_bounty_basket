@@ -96,6 +96,9 @@
         "other": "Dostupné v {{ count }} barvách"
       }
     },
+    "disclosures": {
+      "title": "Upozornění"
+    },
     "gallery": {
       "close": "Zavřít galerii",
       "zoom": "Přiblížit",

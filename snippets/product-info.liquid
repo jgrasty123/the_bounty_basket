@@ -475,6 +475,10 @@ Supported variables
             {%- render 'accordion', title: block.settings.title, content: accordion_content, icon: icon, icon_width: block.settings.icon_width, class: 'product-info__accordion', block: block -%}
           {%- endif -%}
 
+        {%- when 'disclosures' -%}
+          {%- assign icon = block.settings.custom_icon | default: block.settings.icon -%}
+          {%- render 'product-disclosures', product: product, collapse_content: block.settings.collapse_content, icon: icon, icon_width: block.settings.icon_width, block: block -%}
+
         {%- when 'image' -%}
           {%- if block.settings.image != blank -%}
             <div class="product-info__image">

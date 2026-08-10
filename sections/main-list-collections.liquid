@@ -48,10 +48,17 @@
 
             {%- for collection in collections_list -%}
               <a href="{{ collection.url }}" class="collection-card" reveal-js>
-                <div class="content-over-media group rounded-sm" style="--content-over-media-overlay: {{ section.settings.overlay_color.rgb }} / {{ section.settings.overlay_opacity | divided_by: 100.0 }}">
+                <div
+                  class="content-over-media group rounded-sm"
+                  style="--content-over-media-overlay: {{ section.settings.overlay_color.rgb }} / {{ section.settings.overlay_opacity | divided_by: 100.0 }}"
+                >
                   {%- if collection.featured_image != blank -%}
                     {%- capture sizes -%}(max-width: 699px) 73vw, {{ settings.page_width | divided_by: section.settings.collections_per_row }}px{%- endcapture -%}
-                    {{- collection.featured_image | image_url: width: collection.featured_image.width | image_tag: loading: 'lazy', sizes: sizes, widths: '200,300,400,500,600,800,1000,1200,1400,1600', class: 'zoom-image' -}}
+                    {{-
+                      collection.featured_image
+                      | image_url: width: collection.featured_image.width
+                      | image_tag: loading: 'lazy', sizes: sizes, widths: '200,300,400,500,600,800,1000,1200,1400,1600', class: 'zoom-image'
+                    -}}
                   {%- endif -%}
 
                   <div class="collection-card__content-wrapper place-self-center text-center text-custom" style="--text-color: {{ section.settings.text_color.rgb }}">
@@ -140,4 +147,3 @@
   ]
 }
 {% endschema %}
-

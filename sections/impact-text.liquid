@@ -2,9 +2,9 @@
   {%- render 'section-spacing-collapsing' -%}
 
   {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  CSS
-  ------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------
+    CSS
+    ------------------------------------------------------------------------------------------------------------------------
   {%- endcomment -%}
 
   <style>
@@ -22,54 +22,74 @@
   </style>
 
   {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  LIQUID
-  ------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------
+    LIQUID
+    ------------------------------------------------------------------------------------------------------------------------
   {%- endcomment -%}
 
   <div {% render 'section-properties' %}>
-    <div {% unless section.settings.stack_mobile %}class="scroll-area bleed {% if section.blocks.size < 3 %}sm:unbleed{% else %}md:unbleed{% endif %}"{% endunless %}>
+    <div
+      {% unless section.settings.stack_mobile %}
+        class="scroll-area bleed {% if section.blocks.size < 3 %}sm:unbleed{% else %}md:unbleed{% endif %}"
+      {% endunless %}
+    >
       <div class="impact-text impact-text--{{ section.settings.text_alignment }} {% unless section.settings.stack_mobile %}impact-text--scroll{% endunless %}">
-          {%- for block in section.blocks -%}
-            <div class="snap-center" {{ block.shopify_attributes }}>
-              {%- if block.settings.title != blank -%}
-                <h2 class="impact-text__text heading break-all">
-                  <impact-text {% if block.settings.animate_impact_text %}count-up="{{ block.settings.animate_impact_text_duration }}"{% endif %} reveal-js>
-                    {%- render 'styled-text', content: block.settings.title, text_color: section.settings.heading_text_color, gradient: section.settings.heading_gradient, style: section.settings.impact_text_style -%}
-                  </impact-text>
-                </h2>
-              {%- endif -%}
+        {%- for block in section.blocks -%}
+          <div class="snap-center" {{ block.shopify_attributes }}>
+            {%- if block.settings.title != blank -%}
+              <h2 class="impact-text__text heading break-all">
+                <impact-text
+                  {% if block.settings.animate_impact_text %}
+                    count-up="{{ block.settings.animate_impact_text_duration }}"
+                  {% endif %}
+                  reveal-js
+                >
+                  {%- render 'styled-text',
+                    content: block.settings.title,
+                    text_color: section.settings.heading_text_color,
+                    gradient: section.settings.heading_gradient,
+                    style: section.settings.impact_text_style
+                  -%}
+                </impact-text>
+              </h2>
+            {%- endif -%}
 
-              {%- if block.settings.subheading != blank or block.settings.content != blank or block.settings.button_text != blank -%}
-                <div class="impact-text__content">
-                  <div class="prose">
-                    {%- if block.settings.subheading != blank -%}
-                      <h3 class="h4">{{ block.settings.subheading | escape }}</h3>
-                    {%- endif -%}
+            {%- if block.settings.subheading != blank or block.settings.content != blank or block.settings.button_text != blank -%}
+              <div class="impact-text__content">
+                <div class="prose">
+                  {%- if block.settings.subheading != blank -%}
+                    <h3 class="h4">{{ block.settings.subheading | escape }}</h3>
+                  {%- endif -%}
 
-                    {{- block.settings.content -}}
+                  {{- block.settings.content -}}
 
-                    {%- if block.settings.button_text != blank -%}
-                      {%- render 'button', content: block.settings.button_text, href: block.settings.button_url, size: 'xl', background: section.settings.button_background, text_color: section.settings.button_text_color -%}
-                    {%- endif -%}
-                  </div>
+                  {%- if block.settings.button_text != blank -%}
+                    {%- render 'button',
+                      content: block.settings.button_text,
+                      href: block.settings.button_url,
+                      size: 'xl',
+                      background: section.settings.button_background,
+                      text_color: section.settings.button_text_color
+                    -%}
+                  {%- endif -%}
                 </div>
-              {%- endif -%}
-            </div>
+              </div>
+            {%- endif -%}
+          </div>
 
-            {%- unless forloop.last or section.settings.text_divider == 'none' -%}
-              {%- case section.settings.text_divider -%}
-                {%- when 'square' -%}
-                  <span class="shape-square shape--lg place-self-center"></span>
-                {%- when 'circle' -%}
-                  <span class="shape-circle shape--lg place-self-center"></span>
-                {%- when 'diamond' -%}
-                  <span class="shape-diamond shape--lg place-self-center"></span>
-                {%- when 'line' -%}
-                  <span class="shape-line {% if section.settings.stack_mobile %}hidden sm:block{% endif %}"></span>
-              {%- endcase -%}
-            {%- endunless -%}
-          {%- endfor -%}
+          {%- unless forloop.last or section.settings.text_divider == 'none' -%}
+            {%- case section.settings.text_divider -%}
+              {%- when 'square' -%}
+                <span class="shape-square shape--lg place-self-center"></span>
+              {%- when 'circle' -%}
+                <span class="shape-circle shape--lg place-self-center"></span>
+              {%- when 'diamond' -%}
+                <span class="shape-diamond shape--lg place-self-center"></span>
+              {%- when 'line' -%}
+                <span class="shape-line {% if section.settings.stack_mobile %}hidden sm:block{% endif %}"></span>
+            {%- endcase -%}
+          {%- endunless -%}
+        {%- endfor -%}
       </div>
     </div>
   </div>

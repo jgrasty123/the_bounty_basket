@@ -1,26 +1,26 @@
 {%- assign newsletter_block = section.blocks | where: 'type', 'newsletter' | first -%}
 
 {%- if section.blocks.size > 3 -%}
-<style>
-  @media screen and (min-width: 1000px) {
-    #shopify-section-{{ section.id }} {
-      {%- if newsletter_block != blank -%}
-        --footer-block-list-gap: var(--spacing-10);
-      {%- endif -%}
+  <style>
+    @media screen and (min-width: 1000px) {
+      #shopify-section-{{ section.id }} {
+        {%- if newsletter_block != blank -%}
+          --footer-block-list-gap: var(--spacing-10);
+        {%- endif -%}
 
-      --footer-block-list-justify-content: space-between;
+        --footer-block-list-justify-content: space-between;
+      }
     }
-  }
-</style>
+  </style>
 {%- endif -%}
 
 <div class="footer">
   <div class="container">
     <div class="footer__wrapper">
       {%- comment -%}
-      ------------------------------------------------------------------------------------------------------------------
-      BLOCK AREA
-      ------------------------------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------------------------------------
+        BLOCK AREA
+        ------------------------------------------------------------------------------------------------------------------
       {%- endcomment -%}
 
       {%- if section.blocks.size > 0 -%}
@@ -114,16 +114,16 @@
       {%- endif -%}
 
       {%- comment -%}
-      ------------------------------------------------------------------------------------------------------------------
-      SECONDARY AREA
-      ------------------------------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------------------------------------
+        SECONDARY AREA
+        ------------------------------------------------------------------------------------------------------------------
       {%- endcomment -%}
 
       <div class="footer__aside empty:hidden">
         {%- comment -%}
-        ----------------------------------------------------------------------------------------------------------------
-        SOCIAL MEDIA + LOCALIZATION
-        ----------------------------------------------------------------------------------------------------------------
+          ----------------------------------------------------------------------------------------------------------------
+          SOCIAL MEDIA + LOCALIZATION
+          ----------------------------------------------------------------------------------------------------------------
         {%- endcomment -%}
 
         {%- if section.settings.show_social_media -%}
@@ -151,7 +151,12 @@
                 {%- endif -%}
 
                 {%- if country_selector -%}
-                  {%- render 'localization-selector', type: 'country', show_country_name: section.settings.show_country_name, show_country_flag: section.settings.show_country_flag, popover_horizontal_position: popover_horizontal_position -%}
+                  {%- render 'localization-selector',
+                    type: 'country',
+                    show_country_name: section.settings.show_country_name,
+                    show_country_flag: section.settings.show_country_flag,
+                    popover_horizontal_position: popover_horizontal_position
+                  -%}
                 {%- endif -%}
 
                 {%- if locale_selector -%}
@@ -163,9 +168,9 @@
         {%- endif -%}
 
         {%- comment -%}
-        ----------------------------------------------------------------------------------------------------------------
-        COPYRIGHT + PAYMENT METHODS
-        ----------------------------------------------------------------------------------------------------------------
+          ----------------------------------------------------------------------------------------------------------------
+          COPYRIGHT + PAYMENT METHODS
+          ----------------------------------------------------------------------------------------------------------------
         {%- endcomment -%}
 
         <div class="footer__aside-bottom">
@@ -178,12 +183,16 @@
           {%- endif -%}
 
           <div class="footer__copyright v-stack gap-1">
-            <p class="text-sm text-subdued">© {{ 'now' | date: '%Y' }}, {{ shop.name }}. {% if section.settings.show_powered_by_shopify %}{{ powered_by_link }}{%-endif %}</p>
+            <p class="text-sm text-subdued">
+              © {{ 'now' | date: '%Y' }}, {{ shop.name }}. {% if section.settings.show_powered_by_shopify %}{{ powered_by_link }}{%- endif %}
+            </p>
 
             {%- if section.settings.show_policy_links and shop.policies.size > 0 -%}
               <ul class="footer__policy-links unstyled-list">
                 {%- for policy in shop.policies -%}
-                  <li class="contents"><a href="{{ policy.url }}" class="text-sm link-faded">{{ policy.title }}</a></li>
+                  <li class="contents">
+                    <a href="{{ policy.url }}" class="text-sm link-faded">{{ policy.title }}</a>
+                  </li>
                 {%- endfor -%}
               </ul>
             {%- endif -%}

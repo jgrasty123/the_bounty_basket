@@ -17,24 +17,7 @@
     </div>
   </div>
 </div>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": {{ page.title | json }},
-  "url": "{{ shop.url }}{{ page.url }}",
-  "description": {{ page.content | strip_html | truncate: 160 | json }},
-  "publisher": {
-    "@type": "Organization",
-    "name": {{ shop.name | json }},
-    "url": "{{ shop.url }}",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "{{ shop.logo | default: shop.secure_url | json }}"
-    }
-  }
-}
-</script>
+
 {% schema %}
 {
   "name": "Page",

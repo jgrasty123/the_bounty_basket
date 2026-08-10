@@ -1,19 +1,19 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-PRODUCT RATING
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  PRODUCT RATING
+  ----------------------------------------------------------------------------------------------------------------------
 
-This component generates a review badge from the product metafields information.
+  This component generates a review badge from the product metafields information.
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* product: the product from which reviews are extracted
-* show_empty: if set to true, the theme shows a 0.0 if there are no rating yet
-* show_placeholder: if set to true, show random value (useful for the product card placeholder)
-* display_mode: either "rating" (e.g.: 3.5) or "count" (e.g.: 4 reviews). Default to "rating" if none is passed
-* class: extra class to add
+  * product: the product from which reviews are extracted
+  * show_empty: if set to true, the theme shows a 0.0 if there are no rating yet
+  * show_placeholder: if set to true, show random value (useful for the product card placeholder)
+  * display_mode: either "rating" (e.g.: 3.5) or "count" (e.g.: 4 reviews). Default to "rating" if none is passed
+  * class: extra class to add
 {%- endcomment -%}
 
 {%- assign rating_max = 5 -%}
@@ -37,7 +37,12 @@ Supported variables
     {%- assign is_main_product = true -%}
   {%- endif -%}
 
-  <a href="{% unless is_main_product %}{{ product.url }}{% endunless %}#shopify-product-reviews" class="rating {{ class }}" title="{{ 'product.rating_count' | t: count: rating_count }}" {{ block.shopify_attributes }}>
+  <a
+    href="{% unless is_main_product %}{{ product.url }}{% endunless %}#shopify-product-reviews"
+    class="rating {{ class }}"
+    title="{{ 'product.rating_count' | t: count: rating_count }}"
+    {{ block.shopify_attributes }}
+  >
     {%- if display_mode == 'count' -%}
       <span class="text-sm">{{- 'product.rating_count' | t: count: rating_count -}}</span>
     {%- else -%}
