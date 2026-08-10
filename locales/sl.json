@@ -96,6 +96,9 @@
         "other": "{{ count }} razpoložljivih barv"
       }
     },
+    "disclosures": {
+      "title": "Obvestila"
+    },
     "gallery": {
       "close": "Zapri galerijo",
       "zoom": "Povečava",
