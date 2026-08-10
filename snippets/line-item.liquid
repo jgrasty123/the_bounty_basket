@@ -69,6 +69,10 @@ Supported variables
       {%- render 'price-list', line_item: line_item -%}
     </div>
 
+    {%- if show_disclosures -%}
+      {%- render 'cart-disclosures', product: line_item.product -%}
+    {%- endif -%}
+
     {%- unless line_item.product.has_only_default_variant or line_item.gift_card -%}
       <p class="text-sm text-subdued">{{ line_item.variant.title }}</p>
     {%- endunless -%}

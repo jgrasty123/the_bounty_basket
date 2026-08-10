@@ -94,6 +94,9 @@
         "other": "{{ count }} 种颜色可选"
       }
     },
+    "disclosures": {
+      "title": "声明"
+    },
     "gallery": {
       "close": "关闭图库",
       "zoom": "缩放",

@@ -94,6 +94,9 @@
         "other": "{{ count }}개 색상 가능"
       }
     },
+    "disclosures": {
+      "title": "고지사항"
+    },
     "gallery": {
       "close": "갤러리 닫기",
       "zoom": "확대\/축소",

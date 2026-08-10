@@ -94,6 +94,9 @@
         "other": "{{ count }} カラー対応"
       }
     },
+    "disclosures": {
+      "title": "注意事項"
+    },
     "gallery": {
       "close": "閉じる",
       "zoom": "ズームイン",
