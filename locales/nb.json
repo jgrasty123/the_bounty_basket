@@ -94,9 +94,6 @@
         "other": "{{ count }} farger tilgjengelig"
       }
     },
-    "disclosures": {
-      "title": "Merknader"
-    },
     "gallery": {
       "close": "Lukk galleri",
       "zoom": "Forstørr",

@@ -94,9 +94,6 @@
         "other": "{{ count }} väriä saatavilla"
       }
     },
-    "disclosures": {
-      "title": "Huomautukset"
-    },
     "gallery": {
       "close": "Sulje galleria",
       "zoom": "Lähennä",

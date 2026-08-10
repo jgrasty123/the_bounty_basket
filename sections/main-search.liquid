@@ -78,8 +78,7 @@
       {%- for search_type in search.types reversed -%}
         <button slot="title" class="link-reversed subheading" aria-selected="{{ forloop.first }}" controlled-panel="main-search-results-{{ search_type }}">
           {%- assign translation_key = 'search.general.' | append: search_type | append: 's' -%}
-          {{- translation_key | t }}
-          {% if search.types.size == 1 %}({{ search.results_count }}){% endif %}
+          {{- translation_key | t }} {% if search.types.size == 1 %}({{ search.results_count }}){% endif %}
         </button>
       {%- endfor -%}
     </x-tabs>
@@ -87,6 +86,7 @@
 
   <div class="container">
     {%- comment -%}If there is only one type of resources and that those are products, then we can show the results directly{%- endcomment -%}
+
     {%- if search.types.size == 1 -%}
       <search-result-panel id="main-search-results-{{ search.types.first | escape }}">
         {%- case search.types.first -%}
@@ -122,15 +122,7 @@
                     {%- endcapture -%}
 
                     {%- assign filter_label = content_key | t -%}
-                    {%- render 'button',
-                      size: 'xl',
-                      content: filter_label,
-                      icon: 'filter',
-                      style: 'fill',
-                      background: settings.text_color,
-                      text_color: settings.background,
-                      aria_controls: 'facets-drawer'
-                    -%}
+                    {%- render 'button', size: 'xl', content: filter_label, icon: 'filter', style: 'fill', background: settings.text_color, text_color: settings.background, aria_controls: 'facets-drawer' -%}
                   </facet-floating-filter>
                 {%- endif -%}
 
@@ -154,9 +146,7 @@
                         <p class="h5">{{ 'collection.faceting.no_results' | t }}</p>
 
                         {%- assign button_content = 'collection.faceting.clear_filters' | t -%}
-                        {%- assign encoded_terms = search.terms | url_encode -%}
-                        {%- assign url = routes.search_url | append: '?q=' | append: encoded_terms | append: '&sort_by=' | append: search.sort_by | append: '&type=product' -%}
-
+                        {%- assign url = routes.search_url | append: '?q=' | append:  search.terms | append: '&sort_by=' | append: search.sort_by | append: '&type=product' -%}
                         {%- render 'button', href: url, is: 'facet-link', size: 'xl', content: button_content -%}
                       </div>
                     </div>
@@ -193,13 +183,13 @@
                   {%- for item in search.results -%}
                     {%- if item.object_type == 'article' -%}
                       {%- render 'blog-post-card',
-                        article: item,
-                        heading_size: 'h5',
-                        show_category: section.settings.show_category,
-                        show_date: section.settings.show_date,
-                        show_reading_time: false,
-                        show_excerpt: section.settings.show_excerpt,
-                        position: forloop.index
+                          article: item,
+                          heading_size: 'h5',
+                          show_category: section.settings.show_category,
+                          show_date: section.settings.show_date,
+                          show_reading_time: false,
+                          show_excerpt: section.settings.show_excerpt,
+                          position: forloop.index
                       -%}
                     {%- endif -%}
                   {%- endfor -%}
@@ -224,22 +214,16 @@
                 </ul>
               </div>
             {%- endpaginate -%}
+
         {%- endcase -%}
       </search-result-panel>
 
     {%- else -%}
       {%- comment -%}Otherwise, we have to do different Ajax requests for each resource type{%- endcomment -%}
       {%- for type in search.types reversed -%}
-        {%- assign encoded_terms = search.terms | url_encode -%}
-        {%- assign search_url_for_type = routes.search_url | append: '?type=' | append: type | append: '&q=' | append: encoded_terms -%}
+        {%- assign search_url_for_type = routes.search_url | append: '?type=' | append: type | append: '&q=' | append: search.terms -%}
 
-        <search-result-panel
-          role="tabpanel"
-          aria-labelledby="main-search-results-{{ type | escape }}"
-          id="main-search-results-{{ type | escape }}"
-          load-from-url="{{ search_url_for_type | escape }}"
-          hidden
-        >
+        <search-result-panel role="tabpanel" aria-labelledby="main-search-results-{{ type | escape }}" id="main-search-results-{{ type | escape }}" load-from-url="{{ search_url_for_type | escape }}" hidden>
         </search-result-panel>
       {%- endfor -%}
     {%- endif -%}
@@ -267,7 +251,7 @@
   "class": "shopify-section--main-search",
   "tag": "section",
   "settings": [
-    {
+      {
       "type": "range",
       "id": "products_per_page",
       "label": "Products per page",

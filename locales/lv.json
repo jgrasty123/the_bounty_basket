@@ -94,9 +94,6 @@
         "other": "Pieejamas {{ count }} krāsas"
       }
     },
-    "disclosures": {
-      "title": "Paziņojumi"
-    },
     "gallery": {
       "close": "Aizvērt galeriju",
       "zoom": "Pietuvināt",

@@ -33,23 +33,13 @@
         {%- assign addresses_tab_active = true -%}
       {%- endif -%}
 
-      <li
-        class="account-nav__item"
-        {% if orders_tab_active %}
-          aria-current="page"
-        {% endif %}
-      >
+      <li class="account-nav__item" {% if orders_tab_active %}aria-current="page"{% endif %}>
         <a href="{{ routes.account_url }}" class="bold {% unless orders_tab_active %}link-faded{% endunless %}">
           {{- 'customer.account.orders' | t -}}
         </a>
       </li>
 
-      <li
-        class="account-nav__item"
-        {% if addresses_tab_active %}
-          aria-current="page"
-        {% endif %}
-      >
+      <li class="account-nav__item" {% if addresses_tab_active %}aria-current="page"{% endif %}>
         <a href="{{ routes.account_addresses_url }}" class="bold {% unless addresses_tab_active %}link-faded{% endunless %}">
           {{- 'customer.account.addresses' | t -}}
         </a>

@@ -18,10 +18,7 @@ var CountrySelector = class extends HTMLElement {
     this.provinceElement = this.querySelector('[name="address[province]"]');
     this.countryElement.addEventListener("change", this._onCountryChangedListener);
     if (this.hasAttribute("country") && this.getAttribute("country") !== "") {
-      this.countryElement.selectedIndex = Math.max(
-        0,
-        Array.from(this.countryElement.options).findIndex((option) => option.textContent === this.getAttribute("country"))
-      );
+      this.countryElement.selectedIndex = Math.max(0, Array.from(this.countryElement.options).findIndex((option) => option.textContent === this.getAttribute("country")));
       this.countryElement.dispatchEvent(new Event("change"));
     } else {
       this._onCountryChanged();
@@ -283,14 +280,10 @@ var PageDots = class extends HTMLElement {
 var PrevButton = class extends HTMLButtonElement {
   connectedCallback() {
     this._abortController = new AbortController();
-    this.addEventListener("click", () => (this.controlledElement ?? this).dispatchEvent(new CustomEvent("control:prev", { bubbles: true, cancelable: true })), {
-      signal: this._abortController.signal
-    });
+    this.addEventListener("click", () => (this.controlledElement ?? this).dispatchEvent(new CustomEvent("control:prev", { bubbles: true, cancelable: true })), { signal: this._abortController.signal });
     if (this.controlledElement) {
       this.controlledElement.addEventListener("scroll:edge-nearing", (event) => this.disabled = event.detail.position === "start", { signal: this._abortController.signal });
-      this.controlledElement.addEventListener("scroll:edge-leaving", (event) => this.disabled = event.detail.position === "start" ? false : this.disabled, {
-        signal: this._abortController.signal
-      });
+      this.controlledElement.addEventListener("scroll:edge-leaving", (event) => this.disabled = event.detail.position === "start" ? false : this.disabled, { signal: this._abortController.signal });
     }
   }
   disconnectedCallback() {
@@ -303,14 +296,10 @@ var PrevButton = class extends HTMLButtonElement {
 var NextButton = class extends HTMLButtonElement {
   connectedCallback() {
     this._abortController = new AbortController();
-    this.addEventListener("click", () => (this.controlledElement ?? this).dispatchEvent(new CustomEvent("control:next", { bubbles: true, cancelable: true })), {
-      signal: this._abortController.signal
-    });
+    this.addEventListener("click", () => (this.controlledElement ?? this).dispatchEvent(new CustomEvent("control:next", { bubbles: true, cancelable: true })), { signal: this._abortController.signal });
     if (this.controlledElement) {
       this.controlledElement.addEventListener("scroll:edge-nearing", (event) => this.disabled = event.detail.position === "end", { signal: this._abortController.signal });
-      this.controlledElement.addEventListener("scroll:edge-leaving", (event) => this.disabled = event.detail.position === "end" ? false : this.disabled, {
-        signal: this._abortController.signal
-      });
+      this.controlledElement.addEventListener("scroll:edge-leaving", (event) => this.disabled = event.detail.position === "end" ? false : this.disabled, { signal: this._abortController.signal });
     }
   }
   disconnectedCallback() {
@@ -381,11 +370,32 @@ var CustomButton = class extends HTMLButtonElement {
   }
   constructor() {
     super();
+    this._setBusyOnSubmitListener = () => this.setAttribute("aria-busy", "true");
     if (this.type === "submit" && this.form) {
-      this.form.addEventListener("submit", () => this.setAttribute("aria-busy", "true"));
+      this._listenerForm = this.form;
+      this.form.addEventListener("submit", this._setBusyOnSubmitListener);
     }
     this.append(this.contentElement, this.animationElement);
     window.addEventListener("pageshow", () => this.removeAttribute("aria-busy"));
+  }
+  connectedCallback() {
+    // Belt-and-suspenders for buttons using form="<id>" attribute outside the
+    // form element (e.g. the floating sticky ATC). this.form can be null in
+    // the constructor depending on upgrade timing — re-check after connection.
+    // Idempotent: skipped entirely if listener was already attached above.
+    if (this.type === "submit" && !this._listenerForm) {
+      const form = this.form || document.getElementById(this.getAttribute("form"));
+      if (form) {
+        this._listenerForm = form;
+        form.addEventListener("submit", this._setBusyOnSubmitListener);
+      }
+    }
+  }
+  disconnectedCallback() {
+    if (this._listenerForm) {
+      this._listenerForm.removeEventListener("submit", this._setBusyOnSubmitListener);
+      this._listenerForm = null;
+    }
   }
   get contentElement() {
     if (this._contentElement) {
@@ -457,11 +467,7 @@ function getHeadingKeyframe(element, options = {}) {
       case "split_fade":
         return [splitLines, { transform: ["translateY(0.5em)", "translateY(0)"], opacity: [0, 1] }, { duration: 0.3, delay: stagger2(0.1), ...options }];
       case "split_clip":
-        return [
-          splitLines,
-          { clipPath: ["inset(0 0 100% 0)", "inset(0 0 -0.3em 0)"], transform: ["translateY(100%)", "translateY(0)"], opacity: [0, 1] },
-          { duration: 0.7, delay: stagger2(0.15), easing: [0.22, 1, 0.36, 1], ...options }
-        ];
+        return [splitLines, { clipPath: ["inset(0 0 100% 0)", "inset(0 0 -0.3em 0)"], transform: ["translateY(100%)", "translateY(0)"], opacity: [0, 1] }, { duration: 0.7, delay: stagger2(0.15), easing: [0.22, 1, 0.36, 1], ...options }];
       case "split_rotation":
         const rotatedSpans = splitLines.map((line) => line.querySelector("span"));
         rotatedSpans.forEach((span) => span.style.transformOrigin = "top left");
@@ -658,18 +664,14 @@ var SafeSticky = class extends HTMLElement {
     __privateAdd(this, _position, "relative");
   }
   connectedCallback() {
-    inView2(
-      this,
-      () => {
-        __privateGet(this, _resizeObserver).observe(this);
-        window.addEventListener("scroll", __privateGet(this, _checkPositionListener));
-        return () => {
-          __privateGet(this, _resizeObserver).unobserve(this);
-          window.removeEventListener("scroll", __privateGet(this, _checkPositionListener));
-        };
-      },
-      { margin: "500px" }
-    );
+    inView2(this, () => {
+      __privateGet(this, _resizeObserver).observe(this);
+      window.addEventListener("scroll", __privateGet(this, _checkPositionListener));
+      return () => {
+        __privateGet(this, _resizeObserver).unobserve(this);
+        window.removeEventListener("scroll", __privateGet(this, _checkPositionListener));
+      };
+    }, { margin: "500px" });
   }
   disconnectedCallback() {
     window.removeEventListener("scroll", __privateGet(this, _checkPositionListener));
@@ -744,9 +746,7 @@ var ScrollArea = class {
       direction = this._lastScrollPosition > Math.abs(this._element.scrollTop) ? "start" : "end";
       this._lastScrollPosition = Math.abs(this._element.scrollTop);
     }
-    const scrollPosition = Math.round(Math.abs(this.scrollDirection === "inline" ? this._element.scrollLeft : this._element.scrollTop)), scrollMinusSize = Math.round(
-      this.scrollDirection === "inline" ? this._element.scrollWidth - this._element.clientWidth : this._element.scrollHeight - this._element.clientHeight
-    );
+    const scrollPosition = Math.round(Math.abs(this.scrollDirection === "inline" ? this._element.scrollLeft : this._element.scrollTop)), scrollMinusSize = Math.round(this.scrollDirection === "inline" ? this._element.scrollWidth - this._element.clientWidth : this._element.scrollHeight - this._element.clientHeight);
     if (direction === "start" && this._allowTriggerNearingStartEvent && scrollPosition <= this.scrollNearingThreshold) {
       this._allowTriggerNearingStartEvent = false;
       this._allowTriggerLeavingStartEvent = true;
@@ -866,7 +866,10 @@ var Updater = class {
     };
     requestAnimationFrame(() => {
       for (const position of ["top", "bottom", "left", "right"]) {
-        targetElement.style.setProperty(`--${position}`, `${scroll5[position] > maxSize ? maxSize : scroll5[position]}px`);
+        targetElement.style.setProperty(
+          `--${position}`,
+          `${scroll5[position] > maxSize ? maxSize : scroll5[position]}px`
+        );
       }
     });
   }
@@ -878,7 +881,9 @@ var ScrollShadow = class extends HTMLElement {
     this.updater = new Updater(this.shadowRoot.lastElementChild);
   }
   connectedCallback() {
-    this.shadowRoot.querySelector("slot").addEventListener("slotchange", this.start);
+    // BB Cart Hardening 2026-05-04: guard against missing slot element in shadow root.
+    var slot = this.shadowRoot && this.shadowRoot.querySelector("slot");
+    if (slot) slot.addEventListener("slotchange", this.start);
     this.start();
   }
   disconnectedCallback() {
@@ -927,16 +932,11 @@ split_fn = function(force = false) {
     const key = Math.round(letter.getBoundingClientRect().top);
     bounds.set(key, (bounds.get(key) || "").concat(letter.textContent));
   });
-  this.shadowRoot.replaceChildren(
-    ...Array.from(
-      bounds.values(),
-      (line) => document.createRange().createContextualFragment(`
+  this.shadowRoot.replaceChildren(...Array.from(bounds.values(), (line) => document.createRange().createContextualFragment(`
       <span style="display: inline-block;">
         <span style="display: block">${line}</span>
       </span>
-    `)
-    )
-  );
+    `)));
   __privateSet(this, _requireSplit, false);
 };
 onWindowResized_fn = function() {
@@ -951,10 +951,9 @@ if (!window.customElements.get("split-lines")) {
 }
 
 // js/common/carousel/effect-carousel.js
-import { timeline as timeline3, inView as inView4 } from "vendor";
+import { timeline as timeline3, inView as inView3 } from "vendor";
 
 // js/common/carousel/base-carousel.js
-import { inView as inView3 } from "vendor";
 var BaseCarousel = class extends HTMLElement {
   connectedCallback() {
     this._abortController = new AbortController();
@@ -975,6 +974,11 @@ var BaseCarousel = class extends HTMLElement {
       this.addEventListener("control:prev", this.previous, { signal: this._abortController.signal });
       this.addEventListener("control:next", this.next, { signal: this._abortController.signal });
       this.addEventListener("control:select", (event) => this.select(event.detail.index), { signal: this._abortController.signal });
+    }
+    if (!this.selectedSlide) {
+      // Carousel rendered with empty items (e.g. empty product recs section);
+      // bail rather than crashing on classList.add. Fixes JAVASCRIPT-1H.
+      return;
     }
     if (this.selectedIndex === 0) {
       this.selectedSlide.classList.add("is-selected");
@@ -1031,7 +1035,7 @@ var BaseCarousel = class extends HTMLElement {
     this.items.forEach((item, index) => item.hidden = event.detail.filteredIndexes.includes(index));
   }
   _preloadImages() {
-    inView3(this, () => {
+    requestAnimationFrame(() => {
       [this.previousSlide, this.nextSlide].forEach((item) => {
         if (item) {
           Array.from(item.querySelectorAll('img[loading="lazy"]')).forEach((img) => img.removeAttribute("loading"));
@@ -1050,7 +1054,7 @@ var EffectCarousel = class extends BaseCarousel {
     if (this.items.length > 1 && this.hasAttribute("autoplay")) {
       this._player = new Player(this.getAttribute("autoplay"));
       this._player.addEventListener("player:end", this.next.bind(this));
-      inView4(this, () => this._player.resume(true));
+      inView3(this, () => this._player.resume(true));
       if (Shopify.designMode) {
         this.addEventListener("shopify:block:select", () => this._player.stop());
         this.addEventListener("shopify:block:deselect", () => this._player.start());
@@ -1098,13 +1102,10 @@ var EffectCarousel = class extends BaseCarousel {
   _transitionTo(fromSlide, toSlide, { direction = "next", animate: animate19 = true } = {}) {
     fromSlide.classList.remove("is-selected");
     toSlide.classList.add("is-selected");
-    const timelineControls = timeline3(
-      [
-        [fromSlide, { opacity: [1, 0], visibility: ["visible", "hidden"], zIndex: 0 }, { zIndex: { easing: "step-end" } }],
-        [toSlide, { opacity: [0, 1], visibility: ["hidden", "visible"], zIndex: 1 }, { at: "<", zIndex: { easing: "step-end" } }]
-      ],
-      { duration: animate19 ? 0.3 : 0 }
-    );
+    const timelineControls = timeline3([
+      [fromSlide, { opacity: [1, 0], visibility: ["visible", "hidden"], zIndex: 0 }, { zIndex: { easing: "step-end" } }],
+      [toSlide, { opacity: [0, 1], visibility: ["hidden", "visible"], zIndex: 1 }, { at: "<", zIndex: { easing: "step-end" } }]
+    ], { duration: animate19 ? 0.3 : 0 });
     return timelineControls.finished;
   }
 };
@@ -1335,7 +1336,7 @@ var CartDiscountField = class extends AbstractCartDiscount {
     super();
     __privateAdd(this, _CartDiscountField_instances);
     __privateAdd(this, _hiddenDiscountInputOriginalValue);
-    __privateSet(this, _hiddenDiscountInputOriginalValue, __privateGet(this, _CartDiscountField_instances, hiddenDiscountInput_get).value);
+    __privateSet(this, _hiddenDiscountInputOriginalValue, __privateGet(this, _CartDiscountField_instances, hiddenDiscountInput_get)?.value ?? "");
     this.addEventListener("change", this.toggleDiscount.bind(this));
     this.addEventListener("input", __privateMethod(this, _CartDiscountField_instances, updateHiddenInput_fn));
   }
@@ -1346,7 +1347,9 @@ hiddenDiscountInput_get = function() {
   return this.querySelector('[name="discount"]');
 };
 updateHiddenInput_fn = function(event) {
-  __privateGet(this, _CartDiscountField_instances, hiddenDiscountInput_get).value = [__privateGet(this, _hiddenDiscountInputOriginalValue), event.target.value].filter((val) => val && val.trim() !== "").join(",");
+  const hiddenInput = __privateGet(this, _CartDiscountField_instances, hiddenDiscountInput_get);
+  if (!hiddenInput) return;
+  hiddenInput.value = [__privateGet(this, _hiddenDiscountInputOriginalValue), event.target.value].filter((val) => val && val.trim() !== "").join(",");
 };
 var CartDiscountRemoveButton = class extends AbstractCartDiscount {
   constructor() {
@@ -1532,16 +1535,12 @@ var DialogElement = class _DialogElement extends HTMLElement {
     }
   }
   _allowOutsideClickTouch(event) {
-    event.target.addEventListener(
-      "touchend",
-      (subEvent) => {
-        const endTarget = document.elementFromPoint(subEvent.changedTouches.item(0).clientX, subEvent.changedTouches.item(0).clientY);
-        if (!this.contains(endTarget)) {
-          this.hide();
-        }
-      },
-      { once: true }
-    );
+    event.target.addEventListener("touchend", (subEvent) => {
+      const endTarget = document.elementFromPoint(subEvent.changedTouches.item(0).clientX, subEvent.changedTouches.item(0).clientY);
+      if (!this.contains(endTarget)) {
+        this.hide();
+      }
+    }, { once: true });
     return false;
   }
   _allowOutsideClickMouse(event) {
@@ -1758,13 +1757,11 @@ var PrivacyBar = class extends HTMLElement {
   constructor() {
     super();
     this._delegate = new Delegate2(this);
-    window.Shopify.loadFeatures([
-      {
-        name: "consent-tracking-api",
-        version: "0.1",
-        onLoad: this._onConsentLibraryLoaded.bind(this)
-      }
-    ]);
+    window.Shopify.loadFeatures([{
+      name: "consent-tracking-api",
+      version: "0.1",
+      onLoad: this._onConsentLibraryLoaded.bind(this)
+    }]);
     if (Shopify.designMode) {
       const section = this.closest(".shopify-section");
       section.addEventListener("shopify:section:select", this.show.bind(this));
@@ -1838,7 +1835,7 @@ var CartDrawer = class extends Drawer {
    * Update the cart drawer content when cart content changes.
    */
   async _onCartChanged(event) {
-    // BB Hardening 2026-05-19 (JAVASCRIPT-A7/AM/AJ) - re-applied to Impact 7.2.0 on 2026-08-09.
+    // BB Hardening 2026-05-19 (JAVASCRIPT-A7/AM/AJ):
     // Third-party apps (Awin, Elevar, etc.) and bb-product-addons occasionally
     // dispatch cart:change without populating event.detail.cart.sections[sectionId].
     // Parsing a missing string and querying its descendants crashed the drawer.
@@ -1865,12 +1862,9 @@ var CartDrawer = class extends Drawer {
         document.dispatchEvent(new CustomEvent("cart:refresh"));
         return;
       } else {
-        setTimeout(
-          () => {
-            currentInner.innerHTML = updatedInner.innerHTML;
-          },
-          event.detail.baseEvent === "variant:add" ? 0 : 1250
-        );
+        setTimeout(() => {
+          currentInner.innerHTML = updatedInner.innerHTML;
+        }, event.detail.baseEvent === "variant:add" ? 0 : 1250);
         const currentFooter = this.querySelector('[slot="footer"]');
         const updatedFooter = updatedDrawerContent.querySelector('[slot="footer"]');
         if (currentFooter && updatedFooter) {
@@ -1908,9 +1902,23 @@ var CartDrawer = class extends Drawer {
    * Force a complete refresh of the cart drawer (this is called by dispatching the 'cart:refresh' on the document)
    */
   async _onCartRefresh() {
+    let response;
+    try {
+      response = await fetch(`${window.Shopify.routes.root}?section_id=${extractSectionId(this)}`);
+      if (!response.ok) {
+        return;
+      }
+    } catch (e) {
+      // Network error (Safari "Load failed" etc.) — bail rather than crash. Fixes JAVASCRIPT-2M.
+      return;
+    }
     const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = await (await fetch(`${window.Shopify.routes.root}?section_id=${extractSectionId(this)}`)).text();
-    this.replaceChildren(...tempDiv.querySelector("#cart-drawer").children);
+    tempDiv.innerHTML = await response.text();
+    const cartDrawerElement = tempDiv.querySelector("#cart-drawer");
+    if (!cartDrawerElement) {
+      return;
+    }
+    this.replaceChildren(...cartDrawerElement.children);
   }
 };
 var CartNotificationDrawer = class extends Drawer {
@@ -1953,13 +1961,13 @@ var LineItem = class extends HTMLElement {
     this.addEventListener("line-item:change", this._onChanged.bind(this));
   }
   _onWillChange() {
-    this.pillLoaderElement.setAttribute("aria-busy", "true");
+    this.pillLoaderElement?.setAttribute("aria-busy", "true");
   }
   _onErrored() {
-    this.pillLoaderElement.removeAttribute("aria-busy");
+    this.pillLoaderElement?.removeAttribute("aria-busy");
   }
   async _onChanged(event) {
-    this.pillLoaderElement.removeAttribute("aria-busy");
+    this.pillLoaderElement?.removeAttribute("aria-busy");
     if (event.detail.cart["item_count"] === 0 || event.detail.quantity !== 0) {
       return;
     }
@@ -2072,10 +2080,7 @@ var FreeShippingBar = class extends HTMLElement {
     }
   }
   _onCartChanged(event) {
-    const priceForItems = event.detail["cart"]["items"].filter((item) => item["requires_shipping"]).reduce((sum, item) => sum + item["final_line_price"], 0), cartDiscount = event.detail["cart"]["cart_level_discount_applications"].reduce(
-      (sum, discountAllocation) => sum + discountAllocation["discount_application"]["total_allocated_amount"],
-      0
-    );
+    const priceForItems = event.detail["cart"]["items"].filter((item) => item["requires_shipping"]).reduce((sum, item) => sum + item["final_line_price"], 0), cartDiscount = event.detail["cart"]["cart_level_discount_applications"].reduce((sum, discountAllocation) => sum + discountAllocation["total_allocated_amount"], 0);
     this.totalPrice = priceForItems - cartDiscount;
   }
 };
@@ -2136,24 +2141,20 @@ var LineItemQuantity = class extends HTMLElement {
         window.location.reload();
       } else {
         const lineItemAfterChange = cartContent["items"].filter((lineItem2) => lineItem2["key"] === lineKey);
-        lineItem?.dispatchEvent(
-          new CustomEvent("line-item:change", {
-            bubbles: true,
-            detail: {
-              quantity: lineItemAfterChange.length === 0 ? 0 : lineItemAfterChange[0]["quantity"],
-              cart: cartContent
-            }
-          })
-        );
-        document.documentElement.dispatchEvent(
-          new CustomEvent("cart:change", {
-            bubbles: true,
-            detail: {
-              baseEvent: "line-item:change",
-              cart: cartContent
-            }
-          })
-        );
+        lineItem?.dispatchEvent(new CustomEvent("line-item:change", {
+          bubbles: true,
+          detail: {
+            quantity: lineItemAfterChange.length === 0 ? 0 : lineItemAfterChange[0]["quantity"],
+            cart: cartContent
+          }
+        }));
+        document.documentElement.dispatchEvent(new CustomEvent("cart:change", {
+          bubbles: true,
+          detail: {
+            baseEvent: "line-item:change",
+            cart: cartContent
+          }
+        }));
       }
     }
   }
@@ -2183,10 +2184,7 @@ var ShippingEstimator = class extends HTMLElement {
     event.preventDefault();
     const zip = this.querySelector('[name="address[zip]"]').value, country = this.querySelector('[name="address[country]"]').value, province = this.querySelector('[name="address[province]"]').value;
     this.submitButton.setAttribute("aria-busy", "true");
-    const prepareResponse = await fetch(
-      `${Shopify.routes.root}cart/prepare_shipping_rates.json?shipping_address[zip]=${zip}&shipping_address[country]=${country}&shipping_address[province]=${province}`,
-      { method: "POST" }
-    );
+    const prepareResponse = await fetch(`${Shopify.routes.root}cart/prepare_shipping_rates.json?shipping_address[zip]=${zip}&shipping_address[country]=${country}&shipping_address[province]=${province}`, { method: "POST" });
     if (prepareResponse.ok) {
       const shippingRates = await this._getAsyncShippingRates(zip, country, province);
       this._formatShippingRates(shippingRates);
@@ -2198,9 +2196,7 @@ var ShippingEstimator = class extends HTMLElement {
     this.submitButton.removeAttribute("aria-busy");
   }
   async _getAsyncShippingRates(zip, country, province) {
-    const response = await fetch(
-      `${Shopify.routes.root}cart/async_shipping_rates.json?shipping_address[zip]=${zip}&shipping_address[country]=${country}&shipping_address[province]=${province}`
-    );
+    const response = await fetch(`${Shopify.routes.root}cart/async_shipping_rates.json?shipping_address[zip]=${zip}&shipping_address[country]=${country}&shipping_address[province]=${province}`);
     const responseAsText = await response.text();
     if (responseAsText === "null") {
       return this._getAsyncShippingRates(zip, country, province);
@@ -2239,8 +2235,13 @@ if (!window.customElements.get("shipping-estimator")) {
 var FacetApplyButton = class extends HTMLButtonElement {
   constructor() {
     super();
+    // BB Hardening 2026-05-19 (JAVASCRIPT-97): on some collection page variants
+    // the apply button renders outside of (or before) its form, so `this.form`
+    // is null and `addEventListener` crashed the constructor. Null-guard the
+    // form access in both the constructor and _updateCount; null-guard the
+    // facet-drawer lookup in _closeDrawer for the same reason.
     this.addEventListener("click", this._closeDrawer);
-    this.form.addEventListener("change", this._updateCount.bind(this));
+    this.form?.addEventListener("change", this._updateCount.bind(this));
     this.filterCountElement = document.createElement("span");
     this.appendChild(this.filterCountElement);
   }
@@ -2248,6 +2249,7 @@ var FacetApplyButton = class extends HTMLButtonElement {
     this._updateCount();
   }
   _updateCount() {
+    if (!this.form) return;
     const form = new FormData(this.form);
     let nonEmptyValuesCount = Array.from(form.values()).filter((item) => item !== "").length;
     if (form.has("sort_by")) {
@@ -2256,7 +2258,7 @@ var FacetApplyButton = class extends HTMLButtonElement {
     this.filterCountElement.innerText = ` (${nonEmptyValuesCount})`;
   }
   async _closeDrawer() {
-    this.closest("facet-drawer").hide();
+    this.closest("facet-drawer")?.hide();
   }
 };
 if (!window.customElements.get("facet-apply-button")) {
@@ -2389,14 +2391,12 @@ var FacetForm = class extends HTMLFormElement {
     if (!this._isDirty) {
       return;
     }
-    this.dispatchEvent(
-      new CustomEvent("facet:update", {
-        bubbles: true,
-        detail: {
-          url: this._buildUrl()
-        }
-      })
-    );
+    this.dispatchEvent(new CustomEvent("facet:update", {
+      bubbles: true,
+      detail: {
+        url: this._buildUrl()
+      }
+    }));
     this._isDirty = false;
   }
 };
@@ -2414,14 +2414,12 @@ var FacetLink = class extends HTMLAnchorElement {
     event.preventDefault();
     const sectionId = event.target.closest(".shopify-section").id.replace("shopify-section-", ""), url = new URL(this.href);
     url.searchParams.set("section_id", sectionId);
-    this.dispatchEvent(
-      new CustomEvent("facet:update", {
-        bubbles: true,
-        detail: {
-          url
-        }
-      })
-    );
+    this.dispatchEvent(new CustomEvent("facet:update", {
+      bubbles: true,
+      detail: {
+        url
+      }
+    }));
   }
 };
 if (!window.customElements.get("facet-link")) {
@@ -2442,14 +2440,12 @@ var FacetSortBy = class extends HTMLElement {
     if (window.themeVariables.settings.pageType === "search") {
       url.searchParams.set("type", "product");
     }
-    this.dispatchEvent(
-      new CustomEvent("facet:update", {
-        bubbles: true,
-        detail: {
-          url
-        }
-      })
-    );
+    this.dispatchEvent(new CustomEvent("facet:update", {
+      bubbles: true,
+      detail: {
+        url
+      }
+    }));
   }
 };
 if (!window.customElements.get("facet-sort-by")) {
@@ -2525,62 +2521,38 @@ var PriceRange = class extends HTMLElement {
     this.textInputHigherBound = this.querySelector('input[name="filter.v.price.lte"]');
     this.textInputLowerBound.addEventListener("focus", () => this.textInputLowerBound.select(), { signal: this._abortController.signal });
     this.textInputHigherBound.addEventListener("focus", () => this.textInputHigherBound.select(), { signal: this._abortController.signal });
-    this.textInputLowerBound.addEventListener(
-      "change",
-      (event) => {
-        event.preventDefault();
-        event.target.value = Math.max(Math.min(parseInt(event.target.value), parseInt(this.textInputHigherBound.value || event.target.max) - 1), event.target.min);
-        this.rangeLowerBound.value = event.target.value;
-        this.rangeLowerBound.parentElement.style.setProperty("--range-min", `${parseInt(this.rangeLowerBound.value) / parseInt(this.rangeLowerBound.max) * 100}%`);
-      },
-      { signal: this._abortController.signal }
-    );
-    this.textInputHigherBound.addEventListener(
-      "change",
-      (event) => {
-        event.preventDefault();
-        event.target.value = Math.min(Math.max(parseInt(event.target.value), parseInt(this.textInputLowerBound.value || event.target.min) + 1), event.target.max);
-        this.rangeHigherBound.value = event.target.value;
-        this.rangeHigherBound.parentElement.style.setProperty("--range-max", `${parseInt(this.rangeHigherBound.value) / parseInt(this.rangeHigherBound.max) * 100}%`);
-      },
-      { signal: this._abortController.signal }
-    );
-    this.rangeLowerBound.addEventListener(
-      "change",
-      (event) => {
-        event.stopPropagation();
-        this.textInputLowerBound.value = event.target.value;
-        this.textInputLowerBound.dispatchEvent(new Event("change", { bubbles: true }));
-      },
-      { signal: this._abortController.signal }
-    );
-    this.rangeHigherBound.addEventListener(
-      "change",
-      (event) => {
-        event.stopPropagation();
-        this.textInputHigherBound.value = event.target.value;
-        this.textInputHigherBound.dispatchEvent(new Event("change", { bubbles: true }));
-      },
-      { signal: this._abortController.signal }
-    );
-    this.rangeLowerBound.addEventListener(
-      "input",
-      (event) => {
-        event.target.value = Math.min(parseInt(event.target.value), parseInt(this.textInputHigherBound.value || event.target.max) - 1);
-        event.target.parentElement.style.setProperty("--range-min", `${parseInt(event.target.value) / parseInt(event.target.max) * 100}%`);
-        this.textInputLowerBound.value = event.target.value;
-      },
-      { signal: this._abortController.signal }
-    );
-    this.rangeHigherBound.addEventListener(
-      "input",
-      (event) => {
-        event.target.value = Math.max(parseInt(event.target.value), parseInt(this.textInputLowerBound.value || event.target.min) + 1);
-        event.target.parentElement.style.setProperty("--range-max", `${parseInt(event.target.value) / parseInt(event.target.max) * 100}%`);
-        this.textInputHigherBound.value = event.target.value;
-      },
-      { signal: this._abortController.signal }
-    );
+    this.textInputLowerBound.addEventListener("change", (event) => {
+      event.preventDefault();
+      event.target.value = Math.max(Math.min(parseInt(event.target.value), parseInt(this.textInputHigherBound.value || event.target.max) - 1), event.target.min);
+      this.rangeLowerBound.value = event.target.value;
+      this.rangeLowerBound.parentElement.style.setProperty("--range-min", `${parseInt(this.rangeLowerBound.value) / parseInt(this.rangeLowerBound.max) * 100}%`);
+    }, { signal: this._abortController.signal });
+    this.textInputHigherBound.addEventListener("change", (event) => {
+      event.preventDefault();
+      event.target.value = Math.min(Math.max(parseInt(event.target.value), parseInt(this.textInputLowerBound.value || event.target.min) + 1), event.target.max);
+      this.rangeHigherBound.value = event.target.value;
+      this.rangeHigherBound.parentElement.style.setProperty("--range-max", `${parseInt(this.rangeHigherBound.value) / parseInt(this.rangeHigherBound.max) * 100}%`);
+    }, { signal: this._abortController.signal });
+    this.rangeLowerBound.addEventListener("change", (event) => {
+      event.stopPropagation();
+      this.textInputLowerBound.value = event.target.value;
+      this.textInputLowerBound.dispatchEvent(new Event("change", { bubbles: true }));
+    }, { signal: this._abortController.signal });
+    this.rangeHigherBound.addEventListener("change", (event) => {
+      event.stopPropagation();
+      this.textInputHigherBound.value = event.target.value;
+      this.textInputHigherBound.dispatchEvent(new Event("change", { bubbles: true }));
+    }, { signal: this._abortController.signal });
+    this.rangeLowerBound.addEventListener("input", (event) => {
+      event.target.value = Math.min(parseInt(event.target.value), parseInt(this.textInputHigherBound.value || event.target.max) - 1);
+      event.target.parentElement.style.setProperty("--range-min", `${parseInt(event.target.value) / parseInt(event.target.max) * 100}%`);
+      this.textInputLowerBound.value = event.target.value;
+    }, { signal: this._abortController.signal });
+    this.rangeHigherBound.addEventListener("input", (event) => {
+      event.target.value = Math.max(parseInt(event.target.value), parseInt(this.textInputLowerBound.value || event.target.min) + 1);
+      event.target.parentElement.style.setProperty("--range-max", `${parseInt(event.target.value) / parseInt(event.target.max) * 100}%`);
+      this.textInputHigherBound.value = event.target.value;
+    }, { signal: this._abortController.signal });
   }
   disconnectedCallback() {
     this._abortController.abort();
@@ -2595,15 +2567,21 @@ var QuantitySelector = class extends HTMLElement {
   connectedCallback() {
     this._abortController = new AbortController();
     this.inputElement = this.querySelector("input");
-    this.querySelector("button:first-of-type").addEventListener("click", this.stepDown.bind(this), { signal: this._abortController.signal });
-    this.querySelector("button:last-of-type").addEventListener("click", this.stepUp.bind(this), { signal: this._abortController.signal });
+    // BB Cart Hardening 2026-05-04: guard against missing buttons (e.g. when the element
+    // is rendered without children due to a partial DOM update from third-party apps).
+    var stepDownBtn = this.querySelector("button:first-of-type");
+    var stepUpBtn = this.querySelector("button:last-of-type");
+    if (stepDownBtn) stepDownBtn.addEventListener("click", this.stepDown.bind(this), { signal: this._abortController.signal });
+    if (stepUpBtn) stepUpBtn.addEventListener("click", this.stepUp.bind(this), { signal: this._abortController.signal });
   }
   stepDown() {
+    if (!this.inputElement) return;
     this.inputElement.stepDown();
     this.inputElement.dispatchEvent(new Event("change", { bubbles: true }));
     announceStatus(this.inputElement.value);
   }
   stepUp() {
+    if (!this.inputElement) return;
     this.inputElement.stepUp();
     this.inputElement.dispatchEvent(new Event("change", { bubbles: true }));
     announceStatus(this.inputElement.value);
@@ -2716,14 +2694,12 @@ var Listbox = class extends HTMLElement {
               document.getElementById(boundId).textContent = option.getAttribute("title") || option.innerText || option.value;
             });
           }
-          option.dispatchEvent(
-            new CustomEvent("listbox:change", {
-              bubbles: true,
-              detail: {
-                value: option.value
-              }
-            })
-          );
+          option.dispatchEvent(new CustomEvent("listbox:change", {
+            bubbles: true,
+            detail: {
+              value: option.value
+            }
+          }));
         } else {
           option.setAttribute("aria-selected", "false");
         }
@@ -2736,14 +2712,12 @@ _hiddenInput = new WeakMap();
 _Listbox_instances = new WeakSet();
 onOptionClicked_fn = function(event) {
   this.setAttribute("aria-activedescendant", event.currentTarget.id);
-  event.currentTarget.dispatchEvent(
-    new CustomEvent("listbox:select", {
-      bubbles: true,
-      detail: {
-        value: event.currentTarget.value
-      }
-    })
-  );
+  event.currentTarget.dispatchEvent(new CustomEvent("listbox:select", {
+    bubbles: true,
+    detail: {
+      value: event.currentTarget.value
+    }
+  }));
 };
 onInputChanged_fn = function(event) {
   this.setAttribute("aria-activedescendant", this.querySelector(`[role="option"][value="${CSS.escape(event.target.value)}"]`).id);
@@ -2767,17 +2741,15 @@ function imageLoaded(imageOrArray) {
     return Promise.resolve();
   }
   imageOrArray = imageOrArray instanceof Element ? [imageOrArray] : Array.from(imageOrArray);
-  return Promise.all(
-    imageOrArray.map((image) => {
-      return new Promise((resolve) => {
-        if (image.tagName === "IMG" && image.complete || !image.offsetParent) {
-          resolve();
-        } else {
-          image.onload = () => resolve();
-        }
-      });
-    })
-  );
+  return Promise.all(imageOrArray.map((image) => {
+    return new Promise((resolve) => {
+      if (image.tagName === "IMG" && image.complete || !image.offsetParent) {
+        resolve();
+      } else {
+        image.onload = () => resolve();
+      }
+    });
+  }));
 }
 function generateSrcset(imageObjectOrString, widths = []) {
   let imageUrl, maxWidth;
@@ -2863,12 +2835,7 @@ var ProductCard = class extends HTMLElement {
   }
   connectedCallback() {
     this._delegate.on("change", '.product-card__swatch-list [type="radio"], .product-card__variant-list [type="radio"]', this._onSwatchChanged.bind(this));
-    this._delegate.on(
-      "pointerover",
-      '.product-card__swatch-list [type="radio"] + label, .product-card__variant-list [type="radio"] + label',
-      this._onSwatchHovered.bind(this),
-      true
-    );
+    this._delegate.on("pointerover", '.product-card__swatch-list [type="radio"] + label, .product-card__variant-list [type="radio"] + label', this._onSwatchHovered.bind(this), true);
   }
   disconnectedCallback() {
     this._delegate.off();
@@ -2964,33 +2931,27 @@ var ProductForm = class extends HTMLFormElement {
       }
       const cartContent = await (await fetch(`${Shopify.routes.root}cart.js`)).json();
       cartContent["sections"] = responseJson["sections"];
-      this.dispatchEvent(
-        new CustomEvent("variant:add", {
-          bubbles: true,
-          detail: {
-            items: responseJson.hasOwnProperty("items") ? responseJson["items"] : [responseJson],
-            cart: cartContent
-          }
-        })
-      );
-      document.documentElement.dispatchEvent(
-        new CustomEvent("cart:change", {
-          bubbles: true,
-          detail: {
-            baseEvent: "variant:add",
-            cart: cartContent
-          }
-        })
-      );
+      this.dispatchEvent(new CustomEvent("variant:add", {
+        bubbles: true,
+        detail: {
+          items: responseJson.hasOwnProperty("items") ? responseJson["items"] : [responseJson],
+          cart: cartContent
+        }
+      }));
+      document.documentElement.dispatchEvent(new CustomEvent("cart:change", {
+        bubbles: true,
+        detail: {
+          baseEvent: "variant:add",
+          cart: cartContent
+        }
+      }));
     } else {
-      this.dispatchEvent(
-        new CustomEvent("cart:error", {
-          bubbles: true,
-          detail: {
-            error: responseJson["description"]
-          }
-        })
-      );
+      this.dispatchEvent(new CustomEvent("cart:error", {
+        bubbles: true,
+        detail: {
+          error: responseJson["description"]
+        }
+      }));
       document.dispatchEvent(new CustomEvent("cart:refresh"));
     }
   }
@@ -3252,14 +3213,12 @@ var ProductZoomButton = class extends HTMLButtonElement {
       const carousel = this.closest(".product-gallery__media-list-wrapper").querySelector("media-carousel"), visibleImages = carousel.visibleItems.filter((item) => item.getAttribute("data-media-type") === "image");
       openIndex = visibleImages.indexOf(carousel.selectedSlide);
     }
-    this.dispatchEvent(
-      new CustomEvent("lightbox:open", {
-        bubbles: true,
-        detail: {
-          index: openIndex
-        }
-      })
-    );
+    this.dispatchEvent(new CustomEvent("lightbox:open", {
+      bubbles: true,
+      detail: {
+        index: openIndex
+      }
+    }));
   }
 };
 if (!window.customElements.get("product-gallery")) {
@@ -3305,7 +3264,8 @@ var ProductQuickAdd = class extends HTMLElement {
   #scopeToReached = false;
   #intersectionObserver = new IntersectionObserver(this._onObserved.bind(this));
   connectedCallback() {
-    this._scopeFrom = document.getElementById(this.getAttribute("form"));
+    const formEl = document.getElementById(this.getAttribute("form"));
+    this._scopeFrom = formEl ? (formEl.closest(".product-info__buy-buttons") || formEl.parentElement.querySelector(".product-info__buy-buttons") || formEl) : null;
     this._scopeTo = document.querySelector(".footer");
     if (!this._scopeFrom || !this._scopeTo) {
       return;
@@ -3319,7 +3279,7 @@ var ProductQuickAdd = class extends HTMLElement {
   _onObserved(entries) {
     entries.forEach((entry) => {
       if (entry.target === this._scopeFrom) {
-        this.#scopeFromPassed = entry.boundingClientRect.bottom < 0;
+        this.#scopeFromPassed = !entry.isIntersecting && entry.boundingClientRect.bottom < 0;
       }
       if (entry.target === this._scopeTo) {
         this.#scopeToReached = entry.isIntersecting;
@@ -3362,19 +3322,7 @@ onRerender_fn = function(event) {
   if (!this.hasAttribute("allow-partial-rerender") || event.detail.productChange) {
     this.replaceWith(matchingElement);
   } else {
-    const blockTypes = [
-      "sku",
-      "badges",
-      "price",
-      "payment-terms",
-      "variant-picker",
-      "quantity-selector",
-      "volume-pricing",
-      "inventory",
-      "buy-buttons",
-      "pickup-availability",
-      "liquid"
-    ];
+    const blockTypes = ["sku", "badges", "price", "payment-terms", "variant-picker", "quantity-selector", "volume-pricing", "inventory", "buy-buttons", "pickup-availability", "liquid"];
     blockTypes.forEach((blockType) => {
       this.querySelectorAll(`[data-block-type="${blockType}"]`).forEach((element) => {
         const matchingBlock = matchingElement.querySelector(`[data-block-type="${blockType}"][data-block-id="${element.getAttribute("data-block-id")}"]`);
@@ -3508,25 +3456,21 @@ var _VariantPicker = class _VariantPicker extends HTMLElement {
         window.history.replaceState({ path: newUrl.toString() }, "", newUrl.toString());
       }
     }
-    __privateGet(this, _form).dispatchEvent(
-      new CustomEvent("product:rerender", {
-        detail: {
-          htmlFragment: newContent,
-          productChange
-        }
-      })
-    );
+    __privateGet(this, _form).dispatchEvent(new CustomEvent("product:rerender", {
+      detail: {
+        htmlFragment: newContent,
+        productChange
+      }
+    }));
     if (!productChange) {
-      __privateGet(this, _form).dispatchEvent(
-        new CustomEvent("variant:change", {
-          bubbles: true,
-          detail: {
-            formId: __privateGet(this, _form).id,
-            variant: __privateGet(this, _selectedVariant),
-            previousVariant
-          }
-        })
-      );
+      __privateGet(this, _form).dispatchEvent(new CustomEvent("variant:change", {
+        bubbles: true,
+        detail: {
+          formId: __privateGet(this, _form).id,
+          variant: __privateGet(this, _selectedVariant),
+          previousVariant
+        }
+      }));
     }
     Shopify?.PaymentButton?.init();
   }
@@ -3616,7 +3560,7 @@ if (!window.customElements.get("variant-picker")) {
 }
 
 // js/common/media/base-media.js
-import { inView as inView5 } from "vendor";
+import { inView as inView4 } from "vendor";
 var BaseMedia = class extends HTMLElement {
   static get observedAttributes() {
     return ["playing"];
@@ -3624,7 +3568,7 @@ var BaseMedia = class extends HTMLElement {
   connectedCallback() {
     this._abortController = new AbortController();
     if (this.hasAttribute("autoplay")) {
-      inView5(this, this.play.bind(this), { margin: "0px 0px 0px 0px" });
+      inView4(this, this.play.bind(this), { margin: "0px 0px 0px 0px" });
     }
   }
   disconnectedCallback() {
@@ -3727,8 +3671,7 @@ var VideoMedia = class extends BaseMedia {
       this.nextElementSibling?.querySelector(".video-play-button")?.addEventListener("click", this.play.bind(this), { once: true, signal: this._abortController.signal });
     }
     if (this.hasAttribute("show-play-button") && !this.shadowRoot) {
-      this.attachShadow({ mode: "open" }).appendChild(
-        document.createRange().createContextualFragment(`
+      this.attachShadow({ mode: "open" }).appendChild(document.createRange().createContextualFragment(`
         <slot></slot>
         
         <svg part="play-button" fill="none" width="48" height="48" viewBox="0 0 48 48">
@@ -3736,8 +3679,7 @@ var VideoMedia = class extends BaseMedia {
           <path d="M18.578 32.629a.375.375 0 0 1-.578-.316V15.687c0-.297.328-.476.578-.316l12.931 8.314c.23.147.23.483 0 .63L18.578 32.63Z" fill="${window.themeVariables.settings.textColor}"/>
           <path d="M24 .5C36.979.5 47.5 11.021 47.5 24S36.979 47.5 24 47.5.5 36.979.5 24 11.021.5 24 .5Z" stroke="${window.themeVariables.settings.textColor}" stroke-opacity=".12"/>
         </svg>
-      `)
-      );
+      `));
     }
   }
   play({ restart = false } = {}) {
@@ -3769,13 +3711,13 @@ var VideoMedia = class extends BaseMedia {
           this.setAttribute("can-play", "");
           const player = new YT.Player(this.querySelector("iframe"), {
             events: {
-              onReady: () => {
+              "onReady": () => {
                 if (muteVideo) {
                   player.mute();
                 }
                 resolve(player);
               },
-              onStateChange: (event) => {
+              "onStateChange": (event) => {
                 if (event.data === YT.PlayerState.PLAYING) {
                   this.setAttribute("playing", "");
                 } else if (event.data === YT.PlayerState.ENDED || event.data === YT.PlayerState.PAUSED) {
@@ -3854,13 +3796,28 @@ import { timeline as timeline6 } from "vendor";
 var AnimatedDetails = class extends HTMLDetailsElement {
   constructor() {
     super();
+    this._open = this.hasAttribute("open");
+    this._onSummaryClickedListener = this._onSummaryClicked.bind(this);
+  }
+  connectedCallback() {
+    // Per Web Components spec, children are only guaranteed to exist after the
+    // element is connected to the DOM — accessing them in the constructor was
+    // crashing when Shopify section render API or extensions instantiated the
+    // element before its children were parsed. Fixes JAVASCRIPT-Z.
     this.summaryElement = this.firstElementChild;
     this.contentElement = this.lastElementChild;
-    this._open = this.hasAttribute("open");
-    this.summaryElement.addEventListener("click", this._onSummaryClicked.bind(this));
+    if (!this.summaryElement) {
+      return;
+    }
+    this.summaryElement.addEventListener("click", this._onSummaryClickedListener);
     if (Shopify.designMode) {
       this.addEventListener("shopify:block:select", () => this.open = true);
       this.addEventListener("shopify:block:deselect", () => this.open = false);
+    }
+  }
+  disconnectedCallback() {
+    if (this.summaryElement) {
+      this.summaryElement.removeEventListener("click", this._onSummaryClickedListener);
     }
   }
   set open(value) {
@@ -3936,7 +3893,12 @@ var Tabs = class extends HTMLElement {
     super();
     __privateAdd(this, _Tabs_instances);
     if (!this.shadowRoot) {
-      this.attachShadow({ mode: "open" }).appendChild(this.querySelector("template").content.cloneNode(true));
+      const tabsTemplate = this.querySelector("template");
+      if (tabsTemplate) {
+        this.attachShadow({ mode: "open" }).appendChild(tabsTemplate.content.cloneNode(true));
+      } else {
+        return;
+      }
     }
     if (Shopify.designMode) {
       this.addEventListener("shopify:block:select", (event) => this.selectedIndex = this.buttons.indexOf(event.target));
@@ -4094,10 +4056,7 @@ var PredictiveSearch = class extends HTMLElement {
   async _doPredictiveSearch() {
     await this._transitionToSlot("loading");
     const queryParams = `q=${encodeURIComponent(this._queryInput.value)}&section_id=${this.getAttribute("section-id")}&resources[limit]=10&resources[limit_scope]=each`;
-    const nodeElement = new DOMParser().parseFromString(
-      await (await cachedFetch(`${window.Shopify.routes.root}search/suggest?${queryParams}`, { signal: this._abortController.signal })).text(),
-      "text/html"
-    );
+    const nodeElement = new DOMParser().parseFromString(await (await cachedFetch(`${window.Shopify.routes.root}search/suggest?${queryParams}`, { signal: this._abortController.signal })).text(), "text/html");
     this.querySelector('[slot="results"]').replaceWith(document.importNode(nodeElement.querySelector('[slot="results"]'), true));
     return this._transitionToSlot("results");
   }
@@ -4108,10 +4067,7 @@ var PredictiveSearch = class extends HTMLElement {
   async _doFallbackSearch() {
     await this._transitionToSlot("loading");
     const queryParams = `q=${this._queryInput.value}&section_id=${this.getAttribute("section-id")}&resources[limit]=10&resources[limit_scope]=each`;
-    const nodeElement = new DOMParser().parseFromString(
-      await (await cachedFetch(`${window.Shopify.routes.root}search?${queryParams}`, { signal: this._abortController.signal })).text(),
-      "text/html"
-    );
+    const nodeElement = new DOMParser().parseFromString(await (await cachedFetch(`${window.Shopify.routes.root}search?${queryParams}`, { signal: this._abortController.signal })).text(), "text/html");
     this.querySelector('[slot="results"]').replaceWith(document.importNode(nodeElement.querySelector('[slot="results"]'), true));
     return this._transitionToSlot("results");
   }
@@ -4153,7 +4109,7 @@ if (!window.customElements.get("search-drawer")) {
 }
 
 // js/common/text/section-header.js
-import { animate as animate10, inView as inView6 } from "vendor";
+import { animate as animate10, inView as inView5 } from "vendor";
 var _SectionHeader_instances, reveal_fn2;
 var SectionHeader = class extends HTMLElement {
   constructor() {
@@ -4162,7 +4118,7 @@ var SectionHeader = class extends HTMLElement {
   }
   connectedCallback() {
     if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-      inView6(this, __privateMethod(this, _SectionHeader_instances, reveal_fn2).bind(this), { margin: "0px 0px -100px 0px" });
+      inView5(this, __privateMethod(this, _SectionHeader_instances, reveal_fn2).bind(this), { margin: "0px 0px -100px 0px" });
     }
   }
 };
@@ -4272,11 +4228,11 @@ if (!window.customElements.get("split-cursor")) {
 }
 
 // js/sections/collection-list.js
-import { timeline as timeline8, inView as inView7 } from "vendor";
+import { timeline as timeline8, inView as inView6 } from "vendor";
 var CollectionList = class extends HTMLElement {
   connectedCallback() {
     if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-      inView7(this, this._reveal.bind(this), { margin: "-100px" });
+      inView6(this, this._reveal.bind(this), { margin: "-100px" });
     }
   }
   _reveal() {
@@ -4465,11 +4421,7 @@ var DropdownDisclosure = class _DropdownDisclosure extends AnimatedDetails {
   _transitionIn(hasOpenSiblings = false) {
     const timelineSequence = [[this.contentElement, { opacity: 1 }, { duration: 0.2 }]];
     if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches && !reduceMenuAnimation) {
-      timelineSequence.push([
-        this.contentElement.querySelectorAll(":scope > ul > li"),
-        { opacity: [0, 1], transform: ["translateY(-10px)", "translateY(0)"] },
-        { delay: stagger5(0.025), at: "-0.1", duration: 0.2 }
-      ]);
+      timelineSequence.push([this.contentElement.querySelectorAll(":scope > ul > li"), { opacity: [0, 1], transform: ["translateY(-10px)", "translateY(0)"] }, { delay: stagger5(0.025), at: "-0.1", duration: 0.2 }]);
     }
     return timeline9(timelineSequence, { delay: hasOpenSiblings > 0 ? 0.1 : 0 }).finished;
   }
@@ -4537,11 +4489,7 @@ var MegaMenuDisclosure = class extends DropdownDisclosure {
         timelineSequence.push([promo, { opacity: [0, 1] }, { duration: 0.25, delay: contentDelay, at: "mega-menu" }], "mega-menu-promo");
       });
       this.contentElement.querySelectorAll(".mega-menu__nav > li").forEach((column) => {
-        timelineSequence.push([
-          column.querySelectorAll(":scope > :first-child, :scope li"),
-          { opacity: [0, 1], transform: ["translateY(-10px)", "translateY(0)"] },
-          { easing: "ease", delay: stagger5(0.025, { start: contentDelay }), at: "mega-menu", duration: 0.2 }
-        ]);
+        timelineSequence.push([column.querySelectorAll(":scope > :first-child, :scope li"), { opacity: [0, 1], transform: ["translateY(-10px)", "translateY(0)"] }, { easing: "ease", delay: stagger5(0.025, { start: contentDelay }), at: "mega-menu", duration: 0.2 }]);
       });
     }
     return timeline9(timelineSequence).finished;
@@ -4632,11 +4580,7 @@ var NavigationDrawer = class extends Drawer {
       item.setAttribute("hidden", "");
     });
     linkLists[linkListIndex].removeAttribute("hidden");
-    return [
-      linkLists[linkListIndex].querySelectorAll("li"),
-      { opacity: [0, 1], visibility: ["hidden", "visible"], transform: ["translateY(-10px)", "translateY(0)"] },
-      { easing: "ease", duration: 0.2, at: "-0.15", delay: stagger5(0.025, { start: 0.1 }) }
-    ];
+    return [linkLists[linkListIndex].querySelectorAll("li"), { opacity: [0, 1], visibility: ["hidden", "visible"], transform: ["translateY(-10px)", "translateY(0)"] }, { easing: "ease", duration: 0.2, at: "-0.15", delay: stagger5(0.025, { start: 0.1 }) }];
   }
   // Set navigation drawer to initial state when drawer closed
   reinitializeDrawer() {
@@ -4712,19 +4656,16 @@ var FeatureChart = class extends HTMLElement {
         this.featureChartSticky.style.width = `${entries[0].contentRect.width}px`;
       }).observe(this.featureChartTable);
       const offset = getComputedStyle(this).scrollPaddingTop;
-      scroll(
-        ({ y }) => {
-          if (y.current >= y.targetOffset + this.featureProductRow.clientHeight / 2 && y.progress < 0.85) {
-            this.featureChartSticky.classList.add("is-visible");
-          } else {
-            this.featureChartSticky.classList.remove("is-visible");
-          }
-        },
-        {
-          target: this.featureChartTable,
-          offset: [`${offset} start`, `end ${offset}`]
+      scroll(({ y }) => {
+        if (y.current >= y.targetOffset + this.featureProductRow.clientHeight / 2 && y.progress < 0.85) {
+          this.featureChartSticky.classList.add("is-visible");
+        } else {
+          this.featureChartSticky.classList.remove("is-visible");
         }
-      );
+      }, {
+        target: this.featureChartTable,
+        offset: [`${offset} start`, `end ${offset}`]
+      });
     }
   }
   _toggleRows() {
@@ -4761,16 +4702,19 @@ if (!window.customElements.get("feature-chart")) {
 }
 
 // js/sections/image-banner.js
-import { scroll as scroll2, timeline as timeline10, animate as animate12, inView as inView8 } from "vendor";
+import { scroll as scroll2, timeline as timeline10, animate as animate12, inView as inView7 } from "vendor";
 var ImageBanner = class extends HTMLElement {
   connectedCallback() {
     if (this.parallax && window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
       this._setupParallax();
     }
-    inView8(this, async () => {
+    inView7(this, async () => {
       await imageLoaded(Array.from(this.querySelectorAll(":scope > :is(img, video, iframe, svg, video-media)")));
       const headings = Array.from(this.querySelectorAll('[reveal-on-scroll="true"]'));
-      timeline10([[this, { opacity: [0, 1] }, { duration: 0.25 }], ...headings.map((heading) => [...getHeadingKeyframe(heading)])]);
+      timeline10([
+        [this, { opacity: [0, 1] }, { duration: 0.25 }],
+        ...headings.map((heading) => [...getHeadingKeyframe(heading)])
+      ]);
     });
   }
   get parallax() {
@@ -4778,10 +4722,13 @@ var ImageBanner = class extends HTMLElement {
   }
   _setupParallax() {
     const media = Array.from(this.querySelectorAll(":scope > :is(img, video, iframe, svg, video-media, picture)")), [scale, translate] = [1 + this.parallax, this.parallax * 100 / (1 + this.parallax)];
-    scroll2(animate12(media, { transform: [`scale(${scale}) translateY(-${translate}%)`, `scale(${scale}) translateY(0)`] }, { easing: "linear" }), {
-      target: this,
-      offset: ["start end", "end start"]
-    });
+    scroll2(
+      animate12(media, { transform: [`scale(${scale}) translateY(-${translate}%)`, `scale(${scale}) translateY(0)`] }, { easing: "linear" }),
+      {
+        target: this,
+        offset: ["start end", "end start"]
+      }
+    );
   }
 };
 if (!window.customElements.get("image-banner")) {
@@ -4808,10 +4755,10 @@ if (!window.customElements.get("image-link-blocks")) {
 }
 
 // js/sections/images-with-text-scrolling.js
-import { animate as animate13, timeline as timeline11, inView as inView9 } from "vendor";
+import { animate as animate13, timeline as timeline11, inView as inView8 } from "vendor";
 var ImagesWithTextScrolling = class extends HTMLElement {
   connectedCallback() {
-    inView9(this, this._reveal.bind(this));
+    inView8(this, this._reveal.bind(this));
     if (this.hasAttribute("scrolling-experience")) {
       this._imageToTransitionItems = Array.from(this.querySelectorAll(".images-scrolling-desktop__media-wrapper > :not(:first-child)"));
       this._mainImage = this.querySelector(".images-scrolling-desktop__media-wrapper > :first-child");
@@ -4872,13 +4819,13 @@ if (!window.customElements.get("images-with-text-scrolling")) {
 }
 
 // js/sections/impact-text.js
-import { animate as animate14, inView as inView10 } from "vendor";
+import { animate as animate14, inView as inView9 } from "vendor";
 var ImpactText = class extends HTMLElement {
   connectedCallback() {
     if (!window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
       return;
     }
-    inView10(this, ({ target }) => this._onBecameVisible(target), { margin: "-100px" });
+    inView9(this, ({ target }) => this._onBecameVisible(target), { margin: "-100px" });
   }
   async _onBecameVisible(target) {
     animate14(target, { opacity: 1, transform: ["translateY(10px)", "translateY(0)"] }, { duration: 0.3 });
@@ -4895,18 +4842,15 @@ var ImpactText = class extends HTMLElement {
         numberSpan.style.minWidth = `${numberSpan.clientWidth}px`;
       }
       const toReplace = matches[0].replace(/[,\. ]+/, ""), charactersMatches = [...matches[0].matchAll(/[,\. ]+/g)];
-      await animate14(
-        (progress) => {
-          let formattedString = Math.round(progress * parseInt(toReplace)).toString();
-          charactersMatches.forEach((character) => {
-            if (formattedString.length >= matches[0].length - character.index) {
-              formattedString = formattedString.slice(0, character.index) + character[0] + formattedString.slice(character.index);
-            }
-          });
-          numberSpan.textContent = progress === 1 ? matches[0] : formattedString;
-        },
-        { duration: parseFloat(this.getAttribute("count-up")), easing: [0.16, 1, 0.3, 1] }
-      ).finished;
+      await animate14((progress) => {
+        let formattedString = Math.round(progress * parseInt(toReplace)).toString();
+        charactersMatches.forEach((character) => {
+          if (formattedString.length >= matches[0].length - character.index) {
+            formattedString = formattedString.slice(0, character.index) + character[0] + formattedString.slice(character.index);
+          }
+        });
+        numberSpan.textContent = progress === 1 ? matches[0] : formattedString;
+      }, { duration: parseFloat(this.getAttribute("count-up")), easing: [0.16, 1, 0.3, 1] }).finished;
       numberSpan.style.minWidth = null;
     }
   }
@@ -4921,13 +4865,13 @@ var SearchResultPanel = class extends HTMLElement {
     if (!this.hasAttribute("load-from-url")) {
       return;
     }
-    const textResponse = await (await fetch(`${this.getAttribute("load-from-url")}&section_id=${extractSectionId(this)}`)).text();
+    const textResponse = await (await fetch(encodeURI(`${this.getAttribute("load-from-url")}&section_id=${extractSectionId(this)}`))).text();
     const temporaryContent = new DOMParser().parseFromString(textResponse, "text/html");
     const searchResultsPanel = temporaryContent.querySelector(`#${this.getAttribute("id")}`);
     if (searchResultsPanel) {
       this.replaceChildren(...searchResultsPanel.children);
     } else {
-      document.querySelector(`[controlled-panel="${this.id}"]`)?.remove();
+      document.querySelector(`[controlled-panel="${this.id}"]`).remove();
       this.remove();
     }
   }
@@ -4937,12 +4881,12 @@ if (!window.customElements.get("search-result-panel")) {
 }
 
 // js/sections/media-grid.js
-import { timeline as timeline12, inView as inView11 } from "vendor";
+import { timeline as timeline12, inView as inView10 } from "vendor";
 var MediaGrid = class extends HTMLElement {
   connectedCallback() {
     this.items = Array.from(this.children);
     if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-      inView11(this, this._onBecameVisible.bind(this));
+      inView10(this, this._onBecameVisible.bind(this));
     }
   }
   _onBecameVisible() {
@@ -4958,13 +4902,13 @@ if (!window.customElements.get("media-grid")) {
 }
 
 // js/sections/media-with-text.js
-import { animate as animate15, timeline as timeline13, inView as inView12 } from "vendor";
+import { animate as animate15, timeline as timeline13, inView as inView11 } from "vendor";
 var reduceMotion = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
 var MediaWithText = class extends HTMLElement {
   connectedCallback() {
     if (reduceMotion) {
       Array.from(this.querySelectorAll(".media-with-text__item")).forEach((item) => {
-        inView12(item, (observer) => this.reveal(observer.target));
+        inView11(item, (observer) => this.reveal(observer.target));
       });
     }
   }
@@ -4984,7 +4928,7 @@ if (!window.customElements.get("media-with-text")) {
 }
 
 // js/sections/multiple-images-with-text.js
-import { timeline as timeline14, animate as animate16, stagger as stagger6, inView as inView13 } from "vendor";
+import { timeline as timeline14, animate as animate16, stagger as stagger6, inView as inView12 } from "vendor";
 var MultipleImagesWithText = class extends HTMLElement {
   constructor() {
     super();
@@ -5010,25 +4954,26 @@ var MultipleImagesWithText = class extends HTMLElement {
 var MultipleImagesWithTextImageList = class extends EffectCarousel {
   constructor() {
     super();
-    inView13(this, this._reveal.bind(this));
+    inView12(this, this._reveal.bind(this));
   }
   async _reveal() {
     await imageLoaded(this.querySelectorAll("img"));
     if (this.getAttribute("layout") === "stacked") {
-      timeline14(
-        [
-          [this.lastElementChild, { transform: "rotate(0deg)" }],
-          [this.lastElementChild?.previousElementSibling, { transform: "rotate(2deg)" }, { at: "<" }],
-          [this.lastElementChild?.previousElementSibling?.previousElementSibling, { transform: "rotate(-2deg)" }, { at: "<" }]
-        ],
-        {
-          defaultOptions: { duration: 0.15, easing: [0.26, 0.02, 0.27, 0.97] }
-        }
-      );
+      timeline14([
+        [this.lastElementChild, { transform: "rotate(0deg)" }],
+        [this.lastElementChild?.previousElementSibling, { transform: "rotate(2deg)" }, { at: "<" }],
+        [this.lastElementChild?.previousElementSibling?.previousElementSibling, { transform: "rotate(-2deg)" }, { at: "<" }]
+      ], {
+        defaultOptions: { duration: 0.15, easing: [0.26, 0.02, 0.27, 0.97] }
+      });
     } else if (this.getAttribute("layout") === "collage") {
-      timeline14([[this.children, { opacity: 1, transform: ["translateY(15px)", "translateY(0)"] }, { duration: 0.3, delay: stagger6(0.1) }]]);
+      timeline14([
+        [this.children, { opacity: 1, transform: ["translateY(15px)", "translateY(0)"] }, { duration: 0.3, delay: stagger6(0.1) }]
+      ]);
     } else {
-      timeline14([[this.children, { opacity: 1, transform: "rotate(var(--image-rotation, 0deg))" }, { duration: 0.3, delay: stagger6(0.1) }]]);
+      timeline14([
+        [this.children, { opacity: 1, transform: "rotate(var(--image-rotation, 0deg))" }, { duration: 0.3, delay: stagger6(0.1) }]
+      ]);
     }
   }
   _transitionTo(fromSlide, toSlide, { direction, animate: animate19 }) {
@@ -5038,37 +4983,27 @@ var MultipleImagesWithTextImageList = class extends EffectCarousel {
     const transitionSpeed = 0.2;
     if (direction === "next") {
       const fromSlideTransform = getComputedStyle(fromSlide).getPropertyValue("transform");
-      return timeline14(
-        [
-          [fromSlide, { opacity: 0, transform: "rotate(5deg) translate(40px, 10px)" }, { duration: transitionSpeed }],
-          [toSlide, { zIndex: 1 }, { duration: transitionSpeed, zIndex: { easing: "step-start" } }],
-          [fromSlide, { opacity: 1, transform: fromSlideTransform, zIndex: -1 }, { duration: transitionSpeed, at: "<", zIndex: { easing: "step-start" } }],
-          [toSlide.previousElementSibling, { zIndex: 0 }, { at: "<", easing: "step-start" }]
-        ],
-        { defaultOptions: { easing: [0.26, 0.02, 0.27, 0.97] } }
-      ).finished;
+      return timeline14([
+        [fromSlide, { opacity: 0, transform: "rotate(5deg) translate(40px, 10px)" }, { duration: transitionSpeed }],
+        [toSlide, { zIndex: 1 }, { duration: transitionSpeed, zIndex: { easing: "step-start" } }],
+        [fromSlide, { opacity: 1, transform: fromSlideTransform, zIndex: -1 }, { duration: transitionSpeed, at: "<", zIndex: { easing: "step-start" } }],
+        [toSlide.previousElementSibling, { zIndex: 0 }, { at: "<", easing: "step-start" }]
+      ], { defaultOptions: { easing: [0.26, 0.02, 0.27, 0.97] } }).finished;
     } else {
       const toSlideTransform = getComputedStyle(toSlide).getPropertyValue("transform");
-      return timeline14(
-        [
-          [toSlide, { opacity: 0, transform: "rotate(-5deg) translate(-40px, -10px)" }, { duration: transitionSpeed }],
-          this.items.length >= 3 && [fromSlide.previousElementSibling || this.lastElementChild, { zIndex: -1 }, { easing: "step-start" }],
-          [
-            toSlide,
-            { opacity: 1, transform: toSlideTransform, zIndex: 1 },
-            { duration: transitionSpeed, at: this.items.length >= 3 ? "<" : "+0", zIndex: { easing: "step-start" } }
-          ],
-          [fromSlide, { zIndex: 0 }, { duration: transitionSpeed, at: "<", zIndex: { easing: "step-start" } }]
-        ].filter(Boolean),
-        { defaultOptions: { easing: [0.26, 0.02, 0.27, 0.97] } }
-      ).finished;
+      return timeline14([
+        [toSlide, { opacity: 0, transform: "rotate(-5deg) translate(-40px, -10px)" }, { duration: transitionSpeed }],
+        this.items.length >= 3 && [fromSlide.previousElementSibling || this.lastElementChild, { zIndex: -1 }, { easing: "step-start" }],
+        [toSlide, { opacity: 1, transform: toSlideTransform, zIndex: 1 }, { duration: transitionSpeed, at: this.items.length >= 3 ? "<" : "+0", zIndex: { easing: "step-start" } }],
+        [fromSlide, { zIndex: 0 }, { duration: transitionSpeed, at: "<", zIndex: { easing: "step-start" } }]
+      ].filter(Boolean), { defaultOptions: { easing: [0.26, 0.02, 0.27, 0.97] } }).finished;
     }
   }
 };
 var MultipleImagesWithTextContentList = class extends EffectCarousel {
   constructor() {
     super();
-    inView13(this, this._reveal.bind(this));
+    inView12(this, this._reveal.bind(this));
   }
   _reveal() {
     animate16(...getHeadingKeyframe(this.querySelector('[reveal-on-scroll="true"]')));
@@ -5076,14 +5011,11 @@ var MultipleImagesWithTextContentList = class extends EffectCarousel {
   _transitionTo(fromSlide, toSlide, { direction = "next", animate: animate19 = true } = {}) {
     fromSlide.classList.remove("is-selected");
     toSlide.classList.add("is-selected");
-    return timeline14(
-      [
-        [fromSlide, { opacity: [1, 0], visibility: ["visible", "hidden"] }],
-        [toSlide, { opacity: [0, 1], visibility: ["hidden", "visible"] }],
-        [...getHeadingKeyframe(toSlide.querySelector('[reveal-on-scroll="true"]'), { at: "<" })]
-      ],
-      { duration: animate19 ? parseFloat(this.getAttribute("fade-speed") || 0.5) : 0 }
-    ).finished;
+    return timeline14([
+      [fromSlide, { opacity: [1, 0], visibility: ["visible", "hidden"] }],
+      [toSlide, { opacity: [0, 1], visibility: ["hidden", "visible"] }],
+      [...getHeadingKeyframe(toSlide.querySelector('[reveal-on-scroll="true"]'), { at: "<" })]
+    ], { duration: animate19 ? parseFloat(this.getAttribute("fade-speed") || 0.5) : 0 }).finished;
   }
 };
 if (!window.customElements.get("multiple-images-with-text")) {
@@ -5114,8 +5046,7 @@ var NewsletterPopup = class extends Drawer {
     return parseInt(this.getAttribute("apparition-delay") || 0) * 1e3;
   }
   get shouldAppearAutomatically() {
-    return !(localStorage.getItem("theme:popup-filled") === "true" || // Never open if popup has been filled successfully
-    this.hasAttribute("only-once") && localStorage.getItem("theme:popup-appeared") === "true");
+    return !(localStorage.getItem("theme:popup-filled") === "true" || this.hasAttribute("only-once") && localStorage.getItem("theme:popup-appeared") === "true");
   }
   _setInitialPosition() {
     this.style.top = null;
@@ -5135,13 +5066,13 @@ if (!window.customElements.get("newsletter-popup")) {
 }
 
 // js/sections/press.js
-import { timeline as timeline15, animate as animate17, inView as inView14 } from "vendor";
+import { timeline as timeline15, animate as animate17, inView as inView13 } from "vendor";
 var reduceMotion2 = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
 var PressCarousel = class extends EffectCarousel {
   constructor() {
     super();
     if (reduceMotion2) {
-      inView14(this, this._reveal.bind(this));
+      inView13(this, this._reveal.bind(this));
     }
   }
   _reveal() {
@@ -5178,9 +5109,19 @@ var ProductRecommendations = class extends HTMLElement {
       return;
     }
     this._isLoaded = true;
-    const section = this.closest(".shopify-section"), intent = this.getAttribute("intent") || "related", url = `${Shopify.routes.root}recommendations/products?product_id=${this.getAttribute("product")}&limit=${this.getAttribute("limit") || 4}&section_id=${section.id.replace("shopify-section-", "")}&intent=${intent}`, response = await fetch(url, { priority: "low" });
+    const section = this.closest(".shopify-section"), intent = this.getAttribute("intent") || "related", url = `${Shopify.routes.root}recommendations/products?product_id=${this.getAttribute("product")}&limit=${this.getAttribute("limit") || 4}&section_id=${section.id.replace("shopify-section-", "")}&intent=${intent}`;
+    let response;
+    try {
+      response = await fetch(url, { priority: "low" });
+      if (!response.ok) {
+        return;
+      }
+    } catch (e) {
+      // Network error / aborted — fail silently rather than crash. Fixes JAVASCRIPT-D.
+      return;
+    }
     const tempDiv = new DOMParser().parseFromString(await response.text(), "text/html"), productRecommendationsElement = tempDiv.querySelector("product-recommendations");
-    if (productRecommendationsElement.childElementCount > 0) {
+    if (productRecommendationsElement && productRecommendationsElement.childElementCount > 0) {
       this.replaceChildren(...document.importNode(productRecommendationsElement, true).childNodes);
     } else {
       if (intent === "related") {
@@ -5225,9 +5166,19 @@ loadProducts_fn = async function() {
     return;
   }
   __privateSet(this, _isLoaded, true);
-  const section = this.closest(".shopify-section"), url = `${Shopify.routes.root}search?type=product&q=${__privateGet(this, _RecentlyViewedProducts_instances, searchQueryString_get)}&section_id=${extractSectionId(section)}`, response = await fetch(url, { priority: "low" });
+  const section = this.closest(".shopify-section"), url = `${Shopify.routes.root}search?type=product&q=${__privateGet(this, _RecentlyViewedProducts_instances, searchQueryString_get)}&section_id=${extractSectionId(section)}`;
+  let response;
+  try {
+    response = await fetch(url, { priority: "low" });
+    if (!response.ok) {
+      return;
+    }
+  } catch (e) {
+    // Network error / aborted — fail silently rather than crash. Fixes JAVASCRIPT-21.
+    return;
+  }
   const tempDiv = new DOMParser().parseFromString(await response.text(), "text/html"), recentlyViewedProductsElement = tempDiv.querySelector("recently-viewed-products");
-  if (recentlyViewedProductsElement.childElementCount > 0) {
+  if (recentlyViewedProductsElement && recentlyViewedProductsElement.childElementCount > 0) {
     this.replaceChildren(...document.importNode(recentlyViewedProductsElement, true).childNodes);
   } else {
     section.remove();
@@ -5238,37 +5189,26 @@ if (!window.customElements.get("recently-viewed-products")) {
 }
 
 // js/sections/revealed-image-on-scroll.js
-import { scroll as scroll3, timeline as timeline16, ScrollOffset, inView as inView15 } from "vendor";
+import { scroll as scroll3, timeline as timeline16, ScrollOffset, inView as inView14 } from "vendor";
 var RevealedImage = class extends HTMLElement {
   connectedCallback() {
     const scrollTracker = this.querySelector(".revealed-image__scroll-tracker"), scroller = this.querySelector(".revealed-image__scroller");
     scrollTracker.style.height = `${scroller.clientHeight}px`;
     new ResizeObserver((entries) => scrollTracker.style.height = `${entries[0].contentRect.height}px`).observe(scroller);
-    scroll3(
-      timeline16([
-        [
-          this.querySelectorAll(".revealed-image__image-clipper, .revealed-image__content--inside"),
-          { clipPath: ["inset(37% 37% 41% 37%)", "inset(calc(var(--sticky-area-height) / 2) 0)"] },
-          { easing: "ease-in" }
-        ],
-        [this.querySelectorAll("img, svg"), { transform: ["translate(-10%, -1.5%) scale(1.4)", "translate(0, 0) scale(1)"] }, { easing: "ease-in", at: "<" }],
-        [this.querySelectorAll(".revealed-image__content"), { opacity: [0, 1, 1] }, { offset: [0, 0.25, 1], at: "<" }]
-      ]),
-      {
-        target: scrollTracker,
-        offset: ScrollOffset.All
-      }
-    );
-    inView15(
-      this,
-      () => {
-        this.style.visibility = "visible";
-        return () => {
-          this.style.visibility = "hidden";
-        };
-      },
-      { margin: "200px" }
-    );
+    scroll3(timeline16([
+      [this.querySelectorAll(".revealed-image__image-clipper, .revealed-image__content--inside"), { clipPath: ["inset(37% 37% 41% 37%)", "inset(calc(var(--sticky-area-height) / 2) 0)"] }, { easing: "ease-in" }],
+      [this.querySelectorAll("img, svg"), { transform: ["translate(-10%, -1.5%) scale(1.4)", "translate(0, 0) scale(1)"] }, { easing: "ease-in", at: "<" }],
+      [this.querySelectorAll(".revealed-image__content"), { opacity: [0, 1, 1] }, { offset: [0, 0.25, 1], at: "<" }]
+    ]), {
+      target: scrollTracker,
+      offset: ScrollOffset.All
+    });
+    inView14(this, () => {
+      this.style.visibility = "visible";
+      return () => {
+        this.style.visibility = "hidden";
+      };
+    }, { margin: "200px" });
   }
 };
 if (!window.customElements.get("revealed-image")) {
@@ -5297,9 +5237,12 @@ var ScrollingText = class extends HTMLElement {
         );
       } else {
         scroll4(
-          animate18(this, {
-            transform: ["translateX(calc(var(--transform-logical-flip) * 50vw))", "translateX(calc(var(--transform-logical-flip) * 50vw - 10%))"]
-          }),
+          animate18(
+            this,
+            {
+              transform: ["translateX(calc(var(--transform-logical-flip) * 50vw))", "translateX(calc(var(--transform-logical-flip) * 50vw - 10%))"]
+            }
+          ),
           {
             target: this,
             offset: ["start end", "end start"]
@@ -5318,7 +5261,12 @@ var ShopTheLookDots = class extends HTMLElement {
   connectedCallback() {
     this._abortController = new AbortController();
     Array.from(this.children).forEach((dots) => {
-      document.getElementById(dots.getAttribute("aria-controls")).addEventListener("carousel:change", (event) => this._onDotClicked(event), { signal: this._abortController.signal });
+      // BB Cart Hardening 2026-05-04: guard against missing carousel target element.
+      var ariaControls = dots.getAttribute("aria-controls");
+      if (!ariaControls) return;
+      var target = document.getElementById(ariaControls);
+      if (!target) return;
+      target.addEventListener("carousel:change", (event) => this._onDotClicked(event), { signal: this._abortController.signal });
     });
   }
   disconnectedCallback() {
@@ -5333,7 +5281,7 @@ if (!window.customElements.get("shop-the-look-dots")) {
 }
 
 // js/sections/slideshow.js
-import { animate as motionAnimate4, timeline as timeline17, inView as inView16 } from "vendor";
+import { animate as motionAnimate4, timeline as timeline17, inView as inView15 } from "vendor";
 var Slideshow = class extends HTMLElement {
   constructor() {
     super();
@@ -5360,7 +5308,7 @@ var SlideshowCarousel = class extends EffectCarousel {
     super();
     this.addEventListener("carousel:select", this._onSlideSelected);
     if (this.hasAttribute("reveal-on-scroll")) {
-      inView16(this, this._reveal.bind(this));
+      inView15(this, this._reveal.bind(this));
     }
     if (this.querySelector(".slideshow__cursor")) {
       this.addEventListener("tap", this._onSlideshowTap);
@@ -5372,14 +5320,10 @@ var SlideshowCarousel = class extends EffectCarousel {
       this._player.addEventListener("player:start", (event) => {
         const cursorRing = this.querySelector(".slideshow__cursor-ring circle");
         if (cursorRing) {
-          const cursorRingAnimationControl = motionAnimate4(
-            cursorRing,
-            { strokeDasharray: [`0px, ${cursorRing.getTotalLength()}px`, `${cursorRing.getTotalLength()}px, ${cursorRing.getTotalLength()}px`] },
-            {
-              duration: event.detail.duration,
-              easing: "linear"
-            }
-          );
+          const cursorRingAnimationControl = motionAnimate4(cursorRing, { strokeDasharray: [`0px, ${cursorRing.getTotalLength()}px`, `${cursorRing.getTotalLength()}px, ${cursorRing.getTotalLength()}px`] }, {
+            duration: event.detail.duration,
+            easing: "linear"
+          });
           this._pendingAnimationControls.push(cursorRingAnimationControl);
         }
         const circles = Array.from(this.querySelectorAll(".numbered-dots__item"));
@@ -5387,11 +5331,7 @@ var SlideshowCarousel = class extends EffectCarousel {
           const circle = item.querySelector("circle:last-child");
           let circleAnimationControl = null;
           if (item.getAttribute("aria-current") === "true") {
-            circleAnimationControl = motionAnimate4(
-              circle,
-              { strokeDasharray: [`0px, ${circle.getTotalLength()}px`, `${circle.getTotalLength()}px, ${circle.getTotalLength()}px`] },
-              { duration: event.detail.duration, easing: "linear" }
-            );
+            circleAnimationControl = motionAnimate4(circle, { strokeDasharray: [`0px, ${circle.getTotalLength()}px`, `${circle.getTotalLength()}px, ${circle.getTotalLength()}px`] }, { duration: event.detail.duration, easing: "linear" });
           } else {
             circleAnimationControl = motionAnimate4(circle, { strokeDasharray: `${circle.getTotalLength()}px, ${circle.getTotalLength()}px` }, { duration: 0, easing: "linear" });
           }
@@ -5524,6 +5464,7 @@ import { Delegate as Delegate7 } from "vendor";
       }
       const anchorElement = document.querySelector(url.hash);
       if (anchorElement) {
+        event.preventDefault();
         anchorElement.scrollIntoView({ block: "start", behavior: "smooth" });
       }
     });

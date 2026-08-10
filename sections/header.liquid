@@ -1,8 +1,8 @@
 {%- comment -%}
-  IMPLEMENTATION NOTE: Impact header with all the menu is an extremely complex piece of code. Due to requirements from design
-  team, we had to cover over hundred of potential combinations. As a consequence, this part (and all the menu snippets) are
-  extremely sensitive code that should (if possible) not be touched unless you have spend enough time to study and understand
-  the underlying logic of the menu.
+IMPLEMENTATION NOTE: Impact header with all the menu is an extremely complex piece of code. Due to requirements from design
+team, we had to cover over hundred of potential combinations. As a consequence, this part (and all the menu snippets) are
+extremely sensitive code that should (if possible) not be touched unless you have spend enough time to study and understand
+the underlying logic of the menu.
 {%- endcomment -%}
 
 {%- if section.settings.show_country_selector and localization.available_countries.size > 1 -%}
@@ -76,20 +76,12 @@
 </style>
 
 <height-observer variable="header">
-  <store-header
-    class="header"
-    {% if section.settings.hide_on_scroll %}
-      hide-on-scroll="100"
-    {% endif %}
-    {% if section.settings.enable_sticky %}
-      sticky
-    {% endif %}
-  >
+  <store-header class="header" {% if section.settings.hide_on_scroll %}hide-on-scroll="100"{% endif %} {% if section.settings.enable_sticky %}sticky{% endif %}>
     <div class="header__wrapper">
       {%- comment -%}
-        --------------------------------------------------------------------------------------------------------------------
-        MAIN NAV AREA
-        --------------------------------------------------------------------------------------------------------------------
+      --------------------------------------------------------------------------------------------------------------------
+      MAIN NAV AREA
+      --------------------------------------------------------------------------------------------------------------------
       {%- endcomment -%}
 
       <div class="header__main-nav">
@@ -119,46 +111,32 @@
                         assign mega_menu_block = block
                         break
                       endif
+
                     endfor
                   %}
 
                   <li>
                     {%- if link.levels == 0 and mega_menu_block == '' -%}
-                      <a
-                        href="{{ link.url }}"
-                        class="bold link-faded-reverse"
-                        {% if link.current %}
-                          aria-current="page"
-                        {% endif %}
-                      >
-                        {{- link.title -}}
-                      </a>
+                      <a href="{{ link.url }}" class="bold link-faded-reverse" {% if link.current %}aria-current="page"{% endif %}>{{- link.title -}}</a>
                     {%- else -%}
                       {%- if mega_menu_block != '' -%}
                         {%- comment -%}
-                          Implementation note: the designers had the desire to show a lot of different kind of menus in Impact: one standard
-                          mega menu but also a kind of "sidebar" mode when the mega-menu appears in a drawer. Unfortunately, this comes with
-                          a lot of extra complexity as we have to go through two different code path: a "details" element for the standard
-                          menu, and a full drawer for the other one.
+                        Implementation note: the designers had the desire to show a lot of different kind of menus in Impact: one standard
+                        mega menu but also a kind of "sidebar" mode when the mega-menu appears in a drawer. Unfortunately, this comes with
+                        a lot of extra complexity as we have to go through two different code path: a "details" element for the standard
+                        menu, and a full drawer for the other one.
                         {%- endcomment -%}
                         {%- unless mega_menu_block.settings.layout == 'drawer' -%}
                           <details is="mega-menu-disclosure" trigger="{{ section.settings.menu_open_trigger | escape }}" {{ mega_menu_block.shopify_attributes }}>
-                            <summary
-                              class="text-with-icon gap-2.5 bold link-faded-reverse"
-                              {% if link.url != '#' %}
-                                data-url="{{ link.url | escape }}"
-                              {% endif %}
-                            >
-                              {{- link.title -}}
-                              {%- render 'icon' with 'chevron-bottom' -%}
+                            <summary class="text-with-icon gap-2.5 bold link-faded-reverse" {% if link.url != '#' %}data-url="{{ link.url | escape }}"{% endif %}>
+                              {{- link.title -}} {%- render 'icon' with 'chevron-bottom' -%}
                             </summary>
 
-                            {%- render 'mega-menu-horizontal', link: link, mega_menu_block: mega_menu_block -%}
+                           {%- render 'mega-menu-horizontal', link: link, mega_menu_block: mega_menu_block -%}
                           </details>
                         {%- else -%}
                           <button aria-controls="navigation-drawer-{{ forloop.index }}" aria-expanded="false" class="text-with-icon gap-2.5 bold link-faded-reverse">
-                            {{- link.title -}}
-                            {%- render 'icon' with 'chevron-bottom' -%}
+                            {{- link.title -}} {%- render 'icon' with 'chevron-bottom' -%}
                           </button>
 
                           <navigation-drawer class="navigation-drawer drawer lg-max:hidden" id="navigation-drawer-{{ forloop.index }}" open-from="left" mega-menu>
@@ -167,14 +145,8 @@
                         {%- endunless -%}
                       {%- else -%}
                         <details class="relative" is="dropdown-disclosure" trigger="{{ section.settings.menu_open_trigger | escape }}">
-                          <summary
-                            class="text-with-icon gap-2.5 bold link-faded-reverse"
-                            {% if link.url != '#' %}
-                              data-url="{{ link.url | escape }}"
-                            {% endif %}
-                          >
-                            {{- link.title -}}
-                            {%- render 'icon' with 'chevron-bottom' -%}
+                          <summary class="text-with-icon gap-2.5 bold link-faded-reverse" {% if link.url != '#' %}data-url="{{ link.url | escape }}"{% endif %}>
+                            {{- link.title -}} {%- render 'icon' with 'chevron-bottom' -%}
                           </summary>
 
                           <div class="dropdown-menu {% if link.levels <= 1 %}dropdown-menu--restrictable{% endif %}">
@@ -182,28 +154,13 @@
                               {%- for sub_link in link.links -%}
                                 <li>
                                   {%- if sub_link.levels == 0 -%}
-                                    <a
-                                      href="{{ sub_link.url }}"
-                                      class="dropdown-menu__item group"
-                                      {% if sub_link.current %}
-                                        aria-current="page"
-                                      {% endif %}
-                                    >
-                                      <span
-                                        ><span class="reversed-link">{{ sub_link.title }}</span></span
-                                      >
+                                    <a href="{{ sub_link.url }}" class="dropdown-menu__item group" {% if sub_link.current %}aria-current="page"{% endif %}>
+                                      <span><span class="reversed-link">{{ sub_link.title }}</span></span>
                                     </a>
                                   {%- else -%}
                                     <details class="relative" is="dropdown-disclosure" trigger="{{ section.settings.menu_open_trigger | escape }}">
-                                      <summary
-                                        class="dropdown-menu__item group"
-                                        {% if sub_link.url != '#' %}
-                                          data-url="{{ sub_link.url | escape }}"
-                                        {% endif %}
-                                      >
-                                        <span
-                                          ><span class="reversed-link">{{- sub_link.title -}}</span></span
-                                        >
+                                      <summary class="dropdown-menu__item group" {% if sub_link.url != '#' %}data-url="{{ sub_link.url | escape }}"{% endif %}>
+                                        <span><span class="reversed-link">{{- sub_link.title -}}</span></span>
                                         {%- render 'icon' with 'chevron-right', direction_aware: true -%}
                                       </summary>
 
@@ -211,16 +168,8 @@
                                         <ul class="contents" role="list">
                                           {%- for sub_sub_link in sub_link.links -%}
                                             <li>
-                                              <a
-                                                href="{{ sub_sub_link.url }}"
-                                                class="dropdown-menu__item group"
-                                                {% if sub_sub_link.current %}
-                                                  aria-current="page"
-                                                {% endif %}
-                                              >
-                                                <span
-                                                  ><span class="reversed-link">{{ sub_sub_link.title }}</span></span
-                                                >
+                                              <a href="{{ sub_sub_link.url }}" class="dropdown-menu__item group" {% if sub_sub_link.current %}aria-current="page"{% endif %}>
+                                                <span><span class="reversed-link">{{ sub_sub_link.title }}</span></span>
                                               </a>
                                             </li>
                                           {%- endfor -%}
@@ -244,9 +193,9 @@
       </div>
 
       {%- comment -%}
-        --------------------------------------------------------------------------------------------------------------------
-        LOGO AREA
-        --------------------------------------------------------------------------------------------------------------------
+      --------------------------------------------------------------------------------------------------------------------
+      LOGO AREA
+      --------------------------------------------------------------------------------------------------------------------
       {%- endcomment -%}
 
       {%- capture logo_content -%}
@@ -274,9 +223,9 @@
       {% endif %}
 
       {%- comment -%}
-        --------------------------------------------------------------------------------------------------------------------
-        SECONDARY NAV AREA
-        --------------------------------------------------------------------------------------------------------------------
+      --------------------------------------------------------------------------------------------------------------------
+      SECONDARY NAV AREA
+      --------------------------------------------------------------------------------------------------------------------
       {%- endcomment -%}
 
       <div class="header__secondary-nav">
@@ -295,12 +244,7 @@
         <ul class="header__icon-list">
           {%- if section.settings.show_country_selector and localization.available_countries.size > 1 -%}
             <li class="hidden md:block shrink-0">
-              {%- render 'localization-selector',
-                type: 'country',
-                show_country_name: section.settings.show_country_name,
-                show_country_flag: section.settings.show_country_flag,
-                popover_vertical_position: 'end'
-              -%}
+              {%- render 'localization-selector', type: 'country', show_country_name: section.settings.show_country_name, show_country_flag: section.settings.show_country_flag, popover_vertical_position: 'end' -%}
             </li>
           {%- endif -%}
 
@@ -316,7 +260,7 @@
               {%- render 'icon' with 'search' -%}
             </a>
           </li>
-
+          
           {%- if shop.customer_accounts_enabled -%}
             <li>
               <shopify-account class="hidden sm:block" menu="{{ section.settings.customer_account_menu }}">
@@ -329,14 +273,7 @@
           {%- endif -%}
 
           <li>
-            <a
-              href="{{ routes.cart_url }}"
-              data-no-instant
-              class="relative block tap-area"
-              {% if settings.cart_type != 'page' and request.page_type != 'cart' %}
-                aria-controls="cart-drawer"
-              {% endif %}
-            >
+            <a href="{{ routes.cart_url }}" data-no-instant class="relative block tap-area" {% if settings.cart_type != 'page' and request.page_type != 'cart' %}aria-controls="cart-drawer"{% endif %}>
               <span class="sr-only">{{ 'header.general.cart' | t }}</span>
               {%- render 'icon' with 'cart' -%}
 
@@ -364,22 +301,8 @@
 {%- assign secondary_menu = section.settings.secondary_menu -%}
 
 {%- if main_menu.links.size > 0 or secondary_menu.links.size > 0 -%}
-  <navigation-drawer
-    mobile-opening="{{ section.settings.opening_from }}"
-    open-from="left"
-    id="header-sidebar-menu"
-    class="navigation-drawer drawer {% if section.settings.layout != 'drawer' %}lg:hidden{% endif %}"
-    {% if request.design_mode %}
-      handle-section-events
-    {% endif %}
-  >
-    <button
-      is="close-button"
-      aria-label="{{ 'general.accessibility.close' | t | escape }}"
-      {%- if section.settings.opening_from == 'bottom' -%}
-        class="sm-max:hidden"
-      {%- endif -%}
-    >
+  <navigation-drawer mobile-opening="{{ section.settings.opening_from }}" open-from="left" id="header-sidebar-menu" class="navigation-drawer drawer {% if section.settings.layout != 'drawer' %}lg:hidden{% endif %}" {% if request.design_mode %}handle-section-events{% endif %}>
+    <button is="close-button" aria-label="{{ 'general.accessibility.close' | t | escape }}" {%- if section.settings.opening_from == 'bottom' -%}class="sm-max:hidden"{%- endif -%}>
       {%- render 'icon' with 'close', width: 19, height: 19 -%}
     </button>
 
@@ -393,8 +316,7 @@
       show_country_selector: section.settings.show_country_selector,
       show_country_name: section.settings.show_country_name,
       show_country_flag: section.settings.show_country_flag,
-      show_locale_selector: section.settings.show_locale_selector
-    -%}
+      show_locale_selector: section.settings.show_locale_selector -%}
   </navigation-drawer>
 {%- endif -%}
 

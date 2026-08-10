@@ -1,22 +1,22 @@
 {%- comment -%}
-  ----------------------------------------------------------------------------------------------------------------------
-  PRODUCT BADGES COMPONENT
-  ----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+PRODUCT BADGES COMPONENT
+----------------------------------------------------------------------------------------------------------------------
 
-  This component is used in product listing and product page to render the badges of a given product
+This component is used in product listing and product page to render the badges of a given product
 
-  ********************************************
-  Supported variables
-  ********************************************
+********************************************
+Supported variables
+********************************************
 
-  * product: the product to render the badges
-  * variant: the specific variant to show the badge from
-  * types: the types of badge to output. Can be "custom", "sold_out" or "discount" (or a combination separated by comma). If nothing is set, all badges are outputted.
-  * context: can be "product" or "card"
-  * class: an extra class added on the container
+* product: the product to render the badges
+* variant: the specific variant to show the badge from
+* types: the types of badge to output. Can be "custom", "sold_out", "discount", or "includes" (or a combination separated by comma). If nothing is set, all badges are outputted.
+* context: can be "product" or "card"
+* class: an extra class added on the container
 {%- endcomment -%}
 
-{%- assign badge_types = types | default: 'custom, sold_out, discount' | split: ',' -%}
+{%- assign badge_types = types | default: 'custom, sold_out, discount, includes' | split: ',' -%}
 {%- assign variant = variant | default: product.selected_or_first_available_variant -%}
 
 {%- capture badges -%}
@@ -79,6 +79,44 @@
               </on-sale-badge>
             {%- endif -%}
           {%- endif -%}
+        {%- endif -%}
+
+      {%- when 'includes' -%}
+        {%- comment -%}
+        Renders pill badges for "this basket includes X" callouts on the
+        product card. Two tag conventions are supported so no data
+        migration is required:
+
+          1. NEW preferred convention — any tag starting with 'includes-':
+               tag 'includes-cigars'     → "Includes cigars"
+               tag 'includes-pint-glass' → "Includes pint glass"
+
+          2. LEGACY convention — explicit known `contains_*` tags:
+               tag 'contains_cigars'     → "Includes cigars"
+             Note: NOT every contains_* tag becomes a badge.
+             `contains_alcohol` is implied site-wide and is excluded.
+
+        The same tag drives the auto-collection condition
+        (e.g. cigar-gifts), keeping the badge and the collection
+        in sync via a single source of truth.
+        {%- endcomment -%}
+
+        {%- comment -%} Generic includes-* badges {%- endcomment -%}
+        {%- for product_tag in product.tags -%}
+          {%- assign tag_lower = product_tag | downcase -%}
+          {%- assign tag_prefix = tag_lower | slice: 0, 9 -%}
+          {%- if tag_prefix == 'includes-' -%}
+            {%- assign badge_label = tag_lower | replace: '-', ' ' | capitalize -%}
+            <span class="badge badge--includes badge--{{ tag_lower | handle }}">{{ badge_label }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment -%} Legacy alias: contains_cigars tag → "Includes cigars" badge.
+            Skip if the product is ALSO tagged includes-cigars (avoids dupes). {%- endcomment -%}
+        {%- if product.tags contains 'contains_cigars' -%}
+          {%- unless product.tags contains 'includes-cigars' -%}
+            <span class="badge badge--includes badge--contains-cigars">Includes cigars</span>
+          {%- endunless -%}
         {%- endif -%}
     {%- endcase -%}
   {%- endfor -%}

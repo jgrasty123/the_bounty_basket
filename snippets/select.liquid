@@ -1,21 +1,21 @@
 {%- comment -%}
-  ----------------------------------------------------------------------------------------------------------------------
-  SELECT COMPONENT
-  ----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+SELECT COMPONENT
+----------------------------------------------------------------------------------------------------------------------
 
-  This snippet generates a styled select using the native "select" element. If you wish to create a styled select, you
-  need to use the "dropdown" snippet instead.
+This snippet generates a styled select using the native "select" element. If you wish to create a styled select, you
+need to use the "dropdown" snippet instead.
 
-  ********************************************
-  Supported variables
-  ********************************************
+********************************************
+Supported variables
+********************************************
 
-  * name: the HTML name attribute that is used when the field is submitted.
-  * form: if specified, define the form ID linked to this input
-  * label: the label to show
-  * options: if the type is "select", HTML of the rendered options
-  * required: if set to true, the "required" attribute is added to the input
-  * autocomplete: a hint to the browser for help autocompletion. List can be found here: https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete#values
+* name: the HTML name attribute that is used when the field is submitted.
+* form: if specified, define the form ID linked to this input
+* label: the label to show
+* options: if the type is "select", HTML of the rendered options
+* required: if set to true, the "required" attribute is added to the input
+* autocomplete: a hint to the browser for help autocompletion. List can be found here: https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete#values
 {%- endcomment -%}
 
 {%- capture id -%}select-{{ section.id }}-{{ form }}-{{ name | handle }}{%- endcapture -%}

@@ -21,19 +21,15 @@
 
 <div {% render 'section-properties', narrow: true %}>
   {%- comment -%}
-    ----------------------------------------------------------------------------------------------------------------------
-    MOBILE VARIATION
-    ----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  MOBILE VARIATION
+  ----------------------------------------------------------------------------------------------------------------------
   {%- endcomment -%}
   <images-with-text-scrolling class="images-scrolling-mobile scroll-area bleed sm:unbleed">
     {%- for block in section.blocks -%}
       <div class="images-scrolling-mobile__item snap-start" {{ block.shopify_attributes }}>
         {%- if block.settings.image != blank -%}
-          {{-
-            block.settings.image
-            | image_url: width: block.settings.image.width
-            | image_tag: loading: 'lazy', sizes: '(max-width: 740px) 100vw, 650px', widths: '200,300,400,600,800,1000,1200,1400,1600', class: 'rounded-sm'
-          -}}
+          {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'lazy', sizes: '(max-width: 740px) 100vw, 650px', widths: '200,300,400,600,800,1000,1200,1400,1600', class: 'rounded-sm' -}}
         {%- else -%}
           {%- capture image_placeholder -%}product-{%- cycle '1', '2', '3', '4' -%}{%- endcapture -%}
           {{- image_placeholder | placeholder_svg_tag: 'placeholder' -}}
@@ -48,28 +44,14 @@
             {%- if block.settings.custom_icon != blank -%}
               {%- capture sizes -%}{{ block.settings.icon_width }}px{%- endcapture -%}
               {%- capture widths -%}{{ block.settings.icon_width }}, {{ block.settings.icon_width | times: 2 | at_most: block.settings.custom_icon.width }}{%- endcapture -%}
-              {{-
-                block.settings.custom_icon
-                | image_url: width: block.settings.custom_icon.width
-                | image_tag: loading: 'lazy', sizes: sizes, widths: widths, class: 'images-scrolling__icon'
-              -}}
+              {{- block.settings.custom_icon | image_url: width: block.settings.custom_icon.width | image_tag: loading: 'lazy', sizes: sizes, widths: widths, class: 'images-scrolling__icon' -}}
             {%- elsif block.settings.icon != 'none' -%}
               {%- render 'icon' with block.settings.icon, width: block.settings.icon_width, height: block.settings.icon_width, class: 'images-scrolling__icon' -%}
             {%- endif -%}
 
             {%- if block.settings.title != blank -%}
-              <p
-                class="h1"
-                {% if settings.heading_apparition != 'none' %}
-                  reveal-on-scroll="true"
-                {% endif %}
-              >
-                {%- render 'styled-text',
-                  content: block.settings.title,
-                  text_color: section.settings.heading_color,
-                  gradient: section.settings.heading_gradient,
-                  apparition_effect: true
-                -%}
+              <p class="h1" {% if settings.heading_apparition != 'none' %}reveal-on-scroll="true"{% endif %}>
+                {%- render 'styled-text', content: block.settings.title, text_color: section.settings.heading_color, gradient: section.settings.heading_gradient, apparition_effect: true -%}
               </p>
             {%- endif -%}
 
@@ -81,9 +63,9 @@
   </images-with-text-scrolling>
 
   {%- comment -%}
-    ----------------------------------------------------------------------------------------------------------------------
-    DESKTOP VARIATION
-    ----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  DESKTOP VARIATION
+  ----------------------------------------------------------------------------------------------------------------------
   {%- endcomment -%}
   <images-with-text-scrolling scrolling-experience="{{ section.settings.desktop_image_effect }}" class="images-scrolling-desktop">
     <div class="images-scrolling-desktop__content-list">
@@ -97,28 +79,14 @@
             {%- if block.settings.custom_icon != blank -%}
               {%- capture sizes -%}{{ block.settings.icon_width }}px{%- endcapture -%}
               {%- capture widths -%}{{ block.settings.icon_width }}, {{ block.settings.icon_width | times: 2 | at_most: block.settings.custom_icon.width }}{%- endcapture -%}
-              {{-
-                block.settings.custom_icon
-                | image_url: width: block.settings.custom_icon.width
-                | image_tag: loading: 'lazy', sizes: sizes, widths: widths, class: 'images-scrolling__icon'
-              -}}
+              {{- block.settings.custom_icon | image_url: width: block.settings.custom_icon.width | image_tag: loading: 'lazy', sizes: sizes, widths: widths, class: 'images-scrolling__icon' -}}
             {%- elsif block.settings.icon != 'none' -%}
               {%- render 'icon' with block.settings.icon, width: block.settings.icon_width, height: block.settings.icon_width, class: 'images-scrolling__icon' -%}
             {%- endif -%}
 
             {%- if block.settings.title != blank -%}
-              <p
-                class="h1"
-                {% if settings.heading_apparition != 'none' %}
-                  reveal-on-scroll="true"
-                {% endif %}
-              >
-                {%- render 'styled-text',
-                  content: block.settings.title,
-                  text_color: section.settings.heading_color,
-                  gradient: section.settings.heading_gradient,
-                  apparition_effect: true
-                -%}
+              <p class="h1" {% if settings.heading_apparition != 'none' %}reveal-on-scroll="true"{% endif %}>
+                {%- render 'styled-text', content: block.settings.title, text_color: section.settings.heading_color, gradient: section.settings.heading_gradient, apparition_effect: true -%}
               </p>
             {%- endif -%}
 
@@ -131,11 +99,7 @@
     <div class="images-scrolling-desktop__media-wrapper">
       {%- for block in section.blocks -%}
         {%- if block.settings.image != blank -%}
-          {{-
-            block.settings.image
-            | image_url: width: block.settings.image.width
-            | image_tag: loading: 'lazy', sizes: '(max-width: 740px) 100vw, 650px', widths: '200,300,400,600,800,1000,1200,1400,1600', class: 'rounded-sm'
-          -}}
+          {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'lazy', sizes: '(max-width: 740px) 100vw, 650px', widths: '200,300,400,600,800,1000,1200,1400,1600', class: 'rounded-sm' -}}
         {%- else -%}
           {%- capture image_placeholder -%}product-{%- cycle '1', '2', '3', '4' -%}{%- endcapture -%}
           {{- image_placeholder | placeholder_svg_tag: 'placeholder' -}}

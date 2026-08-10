@@ -2,9 +2,9 @@
   {%- render 'section-spacing-collapsing' -%}
 
   {%- comment -%}
-    ------------------------------------------------------------------------------------------------------------------------
-    CSS
-    ------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  CSS
+  ------------------------------------------------------------------------------------------------------------------------
   {%- endcomment -%}
 
   <style>
@@ -14,9 +14,9 @@
   </style>
 
   {%- comment -%}
-    ------------------------------------------------------------------------------------------------------------------------
-    LIQUID
-    ------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  LIQUID
+  ------------------------------------------------------------------------------------------------------------------------
   {%- endcomment -%}
 
   <div {% render 'section-properties' %}>
@@ -24,8 +24,8 @@
       <effect-carousel class="timeline__slider" id="timeline-carousel-{{ section.id }}">
         {%- for block in section.blocks -%}
           {%- liquid
-            assign loading_strategy = null
-
+            assign loading_strategy = nil
+  
             if section.index > 3 or forloop.first == false
               assign loading_strategy = 'lazy'
             endif
@@ -35,7 +35,7 @@
             <div class="timeline__image-wrapper">
               {%- if block.settings.image != blank -%}
                 {%- capture sizes -%}(max-width:700px) 100vw, min(700px, 50vw){%- endcapture -%}
-                {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, class: 'timeline__image rounded', sizes: sizes -}}
+                {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, class: "timeline__image rounded", sizes: sizes -}}
               {%- else -%}
                 <div class="timeline__image">
                   {{- 'image' | placeholder_svg_tag: 'placeholder rounded' -}}

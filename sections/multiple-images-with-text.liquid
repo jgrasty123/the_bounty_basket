@@ -3,9 +3,9 @@
 {%- assign visible_images_count = section.blocks | map: 'settings' | where: 'image' | size -%}
 
 {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  CSS
-  ------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+CSS
+------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <style>
@@ -50,9 +50,9 @@
 </style>
 
 {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  LIQUID
-  ------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+LIQUID
+------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 {%- assign is_narrow = false -%}
@@ -83,11 +83,7 @@
             {%- capture image_id -%}image-{{ block.id }}{%- endcapture -%}
             {%- capture image_class -%}rounded-sm shadow-sm {% unless section.settings.images_layout == 'stacked' %}reveal{% endunless %}{%- endcapture -%}
 
-            {{-
-              block.settings.image
-              | image_url: width: block.settings.image.width
-              | image_tag: id: image_id, style: style, sizes: 'min(100vw, 500px)', widths: '200,300,400,500,600,700,800,900,1000', class: image_class
-            -}}
+            {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: id: image_id, style: style, sizes: 'min(100vw, 500px)', widths: '200,300,400,500,600,700,800,900,1000', class: image_class -}}
           {%- endif -%}
         {%- endfor -%}
       {%- endif -%}
@@ -99,24 +95,13 @@
 
         {%- for block in section.blocks -%}
           {%- if block.settings.subheading != blank or block.settings.title != blank or block.settings.content != blank -%}
-            <div
-              class="prose {% if outputted_text_count == 0 %}is-selected{% else %}reveal-invisible{% endif %}"
-              {% if block.settings.image != blank %}
-                image-id="image-{{ block.id }}"
-              {% endif %}
-              {{ block.shopify_attributes }}
-            >
+            <div class="prose {% if outputted_text_count == 0 %}is-selected{% else %}reveal-invisible{% endif %}" {% if block.settings.image != blank %}image-id="image-{{ block.id }}"{% endif %} {{ block.shopify_attributes }}>
               {%- if block.settings.subheading != blank -%}
                 <p class="subheading">{{ block.settings.subheading | escape }}</p>
               {%- endif -%}
 
               {%- if block.settings.title != blank -%}
-                <p
-                  class="h1"
-                  {% if settings.heading_apparition != 'none' %}
-                    reveal-on-scroll="true"
-                  {% endif %}
-                >
+                <p class="h1" {% if settings.heading_apparition != 'none' %}reveal-on-scroll="true"{% endif %}>
                   {%- render 'styled-text', content: block.settings.title, apparition_effect: true -%}
                 </p>
               {%- endif -%}
@@ -124,13 +109,7 @@
               {{- block.settings.content -}}
 
               {%- if block.settings.button_text != blank -%}
-                {%- render 'button',
-                  href: block.settings.button_url,
-                  content: block.settings.button_text,
-                  size: 'xl',
-                  background: section.settings.button_background,
-                  text_color: section.settings.button_text_color
-                -%}
+                {%- render 'button', href: block.settings.button_url, content: block.settings.button_text, size: 'xl', background: section.settings.button_background, text_color: section.settings.button_text_color -%}
               {%- endif -%}
             </div>
 

@@ -44,8 +44,8 @@
       <reveal-items class="logo-list {% unless section.settings.stack_mobile %}scroll-area bleed sm:unbleed{% endunless %}">
         {%- for block in section.blocks -%}
           {%- liquid
-            assign loading_strategy = null
-
+            assign loading_strategy = nil
+  
             if section.index > 3 or forloop.index > 3
               assign loading_strategy = 'lazy'
             endif

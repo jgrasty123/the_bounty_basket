@@ -275,8 +275,7 @@ height-observer, visibility-progress, scroll-area, video-media, model-media, med
 }
 
 .pswp--click-to-zoom.pswp--zoom-allowed .pswp__img {
-  cursor: var(--cursor-zoom-in-svg-url) 28 28,
-    zoom-in;
+  cursor: var(--cursor-zoom-in-svg-url) 28 28, zoom-in;
 }
 
 .pswp--click-to-zoom.pswp--zoomed-in .pswp__img {
@@ -288,8 +287,7 @@ height-observer, visibility-progress, scroll-area, video-media, model-media, med
 }
 
 .pswp--no-mouse-drag.pswp--zoomed-in .pswp__img, .pswp--no-mouse-drag.pswp--zoomed-in .pswp__img:active, .pswp__img {
-  cursor: var(--cursor-zoom-out-svg-url) 28 28,
-    zoom-out;
+  cursor: var(--cursor-zoom-out-svg-url) 28 28, zoom-out;
 }
 
 .pswp__container, .pswp__img, .pswp__button {
@@ -832,11 +830,8 @@ scroll-carousel {
 }
 
 .content-over-media {
-  grid-template: 0 minmax(0, 1fr) 0 / minmax(0, 1fr) minmax(0,
-      min(var(--container-max-width), 100% - var(--content-over-media-gap, var(--content-over-media-column-gap, var(--container-gutter))) * 2))
-    minmax(0, 1fr);
-  gap: var(--content-over-media-row-gap, var(--content-over-media-gap, var(--container-gutter)))
-    var(--content-over-media-column-gap, var(--content-over-media-gap, var(--container-gutter)));
+  grid-template: 0 minmax(0, 1fr) 0 / minmax(0, 1fr) minmax(0, min(var(--container-max-width), 100% - var(--content-over-media-gap, var(--content-over-media-column-gap, var(--container-gutter))) * 2)) minmax(0, 1fr);
+  gap: var(--content-over-media-row-gap, var(--content-over-media-gap, var(--container-gutter))) var(--content-over-media-column-gap, var(--content-over-media-gap, var(--container-gutter)));
   place-items: center;
   display: grid;
   position: relative;
@@ -1138,8 +1133,7 @@ scroll-carousel {
 
 .popover::part(overlay) {
   min-height: 100lvh;
-  cursor: var(--cursor-close-svg-url) 28 28,
-      auto;
+  cursor: var(--cursor-close-svg-url) 28 28, auto;
   background: #0006;
   position: fixed;
   top: 0;
@@ -1265,8 +1259,7 @@ scroll-carousel {
 }
 
 .drawer.show-close-cursor::part(overlay) {
-  cursor: var(--cursor-close-svg-url) 28 28,
-      auto;
+  cursor: var(--cursor-close-svg-url) 28 28, auto;
 }
 
 .drawer::part(content) {
@@ -1684,7 +1677,7 @@ scroll-carousel {
 }
 
 .textarea {
-  height: auto;
+  height: 65px;
   vertical-align: top;
   padding-block-start: var(--spacing-4);
   padding-block-end: var(--spacing-4);
@@ -2384,11 +2377,11 @@ video-media::part(play-button) {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, -50%)scale(1);
 }
 
 video-media:hover::part(play-button) {
-  transform: translate(-50%, -50%) scale(1.1);
+  transform: translate(-50%, -50%)scale(1.1);
 }
 
 @media screen and (min-width: 700px) {
@@ -2618,11 +2611,7 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
 }
 
 .range-group {
-  background: linear-gradient(to var(--transform-origin-end),
-    rgb(var(--text-color) / .12) var(--range-min),
-    rgb(var(--text-color)) var(--range-min),
-    rgb(var(--text-color)) var(--range-max),
-    rgb(var(--text-color) / .12) var(--range-max));
+  background: linear-gradient(to var(--transform-origin-end), rgb(var(--text-color) / .12) var(--range-min), rgb(var(--text-color)) var(--range-min), rgb(var(--text-color)) var(--range-max), rgb(var(--text-color) / .12) var(--range-max));
   border-radius: 2px;
   height: 4px;
   position: relative;
@@ -3138,7 +3127,7 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
 }
 
 .product-quick-add {
-  z-index: 2;
+  z-index: 10;
   visibility: hidden;
   opacity: 0;
   width: 100%;
@@ -3147,6 +3136,8 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   position: fixed;
   bottom: 0;
   transform: translateY(10px);
+  background: rgb(var(--dialog-background, var(--background)));
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, .1);
 }
 
 .product-quick-add:not(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)) {
@@ -3172,6 +3163,7 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
     padding: 1rem;
     bottom: 1rem;
     transform: translateY(0);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, .12);
   }
 
   .product-quick-add:not(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)) {
@@ -3761,8 +3753,7 @@ tfoot td {
 }
 
 .color-swatch.is-disabled {
-  background: linear-gradient(to bottom right, transparent calc(50% - 1px), rgb(var(--background)) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)),
-      var(--swatch-background) center/cover;
+  background: linear-gradient(to bottom right, transparent calc(50% - 1px), rgb(var(--background)) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)), var(--swatch-background) center/cover;
 }
 
 :disabled + .color-swatch {
@@ -4014,14 +4005,14 @@ tfoot td {
     transition: opacity .2s ease-in-out, visibility .2s ease-in-out, transform .2s ease-in-out;
     position: absolute;
     left: 50%;
-    transform: translateX(-50%) scale(.9);
+    transform: translateX(-50%)scale(.9);
   }
 
   [data-tooltip]:hover:after {
     visibility: visible;
     opacity: 1;
     will-change: transform;
-    transform: translateX(-50%) scale(1);
+    transform: translateX(-50%)scale(1);
   }
 }
 
@@ -6263,7 +6254,13 @@ shopify-account {
   --shopify-account-signed-in-avatar-color-background: rgb(var(--text-color));
   --shopify-account-signed-in-avatar-color-text: rgb(from rgb(var(--text-color)) calc(255 - r) calc(255 - g) calc(255 - b));
   --shopify-account-signed-in-avatar-size: 24px;
-  --shopify-account-avatar-size: none;
+  color: inherit;
+  visibility: inherit;
+}
+
+shopify-account::part(signed-out-avatar) {
+  min-width: 0;
+  min-height: 0;
 }
 
 .dropdown-menu {
@@ -6275,8 +6272,7 @@ shopify-account {
   color: rgb(var(--header-text));
   border-radius: var(--rounded-sm);
   opacity: 0;
-  box-shadow: var(--shadow),
-    0 0 0 1px rgb(var(--text-color) / .12);
+  box-shadow: var(--shadow), 0 0 0 1px rgb(var(--text-color) / .12);
   z-index: 1;
   display: grid;
   position: absolute;
@@ -8498,7 +8494,7 @@ shopify-account {
 @media screen and (min-width: 700px) {
   .section-boxed .shop-the-look {
     --shop-the-look-gap: var(--calculated-section-spacing-inline);
-    --shop-the-look-grid: auto / 55% minmax(0, 1fr);
+    --shop-the-look-grid: auto / 55% minmax(0 , 1fr);
   }
 
   .shop-the-look {

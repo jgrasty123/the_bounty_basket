@@ -1,48 +1,48 @@
 {%- comment -%}
-  ----------------------------------------------------------------------------------------------------------------------
-  OPTION VALUE
-  ----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+OPTION VALUE
+----------------------------------------------------------------------------------------------------------------------
 
-  This component renders a single option value. It is a generic component that is used both on product and collection
-  pages (for metaobject filtering). It ca be used to render a swatch, a block or a thumbnail.
+This component renders a single option value. It is a generic component that is used both on product and collection
+pages (for metaobject filtering). It ca be used to render a swatch, a block or a thumbnail.
 
-  ********************************************
-  Supported variables
-  ********************************************
+********************************************
+Supported variables
+********************************************
 
-  * type: control the presentational type of the option value. Can be "swatch", "block", "thumbnail" or "image_filter". [REQUIRED]
-  * form: the form ID to which the option value belongs. [REQUIRED FOR PRODUCT OPTION]
-  * option_value: in the case of a product option, the option_value object. [REQUIRED FOR PRODUCT OPTION]
-  * filter_value: in the case of a collection filter option, the filter_value object. [REQUIRED FOR COLLECTION FILTER]
-  * param_name: the param_name attribute when field is submitted to the server [REQUIRED FOR PRODUCT OPTION, NOT NEEDED FOR COLLECTION FILTER]
-  * option_position: the position of the option in the list of options [REQUIRED FOR PRODUCT OPTION]
-  * output_variant_media: if set to true, the variant media will be outputted as a data attribute of the associated form control. This is
-                          done on card swatches to allow for a quick preview of the variant media.
-  * url: if defined, option value will be used as a plain link tag instead of an input. If passing an option_value object, the product_url
-         will be used as the link target automatically. [OPTIONAL]
-  * reload_page_for_combined_products: if set to true, when a given option value is connected to a combined product, the option will be generated
-                                       as a link instead, and will reload the whole page. This is needed for main page product, as other sections
-                                       might be different based on the other sections.
-  * hide_if_disabled: if true, the option value will not be rendered if the option value is disabled. [OPTIONAL]
+* type: control the presentational type of the option value. Can be "swatch", "block", "thumbnail" or "image_filter". [REQUIRED]
+* form: the form ID to which the option value belongs. [REQUIRED FOR PRODUCT OPTION]
+* option_value: in the case of a product option, the option_value object. [REQUIRED FOR PRODUCT OPTION]
+* filter_value: in the case of a collection filter option, the filter_value object. [REQUIRED FOR COLLECTION FILTER]
+* param_name: the param_name attribute when field is submitted to the server [REQUIRED FOR PRODUCT OPTION, NOT NEEDED FOR COLLECTION FILTER]
+* option_position: the position of the option in the list of options [REQUIRED FOR PRODUCT OPTION]
+* output_variant_media: if set to true, the variant media will be outputted as a data attribute of the associated form control. This is
+                        done on card swatches to allow for a quick preview of the variant media.
+* url: if defined, option value will be used as a plain link tag instead of an input. If passing an option_value object, the product_url
+       will be used as the link target automatically. [OPTIONAL]
+* reload_page_for_combined_products: if set to true, when a given option value is connected to a combined product, the option will be generated
+                                     as a link instead, and will reload the whole page. This is needed for main page product, as other sections
+                                     might be different based on the other sections.
+* hide_if_disabled: if true, the option value will not be rendered if the option value is disabled. [OPTIONAL]
 
-  Thumbnail specific parameters:
+Thumbnail specific parameters:
 
-  * image: the image to use
-  * size: can be 'sm' to make it smaller
-  * bordered: if set to true, a border is added when the image is not selected
+* image: the image to use
+* size: can be 'sm' to make it smaller
+* bordered: if set to true, a border is added when the image is not selected
 
-  Block swatch specific parameters
+Block swatch specific parameters
 
-  * show_swatch: if set to true, show the color as a small tile.
-  * color: a single color drop (used for product color swatches)
-  * colors: an optional list of color drop (if not set, the theme will use the config based approach as a fallback). When more
-            than one color is given, a conic gradient is generated. It supports up to 4 colors.
-  * image: an optional image used as the background (if not set, the theme will use the config based approach as a fallback)
+* show_swatch: if set to true, show the color as a small tile.
+* color: a single color drop (used for product color swatches)
+* colors: an optional list of color drop (if not set, the theme will use the config based approach as a fallback). When more
+          than one color is given, a conic gradient is generated. It supports up to 4 colors.
+* image: an optional image used as the background (if not set, the theme will use the config based approach as a fallback)
 
-  Color swatch specific parameters:
+Color swatch specific parameters:
 
-  * show_tooltip: if set to true, display a tooltip on hover
-  * swatch: a swatch drop that can contain either an image or a color
+* show_tooltip: if set to true, display a tooltip on hover
+* swatch: a swatch drop that can contain either an image or a color
 {%- endcomment -%}
 
 {%- liquid
@@ -135,42 +135,9 @@
     {%- endif -%}
   {%- endcapture -%}
 
-  <input
-    class="sr-only"
-    type="{% if allow_multiple %}checkbox{% else %}radio{% endif %}"
-    name="{{ param_name }}"
-    id="{{ id | escape }}"
-    value="{{ value | escape }}"
-    {% if form %}
-      form="{{ form }}"
-    {% endif %}
-    {% if selected %}
-      checked="checked"
-    {% endif %}
-    {% if hide_if_disabled and disabled and selected == false %}
-      disabled
-    {% endif %}
-    {% if option_value and option_value.product_url %}
-      data-product-url="{{ option_value.product_url | escape }}"
-    {% endif %}
-    {% if option_position %}
-      data-option-position="{{ option_position }}"
-    {% endif %}
-    {{ variant_attributes }}
-  >
+  <input class="sr-only" type="{% if allow_multiple %}checkbox{% else %}radio{% endif %}" name="{{ param_name }}" id="{{ id | escape }}" value="{{ value | escape }}" {% if form %}form="{{ form }}"{% endif %} {% if selected %}checked="checked"{% endif %} {% if hide_if_disabled and disabled and selected == false %}disabled{% endif %} {% if option_value and option_value.product_url %}data-product-url="{{ option_value.product_url | escape }}"{% endif %} {% if option_position %}data-option-position="{{ option_position }}"{% endif %} {{ variant_attributes }}>
 {%- elsif option_value and option_value.selected -%}
-  <input
-    class="sr-only"
-    type="radio"
-    name="{{ param_name }}"
-    id="{{ id | escape }}"
-    value="{{ value | escape }}"
-    data-option-position="{{ option_position }}"
-    {% if form %}
-      form="{{ form }}"
-    {% endif %}
-    checked="checked"
-  >
+  <input class="sr-only" type="radio" name="{{ param_name }}" id="{{ id | escape }}" value="{{ value | escape }}" data-option-position="{{ option_position }}" {% if form %}form="{{ form }}"{% endif %} checked="checked">
 {%- endif -%}
 
 {%- case type -%}
@@ -178,19 +145,12 @@
     {%- assign image = image | default: variant.featured_media | default: variant.product.featured_media -%}
 
     {%- if image != blank -%}
-      <{{ option_value_tag }}
-        class="thumbnail-swatch {% if size == 'sm' %}thumbnail-swatch--sm{% endif %} {% if disabled %}is-disabled{% endif %} {% if selected and option_value_tag == 'a' %}is-selected{% endif %} {% if bordered %}border{% endif %}"
-        {{ attributes }}
-      >
+      <{{ option_value_tag }} class="thumbnail-swatch {% if size == 'sm' %}thumbnail-swatch--sm{% endif %} {% if disabled %}is-disabled{% endif %} {% if selected and option_value_tag == 'a' %}is-selected{% endif %} {% if bordered %}border{% endif %}" {{ attributes }}>
         <span class="sr-only">{{ label | default: value }}</span>
         {{- image | image_url: width: image.width | image_tag: sizes: '60px', widths: '60,120', class: 'object-cover' -}}
       </{{ option_value_tag }}>
     {%- else -%}
-      <{{ option_value_tag }}
-        class="block-swatch {% if disabled %}is-disabled{% endif %} {% if selected and option_value_tag == 'a' %}is-selected{% endif %}"
-        for="{{ id | escape }}"
-        {{ attributes }}
-      >
+      <{{ option_value_tag }} class="block-swatch {% if disabled %}is-disabled{% endif %} {% if selected and option_value_tag == 'a' %}is-selected{% endif %}" for="{{ id | escape }}" {{ attributes }}>
         {{ label | default: value }}
       </{{ option_value_tag }}>
     {%- endif -%}
@@ -205,18 +165,11 @@
 
       <span>{{ label | default: value }}</span>
     </{{ option_value_tag }}>
-
+    
   {%- when 'swatch' -%}
     {%- assign white_label_list = 'general.label.white' | t | replace: ', ', ',' | downcase | split: ',' -%}
 
-    <{{ option_value_tag }}
-      class="color-swatch {% if settings.color_swatch_style == 'rectangle' %}color-swatch--rectangle{% endif %} {% if size == 'sm' %}color-swatch--sm{% endif %} {% if disabled %}is-disabled{% endif %} {% if selected and option_value_tag == 'a' %}is-selected{% endif %} {% if white_label_list contains downcase_label %}ring-inset{% endif %} {% if settings.color_swatch_style == 'round' %}rounded-full{% endif %}"
-      {% if show_tooltip %}
-        data-tooltip="{{ label | default: value | escape }}"
-      {% endif %}
-      style="{{ swatch_style }}"
-      {{ attributes }}
-    >
+    <{{ option_value_tag }} class="color-swatch {% if settings.color_swatch_style == 'rectangle' %}color-swatch--rectangle{% endif %} {% if size == 'sm' %}color-swatch--sm{% endif %} {% if disabled %}is-disabled{% endif %} {% if selected and option_value_tag == 'a' %}is-selected{% endif %} {% if white_label_list contains downcase_label %}ring-inset{% endif %} {% if settings.color_swatch_style == 'round' %}rounded-full{% endif %}" {% if show_tooltip %}data-tooltip="{{ label | default: value | escape }}"{% endif %} style="{{ swatch_style }}" {{ attributes }}>
       <span class="sr-only">{{ label | default: value }}</span>
     </{{ option_value_tag }}>
 
@@ -226,9 +179,6 @@
         {{- filter_value.image | image_url: width: filter_value.image.width | image_tag: loading: 'lazy', sizes: '32px', widths: '32,64,96', class: 'image-filter__image' -}}
       {%- endif -%}
 
-      <span class="image-filter__label">
-        {{- filter_value.label }}
-        {% if section.settings.show_filter_values_count %}({{ filter_value.count }}){% endif -%}
-      </span>
+      <span class="image-filter__label">{{ filter_value.label }} {% if section.settings.show_filter_values_count %}({{ filter_value.count }}){% endif %}</span>
     </{{ option_value_tag }}>
 {%- endcase -%}
