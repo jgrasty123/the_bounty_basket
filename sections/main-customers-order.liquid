@@ -16,9 +16,9 @@
       <div class="order">
         <div class="v-stack gap-6">
           {%- comment -%}
-          ----------------------------------------------------------------------------------------------------------------
-          ORDER STATUS
-          ----------------------------------------------------------------------------------------------------------------
+            ----------------------------------------------------------------------------------------------------------------
+            ORDER STATUS
+            ----------------------------------------------------------------------------------------------------------------
           {%- endcomment -%}
 
           {%- if order.cancelled -%}
@@ -40,16 +40,22 @@
 
             {%- if fulfillment.tracking_url -%}
               {%- assign button_content = 'customer.order.track_shipment' | t -%}
-              {%- render 'banner', status: 'success', content: fulfillment_message, button_href: fulfillment.tracking_url, button_content: button_content, text_alignment: 'left' -%}
+              {%- render 'banner',
+                status: 'success',
+                content: fulfillment_message,
+                button_href: fulfillment.tracking_url,
+                button_content: button_content,
+                text_alignment: 'left'
+              -%}
             {%- else -%}
               {%- render 'banner', status: 'success', content: fulfillment_message, text_alignment: 'left' -%}
             {%- endif -%}
           {%- endif -%}
 
           {%- comment -%}
-          ----------------------------------------------------------------------------------------------------------------
-          ORDER SUMMARY
-          ----------------------------------------------------------------------------------------------------------------
+            ----------------------------------------------------------------------------------------------------------------
+            ORDER SUMMARY
+            ----------------------------------------------------------------------------------------------------------------
           {%- endcomment -%}
           <table class="order-summary">
             <thead class="order-summary__header">
@@ -98,9 +104,15 @@
                     {%- for tax_line in order.tax_lines -%}
                       <div class="h-stack gap-4 justify-between">
                         {%- if cart.taxes_included -%}
-                          <span>{{ 'customer.order.taxes_included' | t }} ({{ tax_line.title }} {{ tax_line.rate_percentage }}%)</span>
+                          <span>
+                            {{- 'customer.order.taxes_included' | t }} ({{ tax_line.title }}
+                            {{ tax_line.rate_percentage }}%)</span
+                          >
                         {%- else -%}
-                          <span>{{ 'customer.order.taxes_excluded' | t }} ({{ tax_line.title }} {{ tax_line.rate_percentage }}%)</span>
+                          <span>
+                            {{- 'customer.order.taxes_excluded' | t }} ({{ tax_line.title }}
+                            {{ tax_line.rate_percentage }}%)</span
+                          >
                         {%- endif -%}
 
                         <span>{{ tax_line.price | money }}</span>

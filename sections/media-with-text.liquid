@@ -1,9 +1,9 @@
 {%- render 'section-spacing-collapsing' -%}
 
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-CSS
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  CSS
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <style>
@@ -49,107 +49,163 @@ CSS
 </style>
 
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-LIQUID
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  LIQUID
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <div {% render 'section-properties' %}>
-  <media-with-text class="media-with-text {% if section.settings.spacing == 'none' %}{% if section.settings.full_width %}full-bleed{% else %}rounded{% endif %}{% endif %}">
-    {%- for block in section.blocks -%}
-      <div id="block-{{ section.id }}-{{ block.id }}" class="media-with-text__item" {{ block.shopify_attributes }}>
-        <div class="media-with-text__media {% unless section.settings.spacing == 'none' %}rounded{% endunless %}" reveal-on-scroll="true">
-          {%- liquid
-            assign loading_strategy = nil
-  
-            if section.index > 3 or forloop.index > 3
-              assign loading_strategy = 'lazy'
-            endif
-          -%}
+  <div class="section-stack">
+    {%- assign section_header_text_alignment = section.settings.text_alignment | replace: 'left', 'start' | replace: 'right', 'end' -%}
 
-          {%- if block.type == 'image' -%}
-            {%- if block.settings.image != blank -%}
-              {%- assign width_ratio = 100.0 | divided_by: block.settings.media_width -%}
-              {%- assign maximum_image_width = settings.page_width | divided_by: width_ratio -%}
+    {%- render 'section-header',
+      subheading: section.settings.subheading,
+      heading: section.settings.title,
+      heading_color: section.settings.heading_color,
+      heading_gradient: section.settings.heading_gradient,
+      content: section.settings.content,
+      text_alignment: section_header_text_alignment
+    -%}
 
-              {%- capture sizes -%}(max-width: 999px) 100vw, min({{ maximum_image_width | ceil }}px, {{ block.settings.media_width }}vw){% endcapture %}
+    <media-with-text class="media-with-text {% if section.settings.spacing == 'none' %}{% if section.settings.full_width %}full-bleed{% else %}rounded{% endif %}{% endif %}">
+      {%- for block in section.blocks -%}
+        <div id="block-{{ section.id }}-{{ block.id }}" class="media-with-text__item" {{ block.shopify_attributes }}>
+          <div class="media-with-text__media {% unless section.settings.spacing == 'none' %}rounded{% endunless %}" reveal-on-scroll="true">
+            {%- liquid
+              assign loading_strategy = null
 
-              {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: sizes, widths: '300,400,500,600,700,800,1000,1200,1400,1600,1800,2000,2200,2400,2600' -}}
-            {%- else -%}
-              {{- 'image' | placeholder_svg_tag: 'aspect-short placeholder' -}}
-            {%- endif -%}
-          {%- else -%}
-            {%- capture poster -%}
-              {%- assign poster_image = block.settings.poster_image | default: block.settings.video.preview_image -%}
+              if section.index > 3 or forloop.index > 3
+                assign loading_strategy = 'lazy'
+              endif
+            -%}
 
-              {%- if poster_image -%}
-                {{- poster_image | image_url: width: poster_image.width | image_tag: loading: loading_strategy, sizes: '(max-width: 699px) 400px, 800px', widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200', class: 'rounded' -}}
+            {%- if block.type == 'image' -%}
+              {%- if block.settings.image != blank -%}
+                {%- assign width_ratio = 100.0 | divided_by: block.settings.media_width -%}
+                {%- assign maximum_image_width = settings.page_width | divided_by: width_ratio -%}
+
+                {%- capture sizes -%}(max-width: 999px) 100vw, min({{ maximum_image_width | ceil }}px, {{ block.settings.media_width }}vw){% endcapture %}
+
+                {{-
+                  block.settings.image
+                  | image_url: width: block.settings.image.width
+                  | image_tag: loading: loading_strategy, sizes: sizes, widths: '300,400,500,600,700,800,1000,1200,1400,1600,1800,2000,2200,2400,2600'
+                -}}
               {%- else -%}
-                {{ 'image' | placeholder_svg_tag: 'rounded' }}
+                {{- 'image' | placeholder_svg_tag: 'aspect-short placeholder' -}}
               {%- endif -%}
-            {%- endcapture -%}
-
-            {%- if block.settings.video -%}
-              <video-media {% if block.settings.autoplay %}autoplay{% else %}show-play-button{% endif %} style="--aspect-ratio: {{ block.settings.video.aspect_ratio }}">
-                {%- unless block.settings.autoplay -%}
-                  {{- poster -}}
-                {%- endunless -%}
-
-                {%- if block.settings.autoplay -%}
-                  {{- block.settings.video | video_tag: playslinline: true, muted: true, loop: true, preload: 'metadata' -}}
-                {%- else -%}
-                  {{- block.settings.video | video_tag: playslinline: true, controls: true, muted: false, loop: false, preload: 'metadata' -}}
-                {%- endif -%}
-              </video-media>
             {%- else -%}
-              <video-media host="{{ block.settings.external_video_url.type }}" {% if block.settings.autoplay %}autoplay{% else %}show-play-button{% endif %}>
-                {%- unless block.settings.autoplay -%}
-                  {{- poster -}}
-                {%- endunless -%}
+              {%- capture poster -%}
+                {%- assign poster_image = block.settings.poster_image | default: block.settings.video.preview_image -%}
 
-                <template>
-                  {%- if block.settings.external_video_url.type == 'youtube' -%}
-                    <iframe src="https://www.youtube.com/embed/{{ block.settings.external_video_url.id }}?playsinline=1&autoplay=1&controls=0&mute={% if block.settings.autoplay %}1{% else %}0{% endif %}&loop=1&playlist={{ block.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" allow="autoplay; encrypted-media" allowfullscreen="allowfullscreen"></iframe>
-                  {%- elsif block.settings.external_video_url.type == 'vimeo' -%}
-                    <iframe src="https://player.vimeo.com/video/{{ block.settings.external_video_url.id }}?autoplay=1&autopause=1&background={% if block.settings.autoplay %}1{% else %}0{% endif %}&loop=1&muted={% if block.settings.autoplay %}1{% else %}0{% endif %}&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.text_color | remove_first: '#' }}" allow="autoplay; encrypted-media;" allowfullscreen="allowfullscreen"></iframe>
+                {%- if poster_image -%}
+                  {{- poster_image | image_url: width: poster_image.width | image_tag: loading: loading_strategy, sizes: '(max-width: 699px) 400px, 800px', widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200', class: 'rounded' -}}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'rounded' }}
+                {%- endif -%}
+              {%- endcapture -%}
+
+              {%- if block.settings.video -%}
+                <video-media
+                  {% if block.settings.autoplay %}
+                    autoplay
+                  {% else %}
+                    show-play-button
+                  {% endif %}
+                  style="--aspect-ratio: {{ block.settings.video.aspect_ratio }}"
+                >
+                  {%- unless block.settings.autoplay -%}
+                    {{- poster -}}
+                  {%- endunless -%}
+
+                  {%- if block.settings.autoplay -%}
+                    {{- block.settings.video | video_tag: playslinline: true, muted: true, loop: true, preload: 'metadata' -}}
+                  {%- else -%}
+                    {{- block.settings.video | video_tag: playslinline: true, controls: true, muted: false, loop: false, preload: 'metadata' -}}
                   {%- endif -%}
-                </template>
-              </video-media>
-            {%- endif -%}
-          {%- endif -%}
-        </div>
+                </video-media>
+              {%- else -%}
+                <video-media
+                  host="{{ block.settings.external_video_url.type }}"
+                  {% if block.settings.autoplay %}
+                    autoplay
+                  {% else %}
+                    show-play-button
+                  {% endif %}
+                >
+                  {%- unless block.settings.autoplay -%}
+                    {{- poster -}}
+                  {%- endunless -%}
 
-        {%- capture content_class -%}media-with-text__content {% unless section.settings.spacing == 'none' %}rounded{% endunless %}{%- endcapture -%}
-        <div {% render 'surface', class: content_class, background: block.settings.background, background_gradient: block.settings.background_gradient, text_color: block.settings.text_color %}>
-          <div class="prose break-all {{ block.settings.text_position }}" reveal-on-scroll="true">
-            {%- if block.settings.custom_icon != blank -%}
-              {%- capture sizes -%}{{ block.settings.icon_width }}px{%- endcapture -%}
-              {%- capture widths -%}{{ block.settings.icon_width }}, {{ block.settings.icon_width | times: 2 | at_most: block.settings.custom_icon.width }}{%- endcapture -%}
-              {{- block.settings.custom_icon | image_url: width: block.settings.custom_icon.width | image_tag: loading: loading_strategy, sizes: sizes, widths: widths, class: 'media-with-text__icon' -}}
-            {%- elsif block.settings.icon != 'none' -%}
-              {%- render 'icon' with block.settings.icon, width: block.settings.icon_width, height: block.settings.icon_width, class: 'media-with-text__icon' -%}
-            {%- endif -%}
-
-            {%- if block.settings.subheading != blank -%}
-              <p class="subheading">{{ block.settings.subheading | escape }}</p>
-            {%- endif -%}
-
-            {%- if block.settings.title != blank -%}
-              <p class="h2">
-                {%- render 'styled-text', content: block.settings.title, gradient: block.settings.text_gradient -%}
-              </p>
-            {%- endif -%}
-
-            {{- block.settings.content -}}
-
-            {%- if block.settings.link_text != blank -%}
-              {%- render 'button', href: block.settings.link_url, content: block.settings.link_text, size: 'xl', background: block.settings.button_background, text_color: block.settings.button_text_color -%}
+                  <template>
+                    {%- if block.settings.external_video_url.type == 'youtube' -%}
+                      <iframe
+                        src="https://www.youtube.com/embed/{{ block.settings.external_video_url.id }}?playsinline=1&autoplay=1&controls=0&mute={% if block.settings.autoplay %}1{% else %}0{% endif %}&loop=1&playlist={{ block.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen="allowfullscreen"
+                      ></iframe>
+                    {%- elsif block.settings.external_video_url.type == 'vimeo' -%}
+                      <iframe
+                        src="https://player.vimeo.com/video/{{ block.settings.external_video_url.id }}?autoplay=1&autopause=1&background={% if block.settings.autoplay %}1{% else %}0{% endif %}&loop=1&muted={% if block.settings.autoplay %}1{% else %}0{% endif %}&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.text_color | remove_first: '#' }}"
+                        allow="autoplay; encrypted-media;"
+                        allowfullscreen="allowfullscreen"
+                      ></iframe>
+                    {%- endif -%}
+                  </template>
+                </video-media>
+              {%- endif -%}
             {%- endif -%}
           </div>
+
+          {%- capture content_class -%}media-with-text__content {% unless section.settings.spacing == 'none' %}rounded{% endunless %}{%- endcapture -%}
+          <div
+            {% render 'surface',
+              class: content_class,
+              background: block.settings.background,
+              background_gradient: block.settings.background_gradient,
+              text_color: block.settings.text_color
+            %}
+          >
+            <div class="prose break-all {{ block.settings.text_position }}" reveal-on-scroll="true">
+              {%- if block.settings.custom_icon != blank -%}
+                {%- capture sizes -%}{{ block.settings.icon_width }}px{%- endcapture -%}
+                {%- capture widths -%}{{ block.settings.icon_width }}, {{ block.settings.icon_width | times: 2 | at_most: block.settings.custom_icon.width }}{%- endcapture -%}
+                {{-
+                  block.settings.custom_icon
+                  | image_url: width: block.settings.custom_icon.width
+                  | image_tag: loading: loading_strategy, sizes: sizes, widths: widths, class: 'media-with-text__icon'
+                -}}
+              {%- elsif block.settings.icon != 'none' -%}
+                {%- render 'icon' with block.settings.icon, width: block.settings.icon_width, height: block.settings.icon_width, class: 'media-with-text__icon' -%}
+              {%- endif -%}
+
+              {%- if block.settings.subheading != blank -%}
+                <p class="subheading">{{ block.settings.subheading | escape }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.title != blank -%}
+                <p class="h2">
+                  {%- render 'styled-text', content: block.settings.title, gradient: block.settings.text_gradient -%}
+                </p>
+              {%- endif -%}
+
+              {{- block.settings.content -}}
+
+              {%- if block.settings.link_text != blank -%}
+                {%- render 'button',
+                  href: block.settings.link_url,
+                  content: block.settings.link_text,
+                  size: 'xl',
+                  background: block.settings.button_background,
+                  text_color: block.settings.button_text_color
+                -%}
+              {%- endif -%}
+            </div>
+          </div>
         </div>
-      </div>
-    {%- endfor -%}
-  </media-with-text>
+      {%- endfor -%}
+    </media-with-text>
+  </div>
 </div>
 
 {% schema %}
@@ -173,7 +229,7 @@ LIQUID
       "type": "checkbox",
       "id": "alternate_media_position",
       "label": "Alternate media position",
-      "info": "When enabled, block-level media positioning is ignored, and media alternate positions automatically.",
+      "info": "When enabled, block-level media positioning is ignored, and media alternate positions automatically."
     },
     {
       "type": "select",
@@ -198,6 +254,57 @@ LIQUID
         }
       ],
       "default": "small"
+    },
+    {
+      "type": "text_alignment",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "center"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Colors",
+      "info": "Gradient replaces solid colors when set."
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Background gradient"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color"
+    },
+    {
+      "type": "color_background",
+      "id": "heading_gradient",
+      "label": "Heading gradient"
     }
   ],
   "blocks": [

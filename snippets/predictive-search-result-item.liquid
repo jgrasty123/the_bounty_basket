@@ -1,17 +1,17 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-PREDICTIVE SEARCH ITEM
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  PREDICTIVE SEARCH ITEM
+  ----------------------------------------------------------------------------------------------------------------------
 
-Renders a single result for the predictive search (this is abstracted as a snippet as this is rendered for both
-native predictive search and for the fallback search in Liquid, for languages that do not support predictive search)
+  Renders a single result for the predictive search (this is abstracted as a snippet as this is rendered for both
+  native predictive search and for the fallback search in Liquid, for languages that do not support predictive search)
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* item: the search result item
-* type: the object type. Can be "product", "query", "article", "collection" or "page"
+  * item: the search result item
+  * type: the object type. Can be "product", "query", "article", "collection" or "page"
 {%- endcomment -%}
 
 {%- case type -%}

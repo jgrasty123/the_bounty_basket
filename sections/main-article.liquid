@@ -92,8 +92,19 @@
   {%- endif -%}
 </style>
 
-<div class="article" {% if section.settings.allow_transparent_header %}allow-transparent-header{% endif %}>
-  {%- render 'article-banner', show_date: section.settings.show_date, show_author: section.settings.show_author, show_comments_count: section.settings.show_comments_count, layout: section.settings.layout, article_image: article_image -%}
+<div
+  class="article"
+  {% if section.settings.allow_transparent_header %}
+    allow-transparent-header
+  {% endif %}
+>
+  {%- render 'article-banner',
+    show_date: section.settings.show_date,
+    show_author: section.settings.show_author,
+    show_comments_count: section.settings.show_comments_count,
+    layout: section.settings.layout,
+    article_image: article_image
+  -%}
 
   <div class="container">
     <div class="article-content v-stack gap-8 sm:gap-10">
@@ -106,7 +117,13 @@
           {%- assign share_label = 'general.social.share' | t -%}
           {%- assign share_url = shop.url | append: article.url -%}
 
-          <button class="button button--subdued button--lg w-full h-stack gap-3 align-center justify-center sm:hidden" is="share-button" style="--button-background: 0 0 0 / 0" share-url="{{ share_url | escape }}" share-title="{{ article.title | escape }}">
+          <button
+            class="button button--subdued button--lg w-full h-stack gap-3 align-center justify-center sm:hidden"
+            is="share-button"
+            style="--button-background: 0 0 0 / 0"
+            share-url="{{ share_url | escape }}"
+            share-title="{{ article.title | escape }}"
+          >
             {%- render 'icon' with 'share', with: 18, height: 18 -%}
             {{- 'general.social.share' | t -}}
           </button>
@@ -114,10 +131,42 @@
           <span class="bold sm-max:hidden">{{- share_label -}}</span>
 
           <ul class="h-stack sm-max:hidden gap-3" role="list">
-            <li><a href="{% render 'share-link', host: 'facebook', title: article.title, url: article.url %}" class="share-buttons__item" aria-label="{{ 'general.social.share_on' | t: social_media: 'Facebook' }}">{%- render 'icon' with 'facebook', width: 24, height: 24 -%}</a></li>
-            <li><a href="{% render 'share-link', host: 'twitter', title: article.title, url: article.url %}" class="share-buttons__item" aria-label="{{ 'general.social.share_on' | t: social_media: 'Twitter' }}">{%- render 'icon' with 'twitter', width: 24, height: 24 -%}</a></li>
-            <li><a href="{% render 'share-link', host: 'pinterest', title: article.title, url: article.url %}" class="share-buttons__item" aria-label="{{ 'general.social.share_on' | t: social_media: 'Pinterest' }}">{%- render 'icon' with 'pinterest', width: 24, height: 24 -%}</a></li>
-            <li><a href="{% render 'share-link', host: 'email', title: article.title, url: article.url %}" class="share-buttons__item" aria-label="{{ 'general.social.share_email' | t }}">{%- render 'icon' with 'email' -%}</a></li>
+            <li>
+              <a
+                href="{% render 'share-link', host: 'facebook', title: article.title, url: article.url %}"
+                class="share-buttons__item"
+                aria-label="{{ 'general.social.share_on' | t: social_media: 'Facebook' }}"
+              >
+                {%- render 'icon' with 'facebook', width: 24, height: 24 -%}
+              </a>
+            </li>
+            <li>
+              <a
+                href="{% render 'share-link', host: 'twitter', title: article.title, url: article.url %}"
+                class="share-buttons__item"
+                aria-label="{{ 'general.social.share_on' | t: social_media: 'Twitter' }}"
+              >
+                {%- render 'icon' with 'twitter', width: 24, height: 24 -%}
+              </a>
+            </li>
+            <li>
+              <a
+                href="{% render 'share-link', host: 'pinterest', title: article.title, url: article.url %}"
+                class="share-buttons__item"
+                aria-label="{{ 'general.social.share_on' | t: social_media: 'Pinterest' }}"
+              >
+                {%- render 'icon' with 'pinterest', width: 24, height: 24 -%}
+              </a>
+            </li>
+            <li>
+              <a
+                href="{% render 'share-link', host: 'email', title: article.title, url: article.url %}"
+                class="share-buttons__item"
+                aria-label="{{ 'general.social.share_email' | t }}"
+              >
+                {%- render 'icon' with 'email' -%}
+              </a>
+            </li>
           </ul>
         </div>
       {%- endif -%}
@@ -128,10 +177,19 @@
     {%- for block in section.blocks -%}
       {%- case block.type -%}
         {%- when 'navigation' -%}
-          {%- render 'article-navigation', show_date: section.settings.show_date, show_author: section.settings.show_author, show_comments_count: section.settings.show_comments_count, block_attributes: block.shopify_attributes -%}
+          {%- render 'article-navigation',
+            show_date: section.settings.show_date,
+            show_author: section.settings.show_author,
+            show_comments_count: section.settings.show_comments_count,
+            block_attributes: block.shopify_attributes
+          -%}
 
         {%- when 'comments' -%}
-          {%- render 'article-comments', show_gravatar: block.settings.show_gravatar, comments_pagination: block.settings.comments_per_page, block_attributes: block.shopify_attributes -%}
+          {%- render 'article-comments',
+            show_gravatar: block.settings.show_gravatar,
+            comments_pagination: block.settings.comments_per_page,
+            block_attributes: block.shopify_attributes
+          -%}
       {%- endcase -%}
     {%- endfor -%}
   </div>

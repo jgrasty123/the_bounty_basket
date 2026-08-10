@@ -44,8 +44,20 @@
     <ul class="mega-menu__nav" role="list">
       {%- for sub_link in link.links -%}
         <li class="v-stack gap-4 justify-items-start">
-          <a {% if sub_link.url != '#' %}href="{{ sub_link.url }}"{% endif %} class="{% if mega_menu_block.settings.submenu_style == 'bold_heading' %}h5{% endif %}" {% if sub_link.current %}aria-current="page"{% endif %}>
-            <span {% if sub_link.url != '#' %}class="{% if mega_menu_block.settings.submenu_style == 'bold_text' %}link-faded{% else %}reversed-link hover:show{% endif %}"{% endif %}>
+          <a
+            {% if sub_link.url != '#' %}
+              href="{{ sub_link.url }}"
+            {% endif %}
+            class="{% if mega_menu_block.settings.submenu_style == 'bold_heading' %}h5{% endif %}"
+            {% if sub_link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            <span
+              {% if sub_link.url != '#' %}
+                class="{% if mega_menu_block.settings.submenu_style == 'bold_text' %}link-faded{% else %}reversed-link hover:show{% endif %}"
+              {% endif %}
+            >
               {{- sub_link.title -}}
             </span>
           </a>
@@ -55,7 +67,13 @@
               {%- for sub_sub_link in sub_link.links -%}
                 <li>
                   <a href="{{ sub_sub_link.url }}" class="{% if mega_menu_block.settings.submenu_style == 'bold_text' %}h5{% else %}link-faded{% endif %}">
-                    <span {% if mega_menu_block.settings.submenu_style == 'bold_text' %}class="reversed-link hover:show"{% endif %}>{{- sub_sub_link.title -}}</span>
+                    <span
+                      {% if mega_menu_block.settings.submenu_style == 'bold_text' %}
+                        class="reversed-link hover:show"
+                      {% endif %}
+                    >
+                      {{- sub_sub_link.title -}}
+                    </span>
                   </a>
                 </li>
               {%- endfor -%}
@@ -105,9 +123,21 @@
     {%- render 'navigation-promo-block', mega_menu_block: mega_menu_block, force_carousel_mode: force_carousel_mode -%}
   {% else %}
     {%- if use_carousel_fallback_until != '' -%}
-      {%- render 'navigation-promo-block', navigation_layout: navigation_layout, mega_menu_block: mega_menu_block, link_col: link.links.size, is_navigation_drawer: false, use_carousel_fallback_until: use_carousel_fallback_until -%}
+      {%- render 'navigation-promo-block',
+        navigation_layout: navigation_layout,
+        mega_menu_block: mega_menu_block,
+        link_col: link.links.size,
+        is_navigation_drawer: false,
+        use_carousel_fallback_until: use_carousel_fallback_until
+      -%}
     {%- endif -%}
 
-    {%- render 'navigation-promo-block', navigation_layout: navigation_layout, mega_menu_block: mega_menu_block, link_col: link.links.size, is_navigation_drawer: false, hide_promo_until: use_carousel_fallback_until -%}
+    {%- render 'navigation-promo-block',
+      navigation_layout: navigation_layout,
+      mega_menu_block: mega_menu_block,
+      link_col: link.links.size,
+      is_navigation_drawer: false,
+      hide_promo_until: use_carousel_fallback_until
+    -%}
   {%- endif -%}
 </div>

@@ -94,6 +94,9 @@
         "other": "{{ count }} farver tilgængelig"
       }
     },
+    "disclosures": {
+      "title": "Meddelelser"
+    },
     "gallery": {
       "close": "Luk gallery",
       "zoom": "Zoom",
