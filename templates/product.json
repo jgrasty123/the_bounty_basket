@@ -9,6 +9,25 @@
  */
 {
   "sections": {
+    "bb_guarantee_strip_cfGHnY": {
+      "type": "bb-guarantee-strip",
+      "name": "Guarantee strip (W3-03)",
+      "settings": {
+        "compact_mode": true,
+        "section_title": "",
+        "background_color": "#fdf9f1",
+        "icon_color": "#cd241d",
+        "icon_1": "shield",
+        "headline_1": "100% Satisfaction Guaranteed",
+        "body_1": "If you're not happy with your basket, we'll make it right.",
+        "icon_2": "flag",
+        "headline_2": "Hand-Made to Order in the USA",
+        "body_2": "Each basket is built fresh by our in-house team.",
+        "icon_3": "package",
+        "headline_3": "Guaranteed to Arrive Looking Awesome",
+        "body_3": "Or we'll fix it for free."
+      }
+    },
     "main": {
       "type": "main-product",
       "blocks": {
@@ -72,7 +91,7 @@
           "type": "bb_delivery_promise",
           "settings": {
             "cutoff_hour_pt": 14,
-            "transit_business_days": 1,
+            "transit_business_days": 5,
             "show_express_note": true,
             "accent_color": "#cd241d"
           }
@@ -171,9 +190,198 @@
         "input_background": "rgba(0,0,0,0)",
         "input_text_color": ""
       }
+    },
+    "bb_review_wall_BWXEyy": {
+      "type": "bb-review-wall",
+      "name": "Review wall (W3-02)",
+      "settings": {
+        "section_title": "What customers are saying",
+        "subtitle": "",
+        "star_color": "#f5a623",
+        "background_color": "#fdf9f1",
+        "headline_1": "She loved the original idea",
+        "quote_1": "Purchased for my wife’s birthday. She loved the original idea and wine with chocolate, coffee, and biscotti. Great idea easy to order and quick delivery.",
+        "name_1": "Jason H.",
+        "meta_1": "Birthday gift",
+        "headline_2": "A perfect gift",
+        "quote_2": "This margarita basket lifted my daughters spirits she loved it! The basket arrived on time and she instantly set it up for FaceTime pics. Thank you so much a perfect gift!",
+        "name_2": "Charlotte C.",
+        "meta_2": "Verified buyer",
+        "headline_3": "Margaritas for Mama",
+        "quote_3": "My mom was so happy with her Mother’s Day gift, which luckily arrived that very day! It also served as a total cheer up package for both my parents during quarantine and a welcomed break from their usual gin and tonics.",
+        "name_3": "Sarah B.",
+        "meta_3": "Mother's Day gift",
+        "headline_4": "She was super excited",
+        "quote_4": "She was super excited to get the gift - the ability to ship it quickly assured that it arrived on her birthday!\nI recommended this to another friend last night and will ship a basket again in the near future!",
+        "name_4": "Suzanne K.",
+        "meta_4": "Birthday gift",
+        "headline_5": "She absolutely loved it",
+        "quote_5": "The gift basket was for a friend who loves vodka and was celebrating the birth of a child. She absolutely loved it! Ordering was easy and it was delivered on time and well packaged. Thanks.",
+        "name_5": "Elizabeth R.",
+        "meta_5": "Verified buyer",
+        "headline_6": "My cousin loved the gift basket",
+        "quote_6": "My cousin loved the gift basket! It was an interesting way to give her all the alcohol she would need to celebrate her 21st birthday.",
+        "name_6": "Linh V.",
+        "meta_6": "Birthday gift"
+      }
+    },
+    "bb_vs_table_PWAzfj": {
+      "type": "bb-vs-table",
+      "name": "Comparison table (W4-02)",
+      "settings": {
+        "section_title": "The Bounty Basket vs. The Generic Gift",
+        "subtitle": "",
+        "us_column_label": "The BroBasket",
+        "them_column_label": "Generic Gift Baskets",
+        "footer_text": "Up your gifting game. Choose quality.",
+        "background_color": "#fdf9f1",
+        "brand_color": "#1a1a1a",
+        "accent_color": "#cd241d",
+        "category_1": "Food & Ingredients",
+        "us_icon_1": "ingredients",
+        "us_headline_1": "Real ingredients",
+        "us_body_1": "No stale, no-name junk.",
+        "them_icon_1": "junk-box",
+        "them_headline_1": "Stale, no-name junk",
+        "them_body_1": "Often mass-produced fillers.",
+        "category_2": "Made to Order",
+        "us_icon_2": "usa-flag",
+        "us_headline_2": "Made to order",
+        "us_body_2": "Hand-built fresh in the USA when you order.",
+        "them_icon_2": "factory",
+        "them_headline_2": "Mass-assembled overseas",
+        "them_body_2": "Cheap components shipped from far away.",
+        "category_3": "Speed & Fulfillment",
+        "us_icon_3": "rocket",
+        "us_headline_3": "Ships same day",
+        "us_body_3": "Order by 5pm EST and we ship the same business day.",
+        "them_icon_3": "snail",
+        "them_headline_3": "Slow processing",
+        "them_body_3": "Several days before your gift even ships.",
+        "category_4": "Personalization",
+        "us_icon_4": "sparkle",
+        "us_headline_4": "Personalized & customized",
+        "us_body_4": "Built the way you like it — engraving, custom message, future delivery date.",
+        "them_icon_4": "plain-box",
+        "them_headline_4": "One-size-fits-all",
+        "them_body_4": "Generic, pre-made assortments — same gift for everyone.",
+        "category_5": "Recipient Experience",
+        "us_icon_5": "thumbs-up",
+        "us_headline_5": "Curated for the bros",
+        "us_body_5": "Unique, cool items the men in your life actually want.",
+        "them_icon_5": "people-shrug",
+        "them_headline_5": "Generic & predictable",
+        "them_body_5": "A forgettable gift no one talks about."
+      }
+    },
+    "bb_faq_CBwVi8": {
+      "type": "bb-faq",
+      "name": "FAQ accordion (W4-04)",
+      "settings": {
+        "section_title": "Frequently Asked Questions",
+        "subtitle": "",
+        "background_color": "#ffffff",
+        "brand_color": "#1a1a1a",
+        "accent_color": "#cd241d",
+        "q_1": "How fast will my gift arrive?",
+        "a_1": "Orders placed by 5pm EST ship the same business day. Standard ground delivery typically arrives in 3–6 business days. Need it sooner? Express options are available at checkout.",
+        "q_2": "Can I pick a specific delivery date?",
+        "a_2": "Yes. At checkout you can choose any future date for delivery, so the gift shows up exactly when you want it to — birthday, anniversary, holiday, or just a Tuesday.",
+        "q_3": "Do you include a personalized greeting card?",
+        "a_3": "Every basket ships with a free personalized greeting card. You write the message during checkout and we hand-write or print it to include in the box.",
+        "q_4": "What if my recipient isn't home when it's delivered?",
+        "a_4": "Carriers will leave the package at the door unless an adult signature is required (alcohol-containing baskets always require this). For ID-required deliveries, the recipient gets up to 3 delivery attempts, then can pick up at the local carrier facility.",
+        "q_5": "Can I add my own engraving or custom touches?",
+        "a_5": "Yes — many of our baskets include engraved glass options, premium add-ons, and snack upgrades. Look for the customization options on the product page just below the basket details.",
+        "q_6": "What happens if something arrives damaged?",
+        "a_6": "We guarantee your gift arrives looking awesome. If anything is damaged, missing, or not right — email us with a photo and we'll fix it for free, no questions asked.",
+        "q_7": "Where do you ship to?",
+        "a_7": "All 50 US states. Some baskets containing alcohol have state-specific shipping restrictions — those will be flagged at checkout if your recipient's state can't receive the contents.",
+        "q_8": "Are these baskets really made by hand?",
+        "a_8": "Yes. Every basket is hand-built to order by our small team in Ventura, California — using real spirits, real snacks, and quality accessories. Nothing is mass-pre-assembled overseas."
+      }
+    },
+    "bb_story_TLhFT6": {
+      "type": "bb-story",
+      "name": "Founder story (W4-01)",
+      "settings": {
+        "image_side": "left",
+        "image": "shopify://shop_images/James-bounty-basket-co.png",
+        "eyebrow": "Our Story",
+        "heading": "From the creators of The BroBasket",
+        "paragraph_1": "Back in 2014, we built The BroBasket on a simple idea: if women get flowers, why shouldn't the guys get something just as good? Tens of thousands of gifts later, one question kept landing in our inbox — “If the guys get a BroBasket, what do we get?”",
+        "paragraph_2": "The Bounty Basket Co. is our answer. Same hand-built quality, same obsessive curation, same in-house team that actually cares whether your gift lands — now crafted for everyone worth celebrating. Real spirits, real treats, real packaging that doesn't end up in the recycling on the way to the kitchen.",
+        "pull_quote": "",
+        "quote_attribution": "",
+        "paragraph_3": "Every basket is still hand-built to order in our Ventura, California warehouse. We pick the spirits. We curate the snacks. We pack each one like the recipient is somebody we know — because to the person sending it, they are.",
+        "signature": "— James, Co-founder",
+        "cta_label": "Shop the baskets",
+        "cta_url": "",
+        "background_color": "#fdf9f1",
+        "brand_color": "#4a4c3d",
+        "accent_color": "#b08d57"
+      }
+    },
+    "rich_text_cGKYbQ": {
+      "type": "rich-text",
+      "blocks": {
+        "richtext_Na7wTq": {
+          "type": "richtext",
+          "disabled": true,
+          "settings": {
+            "content": "<p></p>{{ product.description }}"
+          }
+        }
+      },
+      "block_order": [
+        "richtext_Na7wTq"
+      ],
+      "settings": {
+        "full_width": true,
+        "content_width": "large",
+        "text_position": "start",
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "17400063553db9cd1c": {
+      "type": "apps",
+      "settings": {
+        "full_width": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false,
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "bb_video_qnKXwx": {
+      "type": "bb-video",
+      "disabled": true,
+      "name": "Unboxing video (W4-03)",
+      "settings": {
+        "eyebrow": "Watch",
+        "heading": "See what arrives at the door",
+        "subheading": "60 seconds. No fluff. Real packaging, real product.",
+        "video_url": "",
+        "cta_label": "Shop the baskets",
+        "cta_url": "",
+        "background_color": "#1a1a1a",
+        "text_color": "#ffffff",
+        "accent_color": "#cd241d"
+      }
     }
   },
   "order": [
-    "main"
+    "bb_guarantee_strip_cfGHnY",
+    "main",
+    "bb_review_wall_BWXEyy",
+    "bb_vs_table_PWAzfj",
+    "bb_faq_CBwVi8",
+    "bb_story_TLhFT6",
+    "rich_text_cGKYbQ",
+    "17400063553db9cd1c",
+    "bb_video_qnKXwx"
   ]
 }
