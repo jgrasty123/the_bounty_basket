@@ -94,9 +94,6 @@
         "other": "{{ count }} colores disponibles"
       }
     },
-    "disclosures": {
-      "title": "Avisos"
-    },
     "gallery": {
       "close": "Cerrar galería",
       "zoom": "Zoom",

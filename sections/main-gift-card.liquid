@@ -2,18 +2,15 @@
 
 <script type="module">
   if (!window.customElements.get('qr-code')) {
-    window.customElements.define(
-      'qr-code',
-      class extends HTMLElement {
-        async connectedCallback() {
-          new window.QRCode(this, {
-            text: this.getAttribute('identifier'),
-            width: 200,
-            height: 200,
-          });
-        }
+    window.customElements.define('qr-code', class extends HTMLElement {
+      async connectedCallback() {
+        new window.QRCode(this, {
+          text: this.getAttribute('identifier'),
+          width: 200,
+          height: 200
+        });
       }
-    );
+    });
   }
 </script>
 
@@ -52,14 +49,7 @@
     <!-- GIFT CARD INFO -->
     <div class="gift-card__info">
       <!-- REMAINING BALANCE -->
-      <div
-        {% render 'surface',
-          class: 'gift-card__issued-info rounded',
-          background: section.settings.amount_background,
-          text_color: section.settings.amount_text_color,
-          background_fallback: 'bg-secondary'
-        %}
-      >
+      <div {% render 'surface', class: 'gift-card__issued-info rounded' background: section.settings.amount_background, text_color: section.settings.amount_text_color, background_fallback: 'bg-secondary' %}>
         <p class="bold">{{ 'gift_card.issued.remaining_amount' | t }}</p>
 
         {% if settings.currency_code_enabled %}
@@ -84,14 +74,7 @@
 
           <!-- ACTION BUTTONS -->
           <div class="v-stack gap-4">
-            <input
-              type="text"
-              value="{{ gift_card.code | format_code }}"
-              readonly
-              aria-label="{{ 'gift_card.issued.code' | t }}"
-              onclick="this.select()"
-              class="gift-card__redeem-code"
-            >
+            <input type="text" value="{{ gift_card.code | format_code }}" readonly aria-label="{{ 'gift_card.issued.code' | t }}" onclick="this.select()" class="gift-card__redeem-code">
 
             <div class="h-stack wrap justify-center gap-2 print:hidden">
               <button type="button" class="button button--subdued" is="copy-button" data-text="{{ gift_card.code | escape }}">{{ 'gift_card.general.copy' | t }}</button>
@@ -118,13 +101,7 @@
 
                 {%- if gift_card.pass_url -%}
                   <a href="{{ gift_card.pass_url }}">
-                    <img
-                      src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
-                      width="145"
-                      height="45"
-                      alt="{{ 'gift_card.issued.add_to_apple_wallet' | t }}"
-                      loading="lazy"
-                    >
+                    <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="145" height="45" alt="{{ 'gift_card.issued.add_to_apple_wallet' | t }}" loading="lazy">
                   </a>
                 {%- endif -%}
               </div>

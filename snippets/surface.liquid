@@ -1,20 +1,20 @@
 {%- comment -%}
-  ----------------------------------------------------------------------------------------------------------------------
-  SURFACE COMPONENT
-  ----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+SURFACE COMPONENT
+----------------------------------------------------------------------------------------------------------------------
 
-  This component allows to set the class and CSS variables to create a context with a different background, text color...
+This component allows to set the class and CSS variables to create a context with a different background, text color...
 
-  ********************************************
-  Supported variables
-  ********************************************
+********************************************
+Supported variables
+********************************************
 
-  * background_gradient: an optional gradient for the section
-  * background: a background to use
-  * text_color: a text color to use
-  * background_fallback: the class to be used as a fallback background if none is specified
-  * class: extra class to be added on the wrapper
-  * style: any extra style attributes
+* background_gradient: an optional gradient for the section
+* background: a background to use
+* text_color: a text color to use
+* background_fallback: the class to be used as a fallback background if none is specified
+* class: extra class to be added on the wrapper
+* style: any extra style attributes
 {%- endcomment -%}
 
 {%- if background_gradient == blank and background == blank or background == 'rgba(0,0,0,0)' -%}

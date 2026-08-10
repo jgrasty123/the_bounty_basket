@@ -95,9 +95,6 @@
         "other": "Parduodama {{ count }} spalvų"
       }
     },
-    "disclosures": {
-      "title": "Pranešimai"
-    },
     "gallery": {
       "close": "Uždaryti galeriją",
       "zoom": "Priartinti",

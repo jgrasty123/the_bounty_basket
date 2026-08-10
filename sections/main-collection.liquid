@@ -80,7 +80,7 @@
       <div class="collection {% if show_filters %}collection--filters-{{ section.settings.filter_layout | escape }}{% endif %}">
         {%- if show_filters or section.settings.show_sort_by -%}
           {%- comment -%}
-            IMPLEMENTATION NOTE: we have to output the drawer no matter what, as it is used on mobile (all the time) or desktop (when in drawer mode)
+          IMPLEMENTATION NOTE: we have to output the drawer no matter what, as it is used on mobile (all the time) or desktop (when in drawer mode)
           {%- endcomment -%}
 
           <facet-drawer header-bordered id="facets-drawer" class="facets-drawer drawer" open-from="left">
@@ -108,15 +108,7 @@
 
             <facet-floating-filter class="facets__floating-filter md:hidden">
               {%- assign filter_label = content_key | t -%}
-              {%- render 'button',
-                size: 'xl',
-                content: filter_label,
-                icon: 'filter',
-                style: 'fill',
-                background: settings.text_color,
-                text_color: settings.background,
-                aria_controls: 'facets-drawer'
-              -%}
+              {%- render 'button', size: 'xl', content: filter_label, icon: 'filter', style: 'fill', background: settings.text_color, text_color: settings.background, aria_controls: 'facets-drawer' -%}
             </facet-floating-filter>
           {%- endif -%}
         {%- endif -%}
@@ -156,89 +148,69 @@
                 <product-list class="product-list" role="region" aria-live="polite">
                   {%- for product in collection.products -%}
                     {%- for block in section.blocks -%}
-                      {%- liquid
-                        if forloop.parentloop.index != block.settings.position
-                          continue
-                        endif
+                      {%- if forloop.parentloop.index != block.settings.position -%}
+                        {%- continue -%}
+                      {%- endif -%}
 
-                        assign is_content_contains_link = false
-                        assign promo_class_list = 'product-list__promo'
+                      <div id="block-{{ section.id }}-{{ block.id }}" {% render 'surface', class: 'product-list__promo group', text_color: block.settings.text_color %} {{ block.shopify_attributes }}>
+                        <a {% if block.settings.link_url %}href="{{ block.settings.link_url }}"{% endif %} class="content-over-media h-full rounded-sm" style="--content-over-media-overlay: {{ block.settings.overlay_color.rgb }} / {{ block.settings.overlay_opacity | divided_by: 100.0 }}">
+                          {%- case block.type -%}
+                            {%- when 'promotion_image' -%}
+                              {%- liquid
+                                assign loading_strategy = nil
+                      
+                                if section.index > 3 or forloop.index > 3
+                                  assign loading_strategy = 'lazy'
+                                endif
+                              -%}
 
-                        if block.settings.content contains '<a href=' or block.settings.content contains '<a title=' or block.settings.content contains '<a target='
-                          assign is_content_contains_link = true
-                        else
-                          assign promo_class_list = promo_class_list | append: ' group'
-                        endif
-                      -%}
+                              {%- if block.settings.image != blank -%}
+                                <picture>
+                                  {%- capture sizes -%}(max-width: 699px) 100vw, {{ 400 | times: block.settings.column_span }}px{%- endcapture -%}
 
-                      {%- capture promo_content -%}
-                        {%- case block.type -%}
-                          {%- when 'promotion_image' -%}
-                            {%- liquid
-                              assign loading_strategy = nil
-                    
-                              if section.index > 3 or forloop.index > 3
-                                assign loading_strategy = 'lazy'
-                              endif
-                            -%}
+                                  <source
+                                    media="(max-width: 699px)"
+                                    srcset="{{ block.settings.mobile_image | image_url: width: 400 }} 400w, {{ block.settings.mobile_image | image_url: width: 600 }} 600w, {{ block.settings.mobile_image | image_url: width: 800 }} 800w, {{ block.settings.mobile_image | image_url: width: 1000 }} 1000w, {{ block.settings.mobile_image | image_url: width: 1200 }} 1200w"
+                                    width="{{ block.settings.mobile_image.width }}"
+                                    height="{{ block.settings.mobile_image.height }}"
+                                  >
 
-                            {%- if block.settings.image != blank -%}
-                              <picture>
-                                {%- capture sizes -%}(max-width: 699px) 100vw, {{ 400 | times: block.settings.column_span }}px{%- endcapture -%}
-
-                                <source
-                                  media="(max-width: 699px)"
-                                  srcset="{{ block.settings.mobile_image | image_url: width: 400 }} 400w, {{ block.settings.mobile_image | image_url: width: 600 }} 600w, {{ block.settings.mobile_image | image_url: width: 800 }} 800w, {{ block.settings.mobile_image | image_url: width: 1000 }} 1000w, {{ block.settings.mobile_image | image_url: width: 1200 }} 1200w"
-                                  width="{{ block.settings.mobile_image.width }}"
-                                  height="{{ block.settings.mobile_image.height }}"
-                                >
-
-                                {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: sizes, widths: '200,300,400,500,600,700,800,900,1000,1200,1400,1600', class: 'zoom-image' -}}
-                              </picture>
-                            {%- endif -%}
-
-                          {%- when 'promotion_video' -%}
-                            {%- if block.settings.video -%}
-                              <video-media autoplay>
-                                {{- block.settings.video | video_tag: playsinline: true, muted: true, loop: true, preload: 'metadata' -}}
-                              </video-media>
-                            {%- else -%}
-                              <video-media host="{{ block.settings.external_video_url.type }}" autoplay>
-                                <template>
-                                  {%- if block.settings.external_video_url.type == 'youtube' -%}
-                                    <iframe src="https://www.youtube.com/embed/{{ block.settings.external_video_url.id }}?playsinline=1&autoplay=1&controls=0&mute=1&loop=1&playlist={{ block.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" allow="autoplay; encrypted-media" allowfullscreen="allowfullscreen"></iframe>
-                                  {%- elsif block.settings.external_video_url.type == 'vimeo' -%}
-                                    <iframe src="https://player.vimeo.com/video/{{ block.settings.external_video_url.id }}?autoplay=1&autopause=1&background=1&loop=1&muted=1&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.text_color | remove_first: '#' }}" allow="autoplay; encrypted-media;" allowfullscreen="allowfullscreen"></iframe>
-                                  {%- endif -%}
-                                </template>
-                              </video-media>
-                            {%- endif -%}
-                        {%- endcase -%}
-
-                        {%- if block.settings.title != blank or block.settings.link_text != blank or block.settings.content != blank -%}
-                          <div class="{{ block.settings.text_position }}">
-                            <div class="v-stack gap-4 sm:gap-6 {% if block.settings.text_position contains 'text-center' %}justify-items-center{% elsif block.settings.text_position contains 'text-end' %}justify-items-end{% endif %}">
-                              {%- if block.settings.title != blank or block.settings.content != blank -%}
-                                <div class="prose">
-                                  {%- if block.settings.title != blank -%}
-                                    <p class="{{ block.settings.heading_tag }}">{{ block.settings.title | escape }}</p>
-                                  {%- endif -%}
-
-                                  {{- block.settings.content -}}
-                                </div>
+                                  {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: sizes, widths: '200,300,400,500,600,700,800,900,1000,1200,1400,1600', class: 'zoom-image' -}}
+                                </picture>
                               {%- endif -%}
 
-                              {%- if block.settings.link_text != blank -%}
-                                {%- if is_content_contains_link -%}
-                                  <a {% if block.settings.link_url %}href="{{ block.settings.link_url }}"{% endif %} class="h-stack gap-4 group">
-                                    <span class="bold">{{- block.settings.link_text | escape -}}</span>
+                            {%- when 'promotion_video' -%}
+                              {%- if block.settings.video -%}
+                                <video-media autoplay>
+                                  {{- block.settings.video | video_tag: playsinline: true, muted: true, loop: true, preload: 'metadata' -}}
+                                </video-media>
+                              {%- else -%}
+                                <video-media host="{{ block.settings.external_video_url.type }}" autoplay>
+                                  <template>
+                                    {%- if block.settings.external_video_url.type == 'youtube' -%}
+                                      <iframe src="https://www.youtube.com/embed/{{ block.settings.external_video_url.id }}?playsinline=1&autoplay=1&controls=0&mute=1&loop=1&playlist={{ block.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" allow="autoplay; encrypted-media" allowfullscreen="allowfullscreen"></iframe>
+                                    {%- elsif block.settings.external_video_url.type == 'vimeo' -%}
+                                      <iframe src="https://player.vimeo.com/video/{{ block.settings.external_video_url.id }}?autoplay=1&autopause=1&background=1&loop=1&muted=1&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.text_color | remove_first: '#' }}" allow="autoplay; encrypted-media;" allowfullscreen="allowfullscreen"></iframe>
+                                    {%- endif -%}
+                                  </template>
+                                </video-media>
+                              {%- endif -%}
+                          {%- endcase -%}
 
-                                    <div class="circle-button circle-button--sm ring-current">
-                                      <span class="sr-only">{{ 'general.accessibility.previous' | t }}</span>
-                                      <span class="animated-arrow"></span>
-                                    </div>
-                                  </a>
-                                {%- else -%}
+                          {%- if block.settings.title != blank or block.settings.link_text != blank -%}
+                            <div class="{{ block.settings.text_position }}">
+                              <div class="v-stack gap-4 sm:gap-6 {% if block.settings.text_position contains 'text-center' %}justify-items-center{% elsif block.settings.text_position contains 'text-end' %}justify-items-end{% endif %}">
+                                {%- if block.settings.title != blank or block.settings.content != blank -%}
+                                  <div class="prose">
+                                    {%- if block.settings.title != blank -%}
+                                      <p class="{{ block.settings.heading_tag }}">{{ block.settings.title | escape }}</p>
+                                    {%- endif -%}
+
+                                    {{- block.settings.content -}}
+                                  </div>
+                                {%- endif -%}
+
+                                {%- if block.settings.link_text != blank -%}
                                   <div class="h-stack gap-4">
                                     <span class="bold">{{- block.settings.link_text | escape -}}</span>
 
@@ -248,35 +220,10 @@
                                     </div>
                                   </div>
                                 {%- endif -%}
-                              {%- endif -%}
+                              </div>
                             </div>
-                          </div>
-                        {%- endif -%}
-                      {%- endcapture -%}
-
-                      <div
-                        id="block-{{ section.id }}-{{ block.id }}"
-                        {% render 'surface', class: promo_class_list, text_color: block.settings.text_color %}
-                        {{ block.shopify_attributes }}
-                      >
-                        {%- if is_content_contains_link -%}
-                          <div
-                            class="content-over-media h-full rounded-sm"
-                            style="--content-over-media-overlay: {{ block.settings.overlay_color.rgb }} / {{ block.settings.overlay_opacity | divided_by: 100.0 }}"
-                          >
-                            {{- promo_content -}}
-                          </div>
-                        {%- else -%}
-                          <a
-                            {% if block.settings.link_url %}
-                              href="{{ block.settings.link_url }}"
-                            {% endif %}
-                            class="content-over-media h-full rounded-sm"
-                            style="--content-over-media-overlay: {{ block.settings.overlay_color.rgb }} / {{ block.settings.overlay_opacity | divided_by: 100.0 }}"
-                          >
-                            {{- promo_content -}}
-                          </a>
-                        {%- endif -%}
+                          {%- endif -%}
+                        </a>
                       </div>
                     {%- endfor -%}
 

@@ -1,9 +1,9 @@
 {%- render 'section-spacing-collapsing' -%}
 
 {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  CSS
-  ------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+CSS
+------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <style>
@@ -31,37 +31,21 @@
 </style>
 
 {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  LIQUID
-  ------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+LIQUID
+------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
-<recently-viewed-products
-  products-count="{{ section.settings.products_count }}"
-  {% if request.page_type == 'product' %}
-    exclude-id="{{ product.id }}"
-  {% endif %}
-  {% render 'section-properties' %}
->
+<recently-viewed-products products-count="{{ section.settings.products_count }}" {% if request.page_type == 'product' %}exclude-id="{{ product.id }}"{% endif %} {% render 'section-properties' %}>
   {%- if search.performed and search.results_count > 0 -%}
     <div class="section-stack">
-      {%- render 'section-header',
-        subheading: section.settings.subheading,
-        heading: section.settings.title,
-        heading_color: section.settings.heading_color,
-        heading_gradient: section.settings.heading_gradient,
-        content: section.settings.content
-      -%}
+      {%- render 'section-header', subheading: section.settings.subheading, heading: section.settings.title, heading_color: section.settings.heading_color, heading_gradient: section.settings.heading_gradient, content: section.settings.content -%}
 
       <div class="{% if section.settings.show_progress_bar %}scrollable-with-controls{% else %}floating-controls-container{% endif %}">
         {%- assign scroll_area_id = 'scroll-area-' | append: section.id -%}
         {%- assign parsed_terms = search.terms | split: ' OR ' -%}
 
-        <scroll-carousel
-          selector="product-card"
-          id="{{ scroll_area_id }}"
-          class="scroll-area bleed {% if section.settings.recommendations_count > section.settings.products_per_row_desktop %}is-scrollable{% endif %}"
-        >
+        <scroll-carousel selector="product-card" id="{{ scroll_area_id }}" class="scroll-area bleed {% if section.settings.recommendations_count > section.settings.products_per_row_desktop %}is-scrollable{% endif %}">
           <reveal-items selector=".product-list > *">
             <product-list class="product-list">
               {%- for parsed_term in parsed_terms -%}
@@ -69,14 +53,7 @@
                 {%- assign product_to_render = search.results | where: 'id', id | first -%}
 
                 {%- if product_to_render != blank -%}
-                  {%- render 'product-card',
-                    product: product_to_render,
-                    stacked: section.settings.stack_products,
-                    position: forloop.index,
-                    background: section.settings.product_card_background,
-                    text_color: section.settings.product_card_text_color,
-                    show_badges: true
-                  -%}
+                  {%- render 'product-card', product: product_to_render, stacked: section.settings.stack_products, position: forloop.index, background: section.settings.product_card_background, text_color: section.settings.product_card_text_color, show_badges: true -%}
                 {%- endif -%}
               {%- endfor -%}
             </product-list>

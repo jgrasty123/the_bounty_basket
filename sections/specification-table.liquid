@@ -2,9 +2,9 @@
 {%- assign text_position = section.settings.text_position -%}
 
 {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  CSS
-  ------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+CSS
+------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <style>
@@ -41,9 +41,9 @@
 </style>
 
 {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  LIQUID
-  ------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+LIQUID
+------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <div {% render 'section-properties' %}>
@@ -64,13 +64,7 @@
           {{- section.settings.content -}}
 
           {%- if section.settings.button_text != blank -%}
-            {%- render 'button',
-              size: 'lg',
-              href: section.settings.button_url,
-              content: section.settings.button_text,
-              background: section.settings.button_background,
-              text_color: section.settings.button_text_color
-            -%}
+            {%- render 'button', size: 'lg', href: section.settings.button_url, content: section.settings.button_text, background: section.settings.button_background, text_color: section.settings.button_text_color -%}
           {%- endif -%}
         </div>
       </div>
@@ -95,13 +89,7 @@
 
             {%- assign outputted_count = outputted_count | plus: 1 -%}
 
-            <div
-              class="feature-chart__table-row"
-              {% if outputted_count > section.settings.max_rows %}
-                hidden
-              {% endif %}
-              {{ block.shopify_attributes }}
-            >
+            <div class="feature-chart__table-row" {% if outputted_count > section.settings.max_rows %}hidden{% endif %} {{ block.shopify_attributes }}>
               {%- if block.settings.heading != blank -%}
                 <div class="feature-chart__heading bold">{{ block.settings.heading }}</div>
               {%- endif -%}
@@ -127,12 +115,7 @@
 
         {%- if outputted_count > section.settings.max_rows -%}
           <div class="feature-chart__toggle">
-            <button
-              data-action="toggle-rows"
-              data-view-more="{{ section.settings.view_all_text | escape }}"
-              data-view-less="{{ section.settings.view_less_text | escape }}"
-              class="text-with-icon group"
-            >
+            <button data-action="toggle-rows" data-view-more="{{ section.settings.view_all_text | escape }}" data-view-less="{{ section.settings.view_less_text | escape }}" class="text-with-icon group">
               <span class="feature-chart__toggle-text reversed-link">{{- section.settings.view_all_text | escape -}}</span>
               <span class="circle-chevron group-hover:colors">{%- render 'icon' with 'chevron-bottom-small' -%}</span>
             </button>

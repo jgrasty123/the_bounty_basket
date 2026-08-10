@@ -1,19 +1,19 @@
 {%- comment -%}
-  ----------------------------------------------------------------------------------------------------------------------
-  COLLECTION TOP BAR
-  ----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+COLLECTION TOP BAR
+----------------------------------------------------------------------------------------------------------------------
 
-  Show the top bar faceting visible on collection and search pages. It either shows facets or active filters based on
-  the selected settings.
+Show the top bar faceting visible on collection and search pages. It either shows facets or active filters based on
+the selected settings.
 
-  ********************************************
-  Supported variables
-  ********************************************
+********************************************
+Supported variables
+********************************************
 
-  * results: either collection or search drop to extract the filters from
-  * show_filters: if set to true, it shows the filters in their horizontal layout
-  * show_active_filters: if set to true, show the active filters
-  * show_sort_by: if set to true, show the sort by
+* results: either collection or search drop to extract the filters from
+* show_filters: if set to true, it shows the filters in their horizontal layout
+* show_active_filters: if set to true, show the active filters
+* show_sort_by: if set to true, show the sort by
 {%- endcomment -%}
 
 {%- assign selected_sort_by_value = results.sort_by | default: results.default_sort_by -%}
@@ -28,8 +28,7 @@
       </button>
     {%- elsif section.settings.filter_layout == 'sidebar' -%}
       <div class="text-with-icon">
-        {%- render 'icon' with 'filter', class: 'icon-subdued' -%}
-        {{- 'collection.faceting.filters' | t -}}
+        {%- render 'icon' with 'filter', class: 'icon-subdued' -%} {{- 'collection.faceting.filters' | t -}}
       </div>
     {%- endif -%}
   {%- endif -%}
@@ -56,16 +55,7 @@
             {%- if availability_filter -%}
               <div class="availability-facet">
                 <label for="{{ id_prefix }}-{{ availability_filter.param_name }}" class="bold">{{- 'collection.faceting.availability_label' | t -}}</label>
-                <input
-                  id="{{ id_prefix }}-{{ availability_filter.param_name }}"
-                  type="checkbox"
-                  class="switch"
-                  name="{{ availability_filter.param_name }}"
-                  value="1"
-                  {% if availability_filter.active_values.size > 0 %}
-                    checked
-                  {% endif %}
-                >
+                <input id="{{ id_prefix }}-{{ availability_filter.param_name }}" type="checkbox" class="switch" name="{{ availability_filter.param_name }}" value="1" {% if availability_filter.active_values.size > 0 %}checked{% endif %}>
               </div>
             {%- endif -%}
 
@@ -86,7 +76,7 @@
 
                 <facet-dialog id="filter-dialog-{{ filter.param_name }}" class="facet-dialog shadow">
                   {%- case filter.type -%}
-                    {%- when 'list', 'boolean' -%}
+                    {%- when 'list' or 'boolean' -%}
                       {%- if filter.presentation == 'image' -%}
                         <div class="image-filter-list">
                           {%- for filter_value in filter.values -%}
@@ -109,23 +99,8 @@
                             {%- endif -%}
 
                             {%- capture checkbox_id -%}checkbox-{{ section.id }}-{{ filter_value.param_name }}-{{ forloop.index }}{%- endcapture -%}
-                            <input
-                              id="{{ checkbox_id }}"
-                              class="sr-only"
-                              type="checkbox"
-                              name="{{ filter_value.param_name }}"
-                              value="{{ filter_value.value }}"
-                              {% if filter_value.active %}
-                                checked
-                              {% endif %}
-                              {% if disabled %}
-                                disabled
-                              {% endif %}
-                            >
-                            <label for="{{ checkbox_id }}" class="facet-dialog-option">
-                              {{- filter_value.label }}
-                              {% if section.settings.show_filter_values_count %}({{ filter_value.count }}){% endif -%}
-                            </label>
+                            <input id="{{ checkbox_id }}" class="sr-only" type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %} {% if disabled %}disabled{% endif %}>
+                            <label for="{{ checkbox_id }}" class="facet-dialog-option">{{ filter_value.label }} {% if section.settings.show_filter_values_count %}({{ filter_value.count }}){% endif %}</label>
                           {%- endfor -%}
                         </div>
                       {%- endif -%}
@@ -146,13 +121,7 @@
         <facet-sort-by class="sort-by-facet">
           <span id="{{ section.id }}-sort-by-label" class="bold">{{ 'collection.faceting.sort_by' | t }}:</span>
 
-          <button
-            type="button"
-            class="text-with-icon group"
-            aria-labelledby="{{ section.id }}-sort-by-label {{ sort_by_popover_id }}-value"
-            aria-controls="{{ sort_by_popover_id }}"
-            aria-expanded="false"
-          >
+          <button type="button" class="text-with-icon group" aria-labelledby="{{ section.id }}-sort-by-label {{ sort_by_popover_id }}-value" aria-controls="{{ sort_by_popover_id }}" aria-expanded="false">
             <span id="{{ sort_by_popover_id }}-value" class="reversed-link">{{- selected_sort_by.name -}}</span>
             <span class="circle-chevron group-hover:colors group-expanded:rotate">{%- render 'icon' with 'chevron-bottom-small', direction_aware: true -%}</span>
           </button>
@@ -161,15 +130,7 @@
             <x-listbox class="popover-listbox" aria-owns="{{ sort_by_popover_id }}-value">
               {%- for sort_option in results.sort_options -%}
                 {%- if sort_option.name != blank -%}
-                  <button
-                    type="button"
-                    class="popover-listbox__option group"
-                    role="option"
-                    value="{{ sort_option.value }}"
-                    {% if sort_option.value == selected_sort_by_value %}
-                      aria-selected="true"
-                    {% endif %}
-                  >
+                  <button type="button" class="popover-listbox__option group" role="option" value="{{ sort_option.value }}" {% if sort_option.value == selected_sort_by_value %}aria-selected="true"{% endif %}>
                     <span class="reversed-link">{{ sort_option.name }}</span>
                   </button>
                 {%- endif -%}

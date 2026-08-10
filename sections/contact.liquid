@@ -36,14 +36,7 @@
     {%- endif -%}
 
     <div class="section-stack__main">
-      <div
-        {% render 'surface',
-          class: 'contact-form rounded',
-          background: section.settings.contact_background,
-          text_color: section.settings.contact_text_color,
-          background_fallback: 'bg-secondary'
-        %}
-      >
+      <div {% render 'surface', class: 'contact-form rounded', background: section.settings.contact_background, text_color: section.settings.contact_text_color, background_fallback: 'bg-secondary' %}>
         {%- capture contact_form_id -%}contact-form-{{ section.id }}{%- endcapture -%}
 
         {%- form 'contact', id: contact_form_id, class: 'form' -%}
@@ -101,13 +94,7 @@
 
           <div class="{% if text_position == 'center' %}justify-self-center{% else%}justify-self-start{% endif %}">
             {%- capture button_content -%}{{ 'contact.form.submit' | t }}{%- endcapture -%}
-            {%- render 'button',
-              content: button_content,
-              type: 'submit',
-              size: 'xl',
-              background: section.settings.button_background,
-              text_color: section.settings.button_text_color
-            -%}
+            {%- render 'button', content: button_content, type: 'submit', size: 'xl', background: section.settings.button_background, text_color: section.settings.button_text_color -%}
           </div>
         {%- endform -%}
       </div>

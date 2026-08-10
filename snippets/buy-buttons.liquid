@@ -1,23 +1,23 @@
 {%- comment -%}
-  ----------------------------------------------------------------------------------------------------------------------
-  BUY BUTTONS
-  ----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+BUY BUTTONS
+----------------------------------------------------------------------------------------------------------------------
 
-  This component is used to show the buy buttons
+This component is used to show the buy buttons
 
-  ********************************************
-  Supported variables
-  ********************************************
+********************************************
+Supported variables
+********************************************
 
-  * product: the product from which to show the buttons
-  * show_payment_button: if we show or not the dynamic checkout button
-  * show_gift_card_recipient: for gift card products, an optional message/email to be sent to the recipient
-  * button_size: the size of the button (default to xl if none is passed)
-  * atc_button_background: the background of the ATC button
-  * atc_button_text_color: the text color of the ATC button
-  * payment_button_background: the custom dynamic checkout button background
-  * payment_button_text_color: the custom dynamic checkout button text color
-  * form_id: if specified, define the form ID linked to this input
+* product: the product from which to show the buttons
+* show_payment_button: if we show or not the dynamic checkout button
+* show_gift_card_recipient: for gift card products, an optional message/email to be sent to the recipient
+* button_size: the size of the button (default to xl if none is passed)
+* atc_button_background: the background of the ATC button
+* atc_button_text_color: the text color of the ATC button
+* payment_button_background: the custom dynamic checkout button background
+* payment_button_text_color: the custom dynamic checkout button text color
+* form_id: if specified, define the form ID linked to this input
 {%- endcomment -%}
 
 {%- assign variant_picker_block = section.blocks | where: 'type', 'variant_picker' | first -%}
@@ -30,19 +30,12 @@
 {%- endif -%}
 
 {%- form 'product', product, is: 'product-form', id: form_id -%}
-  <input
-    type="hidden"
-    {% if variant_picker_block != blank %}
-      disabled
-    {% endif %}
-    name="id"
-    value="{{ product.selected_or_first_available_variant.id }}"
-  >
+  <input type="hidden" {% if variant_picker_block != blank %}disabled{% endif %} name="id" value="{{ product.selected_or_first_available_variant.id }}">
 
   {%- assign button_disabled = false -%}
   {%- assign button_size = button_size | default: 'xl' -%}
 
-  {%- if product.selected_or_first_available_variant == null -%}
+  {%- if product.selected_or_first_available_variant == nil -%}
     {%- capture button_content -%}{{ 'product.general.unavailable_button' | t }}{%- endcapture -%}
     {%- assign button_disabled = true -%}
   {%- elsif product.selected_or_first_available_variant.available -%}
@@ -84,16 +77,7 @@
     {%- endif -%}
 
     <buy-buttons class="buy-buttons {% if show_payment_button %}buy-buttons--multiple{% endif %}" template="{{ product.template_suffix | escape }}" form="{{ form_id }}">
-      {%- render 'button',
-        content: button_content,
-        type: 'submit',
-        size: button_size,
-        disabled: button_disabled,
-        secondary: show_payment_button,
-        subdued: button_disabled,
-        background: atc_button_background,
-        text_color: atc_button_text_color
-      -%}
+      {%- render 'button', content: button_content, type: 'submit', size: button_size, disabled: button_disabled, secondary: show_payment_button, subdued: button_disabled, background: atc_button_background, text_color: atc_button_text_color -%}
 
       {%- if show_payment_button -%}
         {{- form | payment_button -}}

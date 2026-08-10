@@ -9,19 +9,7 @@
       {%- endform -%}
     {%- endcapture -%}
 
-    <newsletter-popup
-      id="newsletter-drawer"
-      open-from="right"
-      class="drawer newsletter-drawer"
-      {% if section.settings.show_only_once %}
-        only-once
-      {% endif %}
-      apparition-delay="{{ section.settings.apparition_delay }}"
-      {% if posted_successfully %}
-        open
-      {% endif %}
-      handle-section-events
-    >
+    <newsletter-popup id="newsletter-drawer" open-from="right" class="drawer newsletter-drawer" {% if section.settings.show_only_once %}only-once{% endif %} apparition-delay="{{ section.settings.apparition_delay }}" {% if posted_successfully %}open{% endif %} handle-section-events>
       <button is="close-button" aria-label="{{ 'general.accessibility.close' | t | escape }}" class="sm-max:hidden">
         {%- render 'icon' with 'close', width: 19, height: 19 -%}
       </button>

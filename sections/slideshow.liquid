@@ -1,7 +1,7 @@
 {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  CSS
-  ------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+CSS
+------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 <style>
   {%- if section.settings.controls_type == 'filled_arrows' -%}
@@ -38,36 +38,19 @@
 </style>
 
 {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  LIQUID
-  ------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+LIQUID
+------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 {%- assign slideshow_id = 'slideshow-' | append: section.id -%}
 
-<x-slideshow
-  class="slideshow {% unless section.settings.full_width %}slideshow--boxed{% endunless %} {% if section.blocks.size > 1 %}slideshow--multiple-slides{% endif %}"
-  {% if section.settings.allow_transparent_header %}
-    allow-transparent-header
-  {% endif %}
->
+<x-slideshow class="slideshow {% unless section.settings.full_width %}slideshow--boxed{% endunless %} {% if section.blocks.size > 1 %}slideshow--multiple-slides{% endif %}" {% if section.settings.allow_transparent_header %}allow-transparent-header{% endif %}>
   {%- unless section.settings.full_width -%}
     <span class="slideshow__slide-background"></span>
   {%- endunless -%}
 
-  <slideshow-carousel
-    id="{{ slideshow_id }}"
-    class="slideshow__carousel"
-    {% if section.settings.show_initial_transition %}
-      reveal-on-scroll="true"
-    {% endif %}
-    selector=".slideshow__slide"
-    transition="{{ section.settings.transition_type }}"
-    {% if section.settings.autoplay %}
-      autoplay="{{ section.settings.cycle_speed }}"
-    {% endif %}
-    role="region"
-  >
+  <slideshow-carousel id="{{ slideshow_id }}" class="slideshow__carousel" {% if section.settings.show_initial_transition %}reveal-on-scroll="true"{% endif %} selector=".slideshow__slide" transition="{{ section.settings.transition_type }}" {% if section.settings.autoplay %}autoplay="{{ section.settings.cycle_speed }}"{% endif %} role="region">
     {%- unless section.blocks.size == 1 or section.settings.controls_type contains 'arrows' -%}
       <custom-cursor class="slideshow__cursor circle-button circle-button--lg circle-button--fill" aria-hidden="true">
         {%- render 'icon' with 'chevron-right' -%}
@@ -152,24 +135,11 @@
       {%- endcapture -%}
 
       {%- if block.settings.button_link != blank and block.settings.button_text == blank -%}
-        <a
-          id="block-{{ block.id }}"
-          href="{{ block.settings.button_link }}"
-          class="slideshow__slide {% if forloop.first %}is-selected{% endif %}"
-          data-slide-type="{{ block.type }}"
-          role="group"
-          {{ block.shopify_attributes }}
-        >
+        <a id="block-{{ block.id }}" href="{{ block.settings.button_link }}" class="slideshow__slide {% if forloop.first %}is-selected{% endif %}" data-slide-type="{{ block.type }}" role="group" {{ block.shopify_attributes }}>
           {{- slide -}}
         </a>
       {%- else -%}
-        <div
-          id="block-{{ block.id }}"
-          class="slideshow__slide {% if forloop.first %}is-selected{% endif %}"
-          data-slide-type="{{ block.type }}"
-          role="group"
-          {{ block.shopify_attributes }}
-        >
+        <div id="block-{{ block.id }}" class="slideshow__slide {% if forloop.first %}is-selected{% endif %}" data-slide-type="{{ block.type }}" role="group" {{ block.shopify_attributes }}>
           {{- slide -}}
         </div>
       {%- endif -%}
@@ -178,22 +148,14 @@
     {%- if section.blocks.size > 1 and section.settings.controls_type != 'none' -%}
       <div class="slideshow__controls">
         {%- case section.settings.controls_type -%}
-          {%- when 'filled_arrows', 'outline_arrows' -%}
+          {%- when 'filled_arrows' or 'outline_arrows' -%}
             <div class="prev-next-buttons">
-              <button
-                is="prev-button"
-                aria-controls="{{ slideshow_id }}"
-                class="circle-button circle-button--lg {% if section.settings.controls_type == 'filled_arrows' %}circle-button--fill{% else %}circle-button--bordered{% endif %} group"
-              >
+              <button is="prev-button" aria-controls="{{ slideshow_id }}" class="circle-button circle-button--lg {% if section.settings.controls_type == 'filled_arrows' %}circle-button--fill{% else %}circle-button--bordered{% endif %} group">
                 <span class="sr-only">{{ 'general.accessibility.previous' | t }}</span>
                 <span class="animated-arrow animated-arrow--reverse"></span>
               </button>
 
-              <button
-                is="next-button"
-                aria-controls="{{ slideshow_id }}"
-                class="circle-button circle-button--lg {% if section.settings.controls_type == 'filled_arrows' %}circle-button--fill{% else %}circle-button--bordered{% endif %} group"
-              >
+              <button is="next-button" aria-controls="{{ slideshow_id }}" class="circle-button circle-button--lg {% if section.settings.controls_type == 'filled_arrows' %}circle-button--fill{% else %}circle-button--bordered{% endif %} group">
                 <span class="sr-only">{{ 'general.accessibility.next' | t }}</span>
                 <span class="animated-arrow"></span>
               </button>
@@ -203,13 +165,7 @@
             <page-dots class="numbered-dots" aria-controls="{{ slideshow_id }}">
               {%- for i in (1..section.blocks.size) -%}
                 <button type="button" class="numbered-dots__item" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
-                  <svg
-                    width="100%"
-                    height="100%"
-                    {% if section.settings.autoplay %}
-                      style="--percent: 0"
-                    {% endif %}
-                  >
+                  <svg width="100%" height="100%" {% if section.settings.autoplay %}style="--percent: 0"{% endif %}>
                     <circle cx="50%" cy="50%" r="15"></circle>
                     <circle cx="50%" cy="50%" r="15"></circle>
                   </svg>

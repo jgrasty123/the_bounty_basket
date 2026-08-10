@@ -1,15 +1,15 @@
 {%- comment -%}
-  ----------------------------------------------------------------------------------------------------------------------
-  SHIPPING ESTIMATOR COMPONENT
-  ---------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+SHIPPING ESTIMATOR COMPONENT
+---------------------------------------------------------------------------------------------------------------------
 
-  This component creates a shipping estimator block.
+This component creates a shipping estimator block.
 
-  ********************************************
-  Supported parameters
-  ********************************************
+********************************************
+Supported parameters
+********************************************
 
-  None
+None
 {%- endcomment -%}
 
 <shipping-estimator class="shipping-estimator">
@@ -19,12 +19,7 @@
     {%- assign zip_label = 'cart.shipping_estimator.zip' | t -%}
     {%- assign estimate_button = 'cart.shipping_estimator.estimate' | t -%}
 
-    <country-selector
-      class="contents"
-      {% if customer and customer.default_address %}
-        country="{{ customer.default_address.country | escape }}"
-      {% endif %}
-    >
+    <country-selector class="contents" {% if customer and customer.default_address %}country="{{ customer.default_address.country | escape }}"{% endif %}>
       {%- render 'select', label: country_label, options: country_option_tags, name: 'address[country]' -%}
       {%- render 'select', label: province_label, name: 'address[province]' -%}
     </country-selector>
