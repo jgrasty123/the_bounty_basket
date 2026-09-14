@@ -313,7 +313,7 @@ Supported variables
             {%- endcapture -%}
             {%- assign bb_gift_option_content_stripped = bb_gift_option_content | strip -%}
             {%- if bb_gift_option_content_stripped != blank -%}
-              {%- render 'bb-gift-options-accordion', id: 'bb-gift-option-engraving-' | append: block.id, title: 'Engrave Your Bottle', content: bb_gift_option_content, option_type: 'engraving', open: block.settings.open_by_default -%}
+              {%- render 'bb-gift-options-accordion', id: 'bb-gift-option-engraving-', append: block.id, title: 'Engrave Your Bottle', content: bb_gift_option_content, option_type: 'engraving', open: block.settings.open_by_default -%}
             {%- endif -%}
           </div>
 
@@ -324,7 +324,7 @@ Supported variables
             {%- endcapture -%}
             {%- assign bb_gift_option_content_stripped = bb_gift_option_content | strip -%}
             {%- if bb_gift_option_content_stripped != blank -%}
-              {%- render 'bb-gift-options-accordion', id: 'bb-gift-option-engraved-glass-' | append: block.id, title: 'Add Engraved Glass', content: bb_gift_option_content, option_type: 'engraved_glass', open: block.settings.open_by_default -%}
+              {%- render 'bb-gift-options-accordion', id: 'bb-gift-option-engraved-glass-', append: block.id, title: 'Add Engraved Glass', content: bb_gift_option_content, option_type: 'engraved_glass', open: block.settings.open_by_default -%}
             {%- endif -%}
           </div>
 
@@ -335,7 +335,7 @@ Supported variables
             {%- endcapture -%}
             {%- assign bb_gift_option_content_stripped = bb_gift_option_content | strip -%}
             {%- if bb_gift_option_content_stripped != blank -%}
-              {%- render 'bb-gift-options-accordion', id: 'bb-gift-option-gift-card-' | append: block.id, title: 'Add a Gift Card & Message', content: bb_gift_option_content, option_type: 'gift_card', open: block.settings.open_by_default -%}
+              {%- render 'bb-gift-options-accordion', id: 'bb-gift-option-gift-card-', append: block.id, title: 'Add a Gift Card & Message', content: bb_gift_option_content, option_type: 'gift_card', open: block.settings.open_by_default -%}
             {%- endif -%}
           </div>
 
@@ -346,7 +346,7 @@ Supported variables
             {%- endcapture -%}
             {%- assign bb_gift_option_content_stripped = bb_gift_option_content | strip -%}
             {%- if bb_gift_option_content_stripped != blank -%}
-              {%- render 'bb-gift-options-accordion', id: 'bb-gift-option-adult-signature-' | append: block.id, title: 'Adult Signature Required', content: bb_gift_option_content, option_type: 'adult_signature', open: block.settings.open_by_default -%}
+              {%- render 'bb-gift-options-accordion', id: 'bb-gift-option-adult-signature-', append: block.id, title: 'Adult Signature Required', content: bb_gift_option_content, option_type: 'adult_signature', open: block.settings.open_by_default -%}
             {%- endif -%}
           </div>
 
@@ -746,4 +746,38 @@ Supported variables
       <input type="hidden" disabled name="id" value="{{ product.selected_or_first_available_variant.id }}">
     {%- endform -%}
   {%- endunless -%}
-</safe-sticky>
+</safe-sticky>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'bb-gift-options-accordion', id: 'bb-gift-option-engraving-' |
+    append: block.id, title: 'Engrave Your Bottle', content: bb_gift_option_content,
+    option_type: 'engraving', open: block.settings.open_by_default -%}"
+  to: "{%- render 'bb-gift-options-accordion', id: 'bb-gift-option-engraving-', append:
+    block.id, title: 'Engrave Your Bottle', content: bb_gift_option_content, option_type:
+    'engraving', open: block.settings.open_by_default -%}"
+  position: 17217..17437
+- from: "{%- render 'bb-gift-options-accordion', id: 'bb-gift-option-engraved-glass-'
+    | append: block.id, title: 'Add Engraved Glass', content: bb_gift_option_content,
+    option_type: 'engraved_glass', open: block.settings.open_by_default -%}"
+  to: "{%- render 'bb-gift-options-accordion', id: 'bb-gift-option-engraved-glass-',
+    append: block.id, title: 'Add Engraved Glass', content: bb_gift_option_content,
+    option_type: 'engraved_glass', open: block.settings.open_by_default -%}"
+  position: 17926..18155
+- from: "{%- render 'bb-gift-options-accordion', id: 'bb-gift-option-gift-card-' |
+    append: block.id, title: 'Add a Gift Card & Message', content: bb_gift_option_content,
+    option_type: 'gift_card', open: block.settings.open_by_default -%}"
+  to: "{%- render 'bb-gift-options-accordion', id: 'bb-gift-option-gift-card-', append:
+    block.id, title: 'Add a Gift Card & Message', content: bb_gift_option_content,
+    option_type: 'gift_card', open: block.settings.open_by_default -%}"
+  position: 18637..18863
+- from: "{%- render 'bb-gift-options-accordion', id: 'bb-gift-option-adult-signature-'
+    | append: block.id, title: 'Adult Signature Required', content: bb_gift_option_content,
+    option_type: 'adult_signature', open: block.settings.open_by_default -%}"
+  to: "{%- render 'bb-gift-options-accordion', id: 'bb-gift-option-adult-signature-',
+    append: block.id, title: 'Adult Signature Required', content: bb_gift_option_content,
+    option_type: 'adult_signature', open: block.settings.open_by_default -%}"
+  position: 19355..19592
+{%- endcomment -%}
