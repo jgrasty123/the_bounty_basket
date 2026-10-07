@@ -913,3 +913,12 @@ html, body { overflow-x: clip; }
   .header { padding-block: 10px !important; }
   .shopify-section--bb-guarantee-strip, [id*="bb_guarantee_strip"] { margin-block: 0 !important; }
 }
+
+/* Add-on groups match the other gift option rows on mobile */
+@media (max-width: 999px) {
+  .bb-upsells__group-title { font-size: 17px !important; font-weight: 700 !important; }
+  .bb-upsells__option-title { font-size: 14px !important; font-weight: 700 !important; }
+  .bb-upsells__option-price { font-size: 15px !important; font-weight: 800 !important; color: rgb(var(--button-background-primary)) !important; }
+  .bb-upsells__group-description { font-size: 15px !important; }
+}
+.bb-upsells__option input:checked + .bb-upsells__option-card { border-color: rgb(var(--button-background-primary)) !important; box-shadow: 0 0 0 1px rgb(var(--button-background-primary)); }
