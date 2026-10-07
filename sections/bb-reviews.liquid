@@ -1,19 +1,39 @@
 {%- comment -%}
-  BB reviews: Judge.me review widget rendered in code (filled by the Judge.me core app embed, which is enabled).
-  Shows the store's real Judge.me reviews only — never hard-coded quotes.
+  BB reviews: the product's real Judge.me reviews. Judge.me's legacy widget metafield is empty on this store (it now
+  expects an app block), so this renders Judge.me's server-side review HTML and styles it as cards. Hidden entirely
+  until the product has at least one review — never placeholder or hard-coded quotes.
 {%- endcomment -%}
-{%- if product != blank -%}
+{%- assign bb_count = product.metafields.reviews.rating_count.value | default: 0 -%}
+{%- if product != blank and bb_count > 0 and product.metafields.judgeme.review_widget_ssr_html != blank -%}
 <div id="bb-reviews" class="bb-reviews container">
   {%- if section.settings.heading != blank -%}
     <h2 class="h3 bb-reviews__heading">{{ section.settings.heading | escape }}</h2>
   {%- endif -%}
-  <div id="judgeme_product_reviews" class="jdgm-widget jdgm-review-widget jdgm-outside-widget" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">
-    {{- product.metafields.judgeme.widget -}}
+  {%- assign bb_rating = product.metafields.reviews.rating.value.rating | default: 0 -%}
+  <p class="bb-reviews__summary">{%- assign bb_full = bb_rating | round -%}<span class="bb-stars__icons" aria-hidden="true">{%- for i in (1..5) -%}<span class="bb-stars__star{% if i > bb_full %} is-empty{% endif %}">★</span>{%- endfor -%}</span> {{ bb_rating | round: 1 }} out of 5 · {{ bb_count }} {% if bb_count == 1 %}review{% else %}reviews{% endif %}</p>
+  <div class="bb-reviews__list">
+    {{- product.metafields.judgeme.review_widget_ssr_html -}}
   </div>
 </div>
 <style>
-  #shopify-section-{{ section.id }} .bb-reviews { padding-block: 40px 24px; }
-  #shopify-section-{{ section.id }} .bb-reviews__heading { text-align: center; margin-block-end: 16px; }
+  #shopify-section-{{ section.id }} .bb-reviews { padding-block: 40px 24px; max-width: 760px; }
+  #shopify-section-{{ section.id }} .bb-reviews__heading { text-align: center; margin-block-end: 6px; }
+  #shopify-section-{{ section.id }} .bb-reviews__summary { text-align: center; font-weight: 700; margin-block-end: 18px; }
+  #shopify-section-{{ section.id }} .jdgm-ssr-ai-content,
+  #shopify-section-{{ section.id }} .jdgm-rev__timestamp,
+  #shopify-section-{{ section.id }} .jdgm-rev__br,
+  #shopify-section-{{ section.id }} .jdgm-rev__actions,
+  #shopify-section-{{ section.id }} .jdgm-rev__transparency-badge-wrapper { display: none !important; }
+  #shopify-section-{{ section.id }} .jdgm-rev { background: #fff; border-radius: 16px; padding: 18px 20px; margin-block-end: 14px; border: 1px solid rgb(var(--text-color) / .08); }
+  #shopify-section-{{ section.id }} .jdgm-rev__header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  #shopify-section-{{ section.id }} .jdgm-rev__icon { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: rgb(var(--button-background-secondary)); font-weight: 800; }
+  #shopify-section-{{ section.id }} .jdgm-rev__rating { order: 3; flex-basis: 100%; }
+  #shopify-section-{{ section.id }} .jdgm-star { font-style: normal; }
+  #shopify-section-{{ section.id }} .jdgm-star::before { content: '★' !important; font-family: inherit !important; color: #d4a24c; font-size: 17px; }
+  #shopify-section-{{ section.id }} .jdgm-star:not(.jdgm--on)::before { color: rgb(var(--text-color) / .2); }
+  #shopify-section-{{ section.id }} .jdgm-rev__author { font-weight: 800; }
+  #shopify-section-{{ section.id }} .jdgm-rev[data-verified-buyer='true'] .jdgm-rev__buyer-badge:empty::before { content: 'Verified buyer'; font-size: 12px; font-weight: 700; color: rgb(var(--success-text, 46 125 91)); }
+  #shopify-section-{{ section.id }} .jdgm-rev__body { margin-block-start: 8px; font-size: 16px; }
 </style>
 {%- endif -%}
 
