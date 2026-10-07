@@ -1,0 +1,15 @@
+# Theme Check configuration (added 2026-10-07, audit FIX-14)
+# Run locally: shopify theme check
+extends: theme-check:recommended
+
+# US-only English store; other locales are Shopify-generated and never complete.
+MatchingTranslations:
+  enabled: false
+
+# Third-party scripts (analytics, apps) can't be served from Shopify's CDN.
+RemoteAsset:
+  enabled: false
+
+# Orphaned snippets are sometimes kept intentionally; warn, don't fail.
+OrphanedSnippet:
+  severity: warning
