@@ -1,9 +1,9 @@
 {%- render 'section-spacing-collapsing' -%}
 
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-CSS
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  CSS
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 <style>
   {%- assign block_size = section.settings.block_size -%}
@@ -36,14 +36,22 @@ CSS
 </style>
 
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-LIQUID
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  LIQUID
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 <div {% render 'section-properties' %}>
   <div class="section-stack">
-    {%- render 'section-header', subheading: section.settings.subheading, heading: section.settings.title, heading_color: section.settings.heading_color, heading_gradient: section.settings.heading_gradient, content: section.settings.content, link_text: section.settings.link_text, link_url: section.settings.link_url -%}
+    {%- render 'section-header',
+      subheading: section.settings.subheading,
+      heading: section.settings.title,
+      heading_color: section.settings.heading_color,
+      heading_gradient: section.settings.heading_gradient,
+      content: section.settings.content,
+      link_text: section.settings.link_text,
+      link_url: section.settings.link_url
+    -%}
 
     <div class="floating-controls-container">
       {%- assign scroll_area_id = 'scroll-area-' | append: section.id -%}
@@ -51,14 +59,22 @@ LIQUID
       <image-link-blocks id="{{ scroll_area_id }}" class="image-link-blocks scroll-area bleed md:unbleed">
         {%- for block in section.blocks -%}
           {%- liquid
-            assign loading_strategy = nil
-  
+            assign loading_strategy = null
+
             if section.index > 3 or forloop.index > 3
               assign loading_strategy = 'lazy'
             endif
           -%}
 
-          <div {% render 'surface', class: 'image-link-blocks__item group rounded', background: block.settings.background, text_color: block.settings.text_color, background_fallback: 'bg-secondary' %} {{ block.shopify_attributes }}>
+          <div
+            {% render 'surface',
+              class: 'image-link-blocks__item group rounded',
+              background: block.settings.background,
+              text_color: block.settings.text_color,
+              background_fallback: 'bg-secondary'
+            %}
+            {{ block.shopify_attributes }}
+          >
             {%- if block.settings.stretch_image -%}
               {%- capture item_content -%}
                 {%- if block.settings.image != blank -%}
@@ -84,13 +100,32 @@ LIQUID
                 {%- endif -%}
               {%- endcapture -%}
 
-              <a {% if block.settings.link_url %}href="{{ block.settings.link_url }}"{% endif %} class="content-over-media rounded" style="--content-over-media-overlay: {{ block.settings.overlay_color.rgb }} / {{ block.settings.overlay_opacity | divided_by: 100.0 }}">
+              <a
+                {% if block.settings.link_url %}
+                  href="{{ block.settings.link_url }}"
+                {% endif %}
+                class="content-over-media rounded"
+                style="--content-over-media-overlay: {{ block.settings.overlay_color.rgb }} / {{ block.settings.overlay_opacity | divided_by: 100.0 }}"
+              >
                 {{- item_content -}}
               </a>
             {%- else -%}
-              <a {% if block.settings.link_url != blank %}href="{{ block.settings.link_url }}"{% endif %} class="image-link-blocks__inner">
+              <a
+                {% if block.settings.link_url != blank %}
+                  href="{{ block.settings.link_url }}"
+                {% endif %}
+                class="image-link-blocks__inner"
+              >
                 {%- if block.settings.image != blank -%}
-                  {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: '(max-width: 699px) 160px, 285px', widths: '200,300,400,500,600,700,800,900,1000,1200', class: 'image-link-blocks__image zoom-image' -}}
+                  {{-
+                    block.settings.image
+                    | image_url: width: block.settings.image.width
+                    | image_tag:
+                      loading: loading_strategy,
+                      sizes: '(max-width: 699px) 160px, 285px',
+                      widths: '200,300,400,500,600,700,800,900,1000,1200',
+                      class: 'image-link-blocks__image zoom-image'
+                  -}}
                 {%- else -%}
                   {{- 'image' | placeholder_svg_tag: 'image-link-blocks__image placeholder' -}}
                 {%- endif -%}

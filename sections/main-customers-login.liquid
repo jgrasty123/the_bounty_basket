@@ -1,15 +1,19 @@
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-LIQUID
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  LIQUID
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 <div class="sm:container">
   <div class="customer-form">
     {%- if section.settings.image != blank -%}
-      {{- section.settings.image | image_url: width: section.settings.image.width | image_tag: sizes: '50vw', widths: '300,400,500,600,700,800,1000,1200,1400', class: 'customer-form__image rounded' -}}
+      {{-
+        section.settings.image
+        | image_url: width: section.settings.image.width
+        | image_tag: sizes: '50vw', widths: '300,400,500,600,700,800,1000,1200,1400', class: 'customer-form__image rounded'
+      -}}
     {%- endif -%}
 
-    {%- liquid 
+    {%- liquid
       capture _recovery
         form 'recover_customer_password'
           if form.errors or form.posted_successfully?
@@ -18,11 +22,24 @@ LIQUID
         endform
       endcapture
     -%}
-    
 
-    <div {% render 'surface', class: 'customer-form__box', background_gradient: section.settings.background_gradient, background: section.settings.background, text_color: section.settings.text_color, background_fallback: 'bg-secondary' %}>
+    <div
+      {% render 'surface',
+        class: 'customer-form__box',
+        background_gradient: section.settings.background_gradient,
+        background: section.settings.background,
+        text_color: section.settings.text_color,
+        background_fallback: 'bg-secondary'
+      %}
+    >
       <account-login class="customer-form__box-inner text-center">
-        <div id="login" class="v-stack gap-12" {% if show_recover_form %}hidden{% endif %}>
+        <div
+          id="login"
+          class="v-stack gap-12"
+          {% if show_recover_form %}
+            hidden
+          {% endif %}
+        >
           <h1 class="h2">
             {%- assign content = 'customer.login.title' | t -%}
             {%- render 'styled-text', content: content, gradient: section.settings.heading_gradient -%}
@@ -32,7 +49,7 @@ LIQUID
             {%- for block in section.blocks -%}
               {%- case block.type -%}
                 {%- when '@app' -%}
-                {%- render block -%}
+                  {%- render block -%}
 
                 {%- when 'liquid' -%}
                   {%- if block.settings.liquid != blank -%}
@@ -48,7 +65,7 @@ LIQUID
 
                       <div class="fieldset">
                         {%- if form.errors -%}
-                          {%- render 'banner', status: 'error', content: form.errors.messages['form'] -%}
+                          {%- render 'banner', status: 'error', content: form.errors.messages.form -%}
                         {%- endif -%}
 
                         {%- assign email_label = 'customer.login.email' | t -%}
@@ -63,19 +80,33 @@ LIQUID
                       </div>
 
                       {%- assign submit_label = 'customer.login.submit' | t -%}
-                      {%- render 'button', content: submit_label, type: 'submit', size: 'xl', stretch: true, secondary: true, background: section.settings.button_background, text_color: section.settings.button_text_color -%}
+                      {%- render 'button',
+                        content: submit_label,
+                        type: 'submit',
+                        size: 'xl',
+                        stretch: true,
+                        secondary: true,
+                        background: section.settings.button_background,
+                        text_color: section.settings.button_text_color
+                      -%}
 
                       <div>
                         <a href="{{ routes.account_register_url }}" class="link text-subdued">{{ 'customer.login.sign_up' | t }}</a>
                       </div>
                     {%- endform -%}
                   </div>
-                {%- endcase -%}
+              {%- endcase -%}
             {%- endfor -%}
           </div>
         </div>
 
-        <div id="recover" class="v-stack gap-12" {% unless show_recover_form %}hidden{% endunless %}>
+        <div
+          id="recover"
+          class="v-stack gap-12"
+          {% unless show_recover_form %}
+            hidden
+          {% endunless %}
+        >
           <h1 class="h2">
             {%- assign content = 'customer.recover_password.title' | t -%}
             {%- render 'styled-text', content: content, gradient: section.settings.heading_gradient -%}
@@ -84,7 +115,7 @@ LIQUID
           {%- form 'recover_customer_password', class: 'form' -%}
             <div class="fieldset">
               {%- if form.errors -%}
-                {%- render 'banner', status: 'error', content: form.errors.messages['form'] -%}
+                {%- render 'banner', status: 'error', content: form.errors.messages.form -%}
               {%- endif -%}
 
               {%- if form.posted_successfully? -%}
@@ -98,7 +129,15 @@ LIQUID
 
             {%- unless form.posted_successfully? -%}
               {%- assign submit_label = 'customer.recover_password.submit' | t -%}
-              {%- render 'button', content: submit_label, type: 'submit', size: 'xl', stretch: true, secondary: true, background: section.settings.button_background, text_color: section.settings.button_text_color -%}
+              {%- render 'button',
+                content: submit_label,
+                type: 'submit',
+                size: 'xl',
+                stretch: true,
+                secondary: true,
+                background: section.settings.button_background,
+                text_color: section.settings.button_text_color
+              -%}
             {%- endunless -%}
 
             <div>

@@ -22,9 +22,9 @@ link so taps on mobile dial directly.
 {%- assign phone_display = section.settings.phone_display | default: '844-446-2443' -%}
 {%- assign phone_dial    = section.settings.phone_dial    | default: '+18444462443' -%}
 {%- assign supporting    = section.settings.supporting_text -%}
-{%- assign bg_color      = section.settings.background    | default: '#1a1a1a' -%}
+{%- assign bg_color      = section.settings.background    | default: '#3a2a33' -%}
 {%- assign text_color    = section.settings.text_color    | default: '#ffffff' -%}
-{%- assign accent_color  = section.settings.accent_color  | default: '#cd241d' -%}
+{%- assign accent_color  = section.settings.accent_color  | default: '#8e3b5a' -%}
 
 <div
   class="bb-phone-strip"
@@ -66,7 +66,7 @@ link so taps on mobile dial directly.
   "settings": [
     {
       "type": "paragraph",
-      "content": "Thin click-to-call strip at the very top of the page. Defaults to BroBasket's main number; edit any setting below to override."
+      "content": "Thin click-to-call strip at the very top of the page. Edit the number and text below."
     },
     {
       "type": "text",
@@ -94,7 +94,7 @@ link so taps on mobile dial directly.
       "type": "color",
       "id": "background",
       "label": "Background colour",
-      "default": "#1a1a1a"
+      "default": "#3a2a33"
     },
     {
       "type": "color",
@@ -106,7 +106,7 @@ link so taps on mobile dial directly.
       "type": "color",
       "id": "accent_color",
       "label": "Phone hover accent",
-      "default": "#cd241d"
+      "default": "#8e3b5a"
     }
   ],
   "presets": [

@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "slideshow": {
@@ -25,7 +16,7 @@
             "button_text": "Shop now",
             "button_link": "shopify://collections/gift-baskets-for-women",
             "text_color": "#ffffff",
-            "button_background": "#4a4c3d",
+            "button_background": "#8e3b5a",
             "button_text_color": "#ffffff",
             "overlay_color": "#000000",
             "overlay_opacity": 20,
@@ -47,10 +38,10 @@
         "autoplay": true,
         "cycle_speed": 6,
         "background": "#f2f2f2",
-        "background_gradient": "linear-gradient(60deg, rgba(60, 65, 68, 1), rgba(23, 29, 33, 1) 98%)"
+        "background_gradient": ""
       }
     },
-    "text_with_icons_eihpRt": {
+    "trust_icons": {
       "type": "text-with-icons",
       "blocks": {
         "item_6y46gn": {
@@ -63,7 +54,7 @@
             "icon_background": "",
             "icon_color": "",
             "title": "Completely Custom Gifts",
-            "content": "<p>Offering one of the only places online to create a truely one of a kind custom gift basket</p>"
+            "content": "<p>One of the only places online to build a truly one-of-a-kind custom gift basket.</p>"
           }
         },
         "item_zbyfKQ": {
@@ -76,7 +67,7 @@
             "icon_background": "",
             "icon_color": "",
             "title": "Lightning Fast Shipping",
-            "content": "<p>Orders placed by 3pm PST - SHIPS SAME DAY. </p><p>Get it there as soon as TOMORROW!</p>"
+            "content": "<p>Orders placed by 2pm PT ship the same business day.</p><p>Get it there as soon as TOMORROW!</p>"
           }
         },
         "item_L4E7bj": {
@@ -89,7 +80,7 @@
             "icon_background": "",
             "icon_color": "",
             "title": "A Partner You Can Trust",
-            "content": "<p>10+ years in business and 10's of thousands of happy customers cant be wrong. Plus in-house customer service here and ready to help. </p>"
+            "content": "<p>10+ years in business and Tens of thousands of happy customers can't be wrong. Plus in-house customer service here and ready to help. </p>"
           }
         }
       },
@@ -110,68 +101,135 @@
         "text_color": ""
       }
     },
-    "multi_column_a3KmAb": {
-      "type": "multi-column",
+    "best_sellers": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "gift-baskets-for-women",
+        "full_width": true,
+        "stack_products": false,
+        "show_progress_bar": false,
+        "products_count": 8,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "subheading": "Most loved",
+        "title": "Best-selling gift baskets",
+        "link_url": "shopify://collections/gift-baskets-for-women",
+        "link_text": "View all"
+      }
+    },
+    "occasions": {
+      "type": "collection-list",
       "blocks": {
-        "item_gCL4g6": {
-          "type": "item",
+        "c0": {
+          "type": "collection",
           "settings": {
-            "show_controls": false,
-            "column_size": "3",
-            "title": "Find Their Perfect Gift",
+            "collection": "birthday-gifts",
+            "title": "Birthday",
             "heading_tag": "h4",
-            "content": "<p>Make their whole day. Choose from our curated selection of ready-to-go gift baskets, or build something they'll never forget.</p>",
-            "link_url": "shopify://collections/shop-all",
-            "link_text": "Shop Now",
-            "link_style": "link"
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#3a2a33",
+            "overlay_opacity": 35
           }
         },
-        "item_rEMP64": {
-          "type": "item",
+        "c1": {
+          "type": "collection",
           "settings": {
-            "show_controls": false,
-            "column_size": "3",
-            "title": "Made for Every Occasion",
+            "collection": "thank-you-gifts",
+            "title": "Thank you",
             "heading_tag": "h4",
-            "content": "<p>Find or create a basket they'll love. Pick a ready-made favorite or customize your own.</p>",
-            "link_url": "shopify://collections/shop-all",
-            "link_text": "Shop Now",
-            "link_style": "link"
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#3a2a33",
+            "overlay_opacity": 35
           }
         },
-        "item_zAWhWX": {
-          "type": "item",
+        "c2": {
+          "type": "collection",
           "settings": {
-            "show_controls": false,
-            "column_size": "3",
-            "title": "Share The Fun",
+            "collection": "anniversary-gifts",
+            "title": "Anniversary",
             "heading_tag": "h4",
-            "content": "<p>Celebrate in style with baskets for family, friends, colleagues, or any group worth acknowledging.</p>",
-            "link_url": "shopify://collections/shop-all",
-            "link_text": "Shop Now",
-            "link_style": "link"
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#3a2a33",
+            "overlay_opacity": 35
+          }
+        },
+        "c3": {
+          "type": "collection",
+          "settings": {
+            "collection": "congratulations-gifts",
+            "title": "Congratulations",
+            "heading_tag": "h4",
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#3a2a33",
+            "overlay_opacity": 35
+          }
+        },
+        "c4": {
+          "type": "collection",
+          "settings": {
+            "collection": "sympathy-gifts",
+            "title": "Sympathy",
+            "heading_tag": "h4",
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#3a2a33",
+            "overlay_opacity": 35
+          }
+        },
+        "c5": {
+          "type": "collection",
+          "settings": {
+            "collection": "get-well-gifts",
+            "title": "Get well",
+            "heading_tag": "h4",
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#3a2a33",
+            "overlay_opacity": 35
           }
         }
       },
       "block_order": [
-        "item_gCL4g6",
-        "item_rEMP64",
-        "item_zAWhWX"
+        "c0",
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5"
       ],
       "settings": {
         "full_width": true,
-        "stack_on_mobile": false,
-        "gap": "medium",
-        "text_alignment": "start",
-        "subheading": "",
-        "title": "Gift Baskets for All Occasions",
-        "content": "<p>Crafted with care and personalized to perfection, our curated gift baskets are designed to elevate every occasion, turning ordinary moments into extraordinary memories with thoughtfulness and heartfelt sincerity.</p>",
-        "background": "",
-        "background_gradient": "",
-        "text_color": ""
+        "stack_collections": false,
+        "collections_per_row_mobile": "2",
+        "collections_per_row": 3,
+        "show_progress_bar": false,
+        "subheading": "Something for every moment",
+        "title": "Shop by occasion",
+        "link_url": "shopify://collections/shop-all",
+        "link_text": "Shop all gifts"
       }
     },
-    "media_with_text_N9gqxm": {
+    "under_75": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "gifts-under-75",
+        "full_width": true,
+        "stack_products": false,
+        "show_progress_bar": false,
+        "products_count": 8,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "subheading": "Thoughtful for less",
+        "title": "Gifts under $75",
+        "link_url": "shopify://collections/gifts-under-75",
+        "link_text": "View all"
+      }
+    },
+    "customize": {
       "type": "media-with-text",
       "blocks": {
         "image_A7jNXz": {
@@ -208,30 +266,8 @@
             "subheading": "",
             "title": "Most Popular Gift Sets",
             "content": "<p>The best way to celebrate holidays, birthdays, milestones, and everyday wins — for anyone you want to make feel special. Whether it's for business or pleasure, our gift baskets feature tequila, gin, vodka, wine, and champagne, plus alcohol-free options packed with treats. Thoughtfully curated, beautifully packaged, ready to send.</p>",
-            "link_text": "ENGRAVE YOUR GIFT",
+            "link_text": "SHOP GIFT SETS",
             "link_url": "shopify://collections/shop-all",
-            "background": "#f6f1eb",
-            "background_gradient": "",
-            "text_color": "#000000",
-            "text_gradient": "",
-            "button_background": "",
-            "button_text_color": ""
-          }
-        },
-        "image_NCL7nM": {
-          "type": "image",
-          "disabled": true,
-          "settings": {
-            "media_width": 50,
-            "media_position": "start",
-            "text_position": "place-self-center text-center",
-            "icon": "none",
-            "icon_width": 48,
-            "subheading": "",
-            "title": "Engraved Liquor Bottles",
-            "content": "<p>Better than a card! Add custom engraving to your chosen bottle for a personalized touch.</p>",
-            "link_text": "ENGRAVE YOUR GIFT",
-            "link_url": "shopify://collections/engravings",
             "background": "#f6f1eb",
             "background_gradient": "",
             "text_color": "#000000",
@@ -243,8 +279,7 @@
       },
       "block_order": [
         "image_A7jNXz",
-        "image_ymXX9D",
-        "image_NCL7nM"
+        "image_ymXX9D"
       ],
       "settings": {
         "full_width": false,
@@ -252,18 +287,77 @@
         "spacing": "small"
       }
     },
-    "1741731117e1eea2df": {
-      "type": "apps",
+    "by_drink": {
+      "type": "collection-list",
+      "blocks": {
+        "c0": {
+          "type": "collection",
+          "settings": {
+            "collection": "champagne",
+            "title": "Champagne & bubbly",
+            "heading_tag": "h4",
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#3a2a33",
+            "overlay_opacity": 35
+          }
+        },
+        "c1": {
+          "type": "collection",
+          "settings": {
+            "collection": "wine",
+            "title": "Wine",
+            "heading_tag": "h4",
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#3a2a33",
+            "overlay_opacity": 35
+          }
+        },
+        "c2": {
+          "type": "collection",
+          "settings": {
+            "collection": "cocktail-kits",
+            "title": "Cocktail kits",
+            "heading_tag": "h4",
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#3a2a33",
+            "overlay_opacity": 35
+          }
+        },
+        "c3": {
+          "type": "collection",
+          "settings": {
+            "collection": "non-alcoholic",
+            "title": "Non-alcoholic",
+            "heading_tag": "h4",
+            "text_position": "place-self-end-start text-start",
+            "text_color": "#ffffff",
+            "overlay_color": "#3a2a33",
+            "overlay_opacity": 35
+          }
+        }
+      },
+      "block_order": [
+        "c0",
+        "c1",
+        "c2",
+        "c3"
+      ],
       "settings": {
         "full_width": true,
-        "remove_vertical_spacing": false,
-        "remove_horizontal_spacing": false,
-        "background": "",
-        "background_gradient": "",
-        "text_color": ""
+        "stack_collections": false,
+        "collections_per_row_mobile": "2",
+        "collections_per_row": 3,
+        "show_progress_bar": false,
+        "subheading": "Pick their pour",
+        "title": "Shop by what they love",
+        "link_url": "shopify://collections/shop-all",
+        "link_text": "Shop all gifts"
       }
     },
-    "rich_text_h67YJF": {
+    "promise": {
       "type": "rich-text",
       "blocks": {
         "subheading_xxpAzU": {
@@ -299,16 +393,30 @@
         "text_position": "start",
         "background": "#fdf6f0",
         "background_gradient": "",
-        "text_color": "#2b2330"
+        "text_color": "#3a2a33"
+      }
+    },
+    "apps": {
+      "type": "apps",
+      "settings": {
+        "full_width": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false,
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
       }
     }
   },
   "order": [
     "slideshow",
-    "text_with_icons_eihpRt",
-    "multi_column_a3KmAb",
-    "media_with_text_N9gqxm",
-    "1741731117e1eea2df",
-    "rich_text_h67YJF"
+    "trust_icons",
+    "best_sellers",
+    "occasions",
+    "under_75",
+    "customize",
+    "by_drink",
+    "promise",
+    "apps"
   ]
 }

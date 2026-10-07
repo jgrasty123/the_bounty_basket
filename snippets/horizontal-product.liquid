@@ -1,20 +1,20 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-HORIZONTAL PRODUCT COMPONENT
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  HORIZONTAL PRODUCT COMPONENT
+  ----------------------------------------------------------------------------------------------------------------------
 
-This component is used in product page, blog page or collection to highlight small product
+  This component is used in product page, blog page or collection to highlight small product
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* product: the product to render
-* size: can be "sm" or nothing
-* show_add_to_cart: a boolean indicating if we show the add to cart
-* background: an optional background color for the tile
-* text_color: an optional text color for the tile
-* output_link: if set to false, the link around the link is not set
+  * product: the product to render
+  * size: can be "sm" or nothing
+  * show_add_to_cart: a boolean indicating if we show the add to cart
+  * background: an optional background color for the tile
+  * text_color: an optional text color for the tile
+  * output_link: if set to false, the link around the link is not set
 {%- endcomment -%}
 
 {%- capture class -%}horizontal-product {% if size == 'sm' %}horizontal-product--sm{% endif %} {% if background != 'rgba(0,0,0,0)' %}rounded-xs{% endif %} snap-start{%- endcapture -%}
@@ -22,7 +22,11 @@ Supported variables
 <div {% render 'surface', class: class, background: background, text_color: text_color %} data-product-handle="{{ product.handle }}">
   {%- if product.featured_media != blank -%}
     <a href="{{ product.url }}">
-      {{- product.featured_media | image_url: width: product.featured_media.width | image_tag: loading: 'lazy', sizes: '(max-width: 740px) 64px, 80px', widths: '64,128,80,160', class: 'horizontal-product__image rounded-xs' -}}
+      {{-
+        product.featured_media
+        | image_url: width: product.featured_media.width
+        | image_tag: loading: 'lazy', sizes: '(max-width: 740px) 64px, 80px', widths: '64,128,80,160', class: 'horizontal-product__image rounded-xs'
+      -}}
     </a>
   {%- endif -%}
 
@@ -58,7 +62,15 @@ Supported variables
 
             {%- render 'button', content: button_content, size: 'sm', subdued: true, aria_controls: quick_buy_id -%}
 
-            <quick-buy-drawer id="{{ quick_buy_id }}" header-bordered open-from="bottom" handle="{{ product.handle }}?variant={{ product.selected_or_first_available_variant.id }}" role="region" aria-live="polite" class="quick-buy-drawer drawer">
+            <quick-buy-drawer
+              id="{{ quick_buy_id }}"
+              header-bordered
+              open-from="bottom"
+              handle="{{ product.handle }}?variant={{ product.selected_or_first_available_variant.id }}"
+              role="region"
+              aria-live="polite"
+              class="quick-buy-drawer drawer"
+            >
               {%- comment -%}Quick buy content is filled on demand for performance reasons {%- endcomment -%}
             </quick-buy-drawer>
           {%- endif -%}

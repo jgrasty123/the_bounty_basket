@@ -1,20 +1,20 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-STORE PICKUP AVAILABILITY
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  STORE PICKUP AVAILABILITY
+  ----------------------------------------------------------------------------------------------------------------------
 
-This component renders the store availability for a given variant, along the associated modal
+  This component renders the store availability for a given variant, along the associated modal
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* product_variant: the variant to which the availability is rendered
+  * product_variant: the variant to which the availability is rendered
 {%- endcomment -%}
 
 {%- assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true -%}
 
-{%- if product_variant != nil -%}
+{%- if product_variant != null -%}
   <pickup-availability class="pickup-availability">
     {%- if pick_up_availabilities.size > 0 -%}
       {%- capture drawer_id -%}store-availability-drawer-{{ product_variant.product.id }}{%- endcapture -%}
@@ -58,7 +58,11 @@ Supported variables
         <div class="pickup-availability__variant text-start h-stack gap-6" slot="header">
           {%- assign image = product_variant.featured_media | default: product_variant.product.featured_media -%}
 
-          {{- image | image_url: width: image.width | image_tag: loading: 'lazy', sizes: '(max-width: 740px) 64px, 80px', widths: '64,80,128,160', class: 'pickup-availability__media' -}}
+          {{-
+            image
+            | image_url: width: image.width
+            | image_tag: loading: 'lazy', sizes: '(max-width: 740px) 64px, 80px', widths: '64,80,128,160', class: 'pickup-availability__media'
+          -}}
 
           <div class="v-stack gap-1">
             <p class="h6">{{ product_variant.product.title }}</p>

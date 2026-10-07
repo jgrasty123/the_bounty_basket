@@ -1,0 +1,131 @@
+{%- comment -%}
+  BB gift options — shared styles + checkmark sync script for the grouped gift option accordions in product-info.
+  Rendered once per product-info. Ported from the_bounty_basket/main 2026-10-06.
+{%- endcomment -%}
+<style>
+          .bb-gift-options {
+            border-bottom: 1px solid rgb(var(--border-color, 229, 231, 235));
+            margin-bottom: var(--spacing-4, 16px);
+          }
+
+          .bb-gift-options__heading {
+            margin: 0;
+            padding: 0 0 var(--spacing-2, 8px) 0;
+            font-size: 18px;
+            color: rgb(var(--text-secondary, 107, 114, 128));
+          }
+
+          .bb-gift-options .product-info__block-item {
+            margin: 0;
+          }
+
+          .bb-gift-options .product-info__block-item + .product-info__block-item {
+            border-top: 1px solid rgb(var(--border-color, 229, 231, 235));
+          }
+
+          .bb-gift-options__item {
+            margin: 0;
+            border: 0;
+            border-radius: 0;
+          }
+
+          .bb-gift-options__toggle {
+            align-items: center;
+            gap: var(--spacing-3, 12px);
+            padding-block: var(--spacing-3, 12px);
+          }
+
+          .bb-gift-options__left,
+          .bb-gift-options__right {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2, 8px);
+          }
+
+          .bb-gift-options__right {
+            margin-inline-start: auto;
+          }
+
+          .bb-gift-options__status-icon {
+            color: rgb(var(--text-secondary, 156, 163, 175));
+            display: inline-flex;
+            line-height: 0;
+          }
+
+          .bb-gift-options__item--active .bb-gift-options__status-icon {
+            color: rgb(var(--button-background));
+          }
+
+          .bb-gift-options__title {
+            font-size: var(--text-sm, 14px);
+            font-weight: 600;
+          }
+
+          .bb-gift-options__price {
+            font-size: var(--text-sm, 14px);
+            color: rgb(var(--text-secondary, 107, 114, 128));
+          }
+
+          .bb-gift-options__content {
+            padding-block-start: 0;
+          }
+        </style>
+<script>
+          (function() {
+            'use strict';
+
+            function isOptionActive(item) {
+              var type = item.dataset.giftOptionType || '';
+
+              if (type === 'engraving') {
+                var engravingSelected = item.querySelector('[data-engraving-radio]:checked');
+                return !!(engravingSelected && engravingSelected.value !== 'none' && engravingSelected.dataset.variantId);
+              }
+
+              if (type === 'engraved_glass') {
+                var glassSelected = item.querySelector('[data-engraved-glass-type-radio]:checked');
+                return !!(glassSelected && glassSelected.value !== 'none');
+              }
+
+              if (type === 'gift_card') {
+                var giftSelect = item.querySelector('[data-gift-card-select]');
+                return !!(giftSelect && giftSelect.value !== 'none');
+              }
+
+              if (type === 'adult_signature') {
+                var signatureCheckbox = item.querySelector('[data-adult-signature-checkbox]');
+                return !!(signatureCheckbox && signatureCheckbox.checked);
+              }
+
+              if (type === 'product_upsells') {
+                var hasCheckbox = item.querySelector('[data-upsell-checkbox]:checked');
+                var hasRadio = item.querySelector('[data-upsell-radio]:checked');
+                var hasModalSelection = item.querySelector('[data-mini-bottle-toggle]:checked');
+                return !!(hasCheckbox || hasRadio || hasModalSelection);
+              }
+
+              return false;
+            }
+
+            function syncGiftOptionCheckmarks() {
+              document.querySelectorAll('.bb-gift-options__item[data-gift-option-type]').forEach(function(item) {
+                item.classList.toggle('bb-gift-options__item--active', isOptionActive(item));
+              });
+            }
+
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', syncGiftOptionCheckmarks);
+            } else {
+              syncGiftOptionCheckmarks();
+            }
+
+            document.addEventListener('change', syncGiftOptionCheckmarks);
+            document.addEventListener('input', syncGiftOptionCheckmarks);
+            document.addEventListener('click', function() {
+              window.requestAnimationFrame(syncGiftOptionCheckmarks);
+            });
+          })();
+        </script>
+<style>
+  .bb-adult-signature-line { margin-block-start: 4px; }
+</style>

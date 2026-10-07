@@ -1,6 +1,12 @@
 {%- render 'bundle-note-data' -%}
 
-<cart-drawer {% if request.design_mode %}handle-section-events{% endif %} class="cart-drawer drawer drawer--lg" id="cart-drawer">
+<cart-drawer
+  {% if request.design_mode %}
+    handle-section-events
+  {% endif %}
+  class="cart-drawer drawer drawer--lg"
+  id="cart-drawer"
+>
   {%- if cart.item_count == 0 -%}
     <button is="close-button" aria-label="{{ 'general.accessibility.close' | t | escape }}">
       {%- render 'icon' with 'close' -%}
@@ -41,7 +47,7 @@
 
       {%- comment -%}
       --------------------------------------------------------------------------
-      BROBASKET CART DRAWER ADDITIONS (2026-05-15)
+      BB CART DRAWER ADDITIONS (2026-05-15)
       --------------------------------------------------------------------------
       Adult signature disclosure — only renders if the adult signature variant
       (51099741126902) is present in cart. Read-only by design: the signature
@@ -105,7 +111,7 @@
           gap: 0.5rem;
         }
         .bb-cart-drawer__adult-signature-checkbox {
-          accent-color: #e0584f; /* match BroBasket coral primary */
+          accent-color: rgb(var(--button-background-primary));
           width: 1.05rem;
           height: 1.05rem;
           flex-shrink: 0;
@@ -164,15 +170,29 @@
 
                   {%- if rendered_recommendations > 1 -%}
                     <div class="h-stack gap-2 hidden sm:flex">
-                      <button is="prev-button" class="circle-chevron hover:colors" aria-controls="{{ carousel_id }}" aria-label="{{ 'general.accessibility.previous' | t | escape }}" disabled>{%- render 'icon' with 'chevron-left-small', direction_aware: true -%}</button>
-                      <button is="next-button" class="circle-chevron hover:colors" aria-controls="{{ carousel_id }}" aria-label="{{ 'general.accessibility.next' | t | escape }}">{%- render 'icon' with 'chevron-right-small', direction_aware: true -%}</button>
+                      <button
+                        is="prev-button"
+                        class="circle-chevron hover:colors"
+                        aria-controls="{{ carousel_id }}"
+                        aria-label="{{ 'general.accessibility.previous' | t | escape }}"
+                        disabled
+                      >
+                        {%- render 'icon' with 'chevron-left-small', direction_aware: true -%}
+                      </button>
+                      <button is="next-button" class="circle-chevron hover:colors" aria-controls="{{ carousel_id }}" aria-label="{{ 'general.accessibility.next' | t | escape }}">
+                        {%- render 'icon' with 'chevron-right-small', direction_aware: true -%}
+                      </button>
                     </div>
                   {%- endif -%}
                 </div>
               {%- endif -%}
 
               {%- if recommendations != blank -%}
-                <scroll-carousel selector=".horizontal-product" id="{{ carousel_id }}" class="horizontal-product-list-carousel {% unless horizontal_products_blends %}separate{% endunless %} scroll-area bleed">
+                <scroll-carousel
+                  selector=".horizontal-product"
+                  id="{{ carousel_id }}"
+                  class="horizontal-product-list-carousel {% unless horizontal_products_blends %}separate{% endunless %} scroll-area bleed"
+                >
                   <div class="horizontal-product-list {% if horizontal_products_blends %}divide-x{% else %}separate{% endif %}">
                     {{- recommendations -}}
                   </div>
@@ -188,7 +208,7 @@
       {%- if section.settings.allow_discount_application or cart.cart_level_discount_applications.size > 0 -%}
         <div class="v-stack gap-2.5">
           {%- if section.settings.allow_discount_application -%}
-            {%- render 'cart-discount', section: section -%}
+            {%- render 'cart-discount' -%}
           {%- endif -%}
 
           {%- if cart.cart_level_discount_applications.size > 0 -%}
@@ -196,7 +216,8 @@
               {%- for discount_application in cart.cart_level_discount_applications -%}
                 <div class="h-stack gap-4 justify-between">
                   <div class="badge">
-                    {%- render 'icon' with 'discount' -%} {{ discount_application.title }} (-{{ discount_application.total_allocated_amount | money }})
+                    {%- render 'icon' with 'discount' -%}
+                    {{ discount_application.title }} (-{{ discount_application.total_allocated_amount | money }})
 
                     {%- if section.settings.allow_discount_application and discount_application.type != '' -%}
                       <cart-discount-remove-button discount-code="{{ discount_application.title | escape }}" class="h-stack align-center">

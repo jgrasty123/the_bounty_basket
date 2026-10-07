@@ -1,12 +1,24 @@
 <div class="sm:container">
   <div class="customer-form">
     {%- if section.settings.image != blank -%}
-      {{- section.settings.image | image_url: width: section.settings.image.width | image_tag: sizes: '50vw', widths: '300,400,500,600,700,800,1000,1200,1400', class: 'customer-form__image rounded' -}}
+      {{-
+        section.settings.image
+        | image_url: width: section.settings.image.width
+        | image_tag: sizes: '50vw', widths: '300,400,500,600,700,800,1000,1200,1400', class: 'customer-form__image rounded'
+      -}}
     {%- endif -%}
 
-    <div {% render 'surface', class: 'customer-form__box', background_gradient: section.settings.background_gradient, background: section.settings.background, text_color: section.settings.text_color, background_fallback: 'bg-secondary' %}>
+    <div
+      {% render 'surface',
+        class: 'customer-form__box',
+        background_gradient: section.settings.background_gradient,
+        background: section.settings.background,
+        text_color: section.settings.text_color,
+        background_fallback: 'bg-secondary'
+      %}
+    >
       <div class="customer-form__box-inner text-center">
-        <div  class="v-stack gap-12">
+        <div class="v-stack gap-12">
           <h1 class="h2">
             {%- assign content = 'customer.register.title' | t -%}
             {%- render 'styled-text', content: content, gradient: section.settings.heading_gradient -%}
@@ -61,7 +73,15 @@
                       </div>
 
                       {%- assign submit_label = 'customer.register.submit' | t -%}
-                    {%- render 'button', content: submit_label, type: 'submit', size: 'xl', stretch: true, secondary: true, background: section.settings.button_background, text_color: section.settings.button_text_color -%}
+                      {%- render 'button',
+                        content: submit_label,
+                        type: 'submit',
+                        size: 'xl',
+                        stretch: true,
+                        secondary: true,
+                        background: section.settings.button_background,
+                        text_color: section.settings.button_text_color
+                      -%}
 
                       <div>
                         <a href="{{ routes.account_login_url }}" class="link text-subdued">{{ 'customer.register.login' | t }}</a>

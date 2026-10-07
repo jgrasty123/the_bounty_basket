@@ -214,7 +214,10 @@
   {%- endif -%}
 {%- endcapture -%}
 
-<div class="navigation-promo__wrapper {% if use_carousel_fallback_until %}{{ use_carousel_fallback_until }}:hidden{% endif %} {% if hide_promo_until != blank %}{{ hide_promo_until }}-max:hidden{% endif %}" id="navigation-promo-{{ promo_id }}">
+<div
+  class="navigation-promo__wrapper {% if use_carousel_fallback_until %}{{ use_carousel_fallback_until }}:hidden{% endif %} {% if hide_promo_until != blank %}{{ hide_promo_until }}-max:hidden{% endif %}"
+  id="navigation-promo-{{ promo_id }}"
+>
   {%- if is_promo_grid or is_promo_collage -%}
     <div class="navigation-promo navigation-promo--{{ mega_menu_block.settings.promo_content_layout }} {% if is_promo_grid %}scroll-area bleed{% endif %}">
       {{ promo_block_content }}
@@ -222,7 +225,12 @@
   {%- else -%}
     <div class="relative">
       {%- capture carousel_id -%}promo-carousel-{{ promo_id }}{%- endcapture -%}
-      <mega-menu-promo-carousel id="{{ carousel_id }}" class="navigation-promo navigation-promo--{% if force_carousel_mode or use_carousel_fallback_until %}carousel{% else %}{{ mega_menu_block.settings.promo_content_layout }}{% endif %}" role="region" style="--navigation-promo-gap: 0">
+      <mega-menu-promo-carousel
+        id="{{ carousel_id }}"
+        class="navigation-promo navigation-promo--{% if force_carousel_mode or use_carousel_fallback_until %}carousel{% else %}{{ mega_menu_block.settings.promo_content_layout }}{% endif %}"
+        role="region"
+        style="--navigation-promo-gap: 0"
+      >
         {{ promo_block_content }}
       </mega-menu-promo-carousel>
 

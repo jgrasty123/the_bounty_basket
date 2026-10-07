@@ -3,7 +3,7 @@
     "name": "theme_info",
     "theme_name": "Impact",
     "theme_author": "Maestrooo",
-    "theme_version": "7.0.1",
+    "theme_version": "7.2.0",
     "theme_documentation_url": "https://support.maestrooo.com/",
     "theme_support_url": "https://support.maestrooo.com/article/203-contact-us"
   },
@@ -394,7 +394,7 @@
         "id": "heading_font",
         "label": "Font",
         "info": "Selecting different fonts can affect the speed of your online store. Learn more about [system fonts.](https://help.shopify.com/en/manual/online-store/os/store-speed/improving-speed#fonts)",
-        "default": "assistant_n4"
+        "default": "helvetica_n4"
       },
       {
         "type": "select",
@@ -455,7 +455,7 @@
         "id": "text_font",
         "label": "Font",
         "info": "Selecting different fonts can affect the speed of your online store. Learn more about [system fonts.](https://help.shopify.com/en/manual/online-store/os/store-speed/improving-speed#fonts)",
-        "default": "assistant_n4"
+        "default": "helvetica_n4"
       },
       {
         "type": "range",
@@ -823,7 +823,8 @@
         "id": "cart_free_shipping_threshold",
         "label": "Free shipping minimum amount",
         "info": "Indicate the value in your store main currency.",
-        "default": "50"
+        "default": "50",
+        "visible_if": "{{ settings.cart_show_free_shipping_threshold }}"
       }
     ]
   },
@@ -934,82 +935,6 @@
         "id": "favicon",
         "label": "Image",
         "info": "180 x 180px .png recommended"
-      }
-    ]
-  },
-  {
-    "name": "Global font size",
-    "settings": [
-      {
-        "type": "range",
-        "id": "font_scale_percent",
-        "label": "Font scale",
-        "min": 50,
-        "max": 150,
-        "step": 5,
-        "unit": "%",
-        "default": 100,
-        "info": "Scales all font sizes globally across the theme."
-      }
-    ]
-  },
-  {
-    "name": "Delivery Date Picker",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Cutoff & Lead Time"
-      },
-      {
-        "type": "paragraph",
-        "content": "These control how the cart-page delivery picker calculates the earliest pickable date. Defaults match BroBasket's current ODD configuration."
-      },
-      {
-        "type": "text",
-        "id": "bb_dp_cutoff_time",
-        "label": "Cutoff time (24-hour format)",
-        "default": "14:00",
-        "info": "Orders placed before this time on a shipping day ship the same day. After cutoff, orders ship the next shipping day. Use HH:MM format. Default 14:00 = 2pm."
-      },
-      {
-        "type": "text",
-        "id": "bb_dp_cutoff_timezone",
-        "label": "Cutoff timezone",
-        "default": "America/Los_Angeles",
-        "info": "Use a valid IANA timezone identifier. America/Los_Angeles = Pacific Time (auto-handles PDT/PST switch)."
-      },
-      {
-        "type": "text",
-        "id": "bb_dp_working_days",
-        "label": "Shipping days",
-        "default": "Mon,Tue,Wed,Thu,Fri",
-        "info": "Days the warehouse ships. Comma-separated, 3-letter day names. The picker hardcodes Sunday as a non-delivery day; Saturday delivery is always allowed."
-      },
-      {
-        "type": "range",
-        "id": "bb_dp_max_days_out",
-        "label": "Max days out",
-        "default": 180,
-        "min": 30,
-        "max": 360,
-        "step": 30,
-        "unit": "day",
-        "info": "How far in the future a customer can pick. Matches ODD's current setting (180)."
-      },
-      {
-        "type": "header",
-        "content": "Holidays"
-      },
-      {
-        "type": "paragraph",
-        "content": "Comma-separated list of dates the warehouse is closed AND no delivery happens. Use MM/DD/YYYY format. Add new years' dates here annually."
-      },
-      {
-        "type": "textarea",
-        "id": "bb_dp_holidays",
-        "label": "Holiday dates",
-        "default": "12/25/2025,01/01/2026,12/26/2025",
-        "info": "Examples: 12/25/2025, 01/01/2026. Each entry is one date. Leave blank for no holidays."
       }
     ]
   }

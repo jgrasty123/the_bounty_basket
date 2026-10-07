@@ -1,29 +1,32 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-OFFER COMPONENT
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  OFFER COMPONENT
+  ----------------------------------------------------------------------------------------------------------------------
 
-This component is used to create banner (for instance to showing an error, an info, or to show promotion content). Because
-there are a lot of parameters, you simply need to pass the "block" object and everything will be extracted from it.
+  This component is used to create banner (for instance to showing an error, an info, or to show promotion content). Because
+  there are a lot of parameters, you simply need to pass the "block" object and everything will be extracted from it.
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* title: an optional title for the banner
-* content: the textual content to use
-* icon: the name of an icon that is optionally added along the text
-* icon_width: the width of the icon
-* custom_icon: an image of an optional icon (if any)
-* icon_position: the position of the icon. Accept the values "aligned" or "stacked".
-* text_alignment: alignment of the text
-* background: an optional background that would override existing color
-* text_color: an optional text color that would override existing color
+  * title: an optional title for the banner
+  * content: the textual content to use
+  * icon: the name of an icon that is optionally added along the text
+  * icon_width: the width of the icon
+  * custom_icon: an image of an optional icon (if any)
+  * icon_position: the position of the icon. Accept the values "aligned" or "stacked".
+  * text_alignment: alignment of the text
+  * background: an optional background that would override existing color
+  * text_color: an optional text color that would override existing color
 {%- endcomment -%}
 
 {%- capture offer_class -%}offer {% if block.settings.text_alignment == 'center' %}offer--center{% endif %}{%- endcapture -%}
 
-<div {% render 'surface', class: offer_class, background: block.settings.background, text_color: block.settings.text_color, background_fallback: 'bg-secondary' %} {{ block.shopify_attributes }}>
+<div
+  {% render 'surface', class: offer_class, background: block.settings.background, text_color: block.settings.text_color, background_fallback: 'bg-secondary' %}
+  {{ block.shopify_attributes }}
+>
   {%- capture icon_with_title -%}
     {%- if block.settings.custom_icon != blank -%}
       {%- capture sizes -%}{{ block.settings.icon_width }}px{%- endcapture -%}

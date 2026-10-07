@@ -44,9 +44,9 @@
         <div class="cart-order">
           <div class="cart-order__summary">
             {%- comment -%}
-            ----------------------------------------------------------------------------------------------------------------
-            ORDER SUMMARY
-            ----------------------------------------------------------------------------------------------------------------
+              ----------------------------------------------------------------------------------------------------------------
+              ORDER SUMMARY
+              ----------------------------------------------------------------------------------------------------------------
             {%- endcomment -%}
             <table class="order-summary">
               <thead class="order-summary__header">
@@ -60,9 +60,9 @@
               <tbody class="order-summary__body">
                 {%- for line_item in cart.items -%}
                   {% liquid
-                    assign max_quantity = nil
-                  
-                    if line_item.variant.quantity_rule.max != nil
+                    assign max_quantity = null
+
+                    if line_item.variant.quantity_rule.max != null
                       assign max_quantity = max_quantity | default: 999999 | at_most: line_item.variant.quantity_rule.max
                     endif
                   %}
@@ -71,15 +71,28 @@
                     <td>{%- render 'line-item', line_item: line_item, show_disclosures: true -%}</td>
 
                     <td class="hidden align-center text-center text-subdued sm:table-cell">
-                        <line-item-quantity class="v-stack justify-center gap-2">
-                          <input class="quantity-input" type="number" is="quantity-input" inputmode="numeric" min="{{ line_item.variant.quantity_rule.min }}" step="{{ line_item.variant.quantity_rule.increment }}" {% if max_quantity != nil %}max="{{ max_quantity }}"{% endif %} data-line-key="{{ line_item.key }}" aria-label="{{ 'cart.order.change_quantity' | t | escape }}" value="{{ line_item.quantity }}">
+                      <line-item-quantity class="v-stack justify-center gap-2">
+                        <input
+                          class="quantity-input"
+                          type="number"
+                          is="quantity-input"
+                          inputmode="numeric"
+                          min="{{ line_item.variant.quantity_rule.min }}"
+                          step="{{ line_item.variant.quantity_rule.increment }}"
+                          {% if max_quantity != null %}
+                            max="{{ max_quantity }}"
+                          {% endif %}
+                          data-line-key="{{ line_item.key }}"
+                          aria-label="{{ 'cart.order.change_quantity' | t | escape }}"
+                          value="{{ line_item.quantity }}"
+                        >
 
-                          <span class="text-xs">
-                            <a href="{{ line_item.url_to_remove }}" class="link" aria-label="{{ 'cart.order.remove_with_title' | t: title: line_item.title | escape }}">
-                              {{- 'cart.order.remove' | t -}}
-                            </a>
-                          </span>
-                        </line-item-quantity>
+                        <span class="text-xs">
+                          <a href="{{ line_item.url_to_remove }}" class="link" aria-label="{{ 'cart.order.remove_with_title' | t: title: line_item.title | escape }}">
+                            {{- 'cart.order.remove' | t -}}
+                          </a>
+                        </span>
+                      </line-item-quantity>
                     </td>
 
                     <td class="hidden align-center text-subdued text-end sm:table-cell">{{ line_item.final_line_price | money }}</td>
@@ -89,9 +102,9 @@
             </table>
 
             {%- comment -%}
-            ----------------------------------------------------------------------------------------------------------------
-            SHIPPING ESTIMATOR
-            ----------------------------------------------------------------------------------------------------------------
+              ----------------------------------------------------------------------------------------------------------------
+              SHIPPING ESTIMATOR
+              ----------------------------------------------------------------------------------------------------------------
             {%- endcomment -%}
 
             {%- if section.settings.show_shipping_estimator and cart.requires_shipping -%}
@@ -100,42 +113,6 @@
 
               {%- render 'accordion', title: accordion_title, icon: 'picto-box', content: accordion_content, size: 'lg' -%}
             {%- endif -%}
-
-            <div class="bb-clear-cart">
-              <button type="button" class="bb-clear-cart__button" data-clear-cart>Clear cart</button>
-            </div>
-
-            <script>
-              (function() {
-                var btn = document.querySelector('[data-clear-cart]');
-                if (!btn) return;
-                btn.addEventListener('click', function() {
-                  if (!confirm('Remove all items from your cart?')) return;
-                  fetch(Shopify.routes.root + 'cart/clear.js', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
-                    .then(function() { window.location.reload(); });
-                });
-              })();
-            </script>
-
-            <style>
-              .bb-clear-cart {
-                margin-top: var(--spacing-4, 16px);
-                text-align: end;
-              }
-              .bb-clear-cart__button {
-                background: none;
-                border: none;
-                padding: 0;
-                font-size: var(--text-xs, 12px);
-                color: rgb(var(--text-secondary, 107, 114, 128));
-                text-decoration: underline;
-                cursor: pointer;
-                font-family: inherit;
-              }
-              .bb-clear-cart__button:hover {
-                color: rgb(var(--text-primary, 0, 0, 0));
-              }
-            </style>
           </div>
 
           <safe-sticky class="cart-order__recap v-stack gap-6">
@@ -150,7 +127,7 @@
                       {%- if section.settings.allow_discount_application or cart.cart_level_discount_applications.size > 0 -%}
                         <div class="v-stack gap-2.5">
                           {%- if section.settings.allow_discount_application -%}
-                            {%- render 'cart-discount', section: section -%}
+                            {%- render 'cart-discount' -%}
                           {%- endif -%}
 
                           {%- if cart.cart_level_discount_applications.size > 0 -%}
@@ -158,7 +135,8 @@
                               {%- for discount_application in cart.cart_level_discount_applications -%}
                                 <div class="h-stack gap-4 justify-between">
                                   <div class="badge">
-                                    {%- render 'icon' with 'discount' -%} {{ discount_application.title }} (-{{ discount_application.total_allocated_amount | money }})
+                                    {%- render 'icon' with 'discount' -%}
+                                    {{ discount_application.title }} (-{{ discount_application.total_allocated_amount | money }})
 
                                     {%- if section.settings.allow_discount_application and discount_application.type != '' -%}
                                       <cart-discount-remove-button discount-code="{{ discount_application.title | escape }}" class="h-stack align-center">
@@ -203,31 +181,6 @@
                       {%- endif -%}
                     </div>
 
-                  {%- when 'cart_note' -%}
-                    <cart-note class="cart-form__note block" {{ block.shopify_attributes }}>
-                      {%- assign order_note = 'cart.general.order_note' | t -%}
-                      {%- render 'input', name: 'note', multiline: 3, label: order_note, value: cart.note, maxlength: block.settings.maxlength -%}
-                    </cart-note>
-
-                  {%- when 'text' -%}
-                    {%- if block.settings.content != blank -%}
-                      <div class="prose text-subdued" {{ block.shopify_attributes }}>
-                        {{- block.settings.content -}}
-                      </div>
-                    {%- endif -%}
-
-                  {%- when 'offer' -%}
-                    <div class="v-stack gap-4">
-                      {%- render 'offer', block: block -%}
-                    </div>
-
-                  {%- when 'accelerated_buttons' -%}
-                    {% if additional_checkout_buttons %}
-                      <div class="additional-checkout-buttons additional-checkout-buttons--vertical" {{ block.shopify_attributes }}>
-                        {{- content_for_additional_checkout_buttons -}}
-                      </div>
-                    {% endif %}
-
                   {%- when 'adult_signature' -%}
                     {%- if requires_adult_signature -%}
                       <div class="cart-form__adult-signature" {{ block.shopify_attributes }}>
@@ -249,6 +202,40 @@
                             copy_selected: block.settings.copy_selected
                       -%}
                     </div>
+
+                  {%- when 'cart_note' -%}
+                    <cart-note class="cart-form__note block" {{ block.shopify_attributes }}>
+                      {%- assign order_note = 'cart.general.order_note' | t -%}
+                      {%- render 'input', name: 'note', multiline: 3, label: order_note, value: cart.note, maxlength: block.settings.maxlength -%}
+                    </cart-note>
+
+                  {%- when 'text' -%}
+                    {%- if block.settings.content != blank -%}
+                      <div class="prose text-subdued" {{ block.shopify_attributes }}>
+                        {{- block.settings.content -}}
+                      </div>
+                    {%- endif -%}
+
+                  {%- when 'offer' -%}
+                    {%- assign previous_block_index = forloop.index0 | minus: 1 -%}
+                    {%- assign next_block_index = forloop.index0 | plus: 1 -%}
+
+                    {%- if section.blocks[next_block_index].type == 'offer' -%}
+                      <div class="v-stack gap-4">
+                    {%- endif -%}
+
+                    {%- render 'offer', block: block -%}
+
+                    {%- if section.blocks[previous_block_index].type == 'offer' -%}
+                      </div>
+                    {%- endif -%}
+
+                  {%- when 'accelerated_buttons' -%}
+                    {% if additional_checkout_buttons %}
+                      <div class="additional-checkout-buttons additional-checkout-buttons--vertical" {{ block.shopify_attributes }}>
+                        {{- content_for_additional_checkout_buttons -}}
+                      </div>
+                    {% endif %}
 
                   {%- when 'checkout_button' -%}
                     {%- assign checkout_button = 'cart.general.checkout' | t -%}
@@ -323,92 +310,6 @@
           "type": "richtext",
           "id": "content",
           "label": "Content"
-        }
-      ]
-    },
-    {
-      "type": "adult_signature",
-      "name": "Adult signature checkbox",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Checkbox label",
-          "default": "Adult signature is required for all orders"
-        }
-      ]
-    },
-    {
-      "type": "bb_delivery_date_picker",
-      "name": "Delivery date picker",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Custom delivery date picker. Block-level values override the global Theme settings if filled."
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "Pick a Delivery Date"
-        },
-        {
-          "type": "text",
-          "id": "cutoff_time",
-          "label": "Cutoff time (HH:MM, 24-hour)",
-          "default": "14:00"
-        },
-        {
-          "type": "text",
-          "id": "cutoff_timezone",
-          "label": "Cutoff timezone (IANA)",
-          "default": "America/Los_Angeles"
-        },
-        {
-          "type": "text",
-          "id": "working_days",
-          "label": "Shipping days (comma-separated)",
-          "default": "Mon,Tue,Wed,Thu,Fri"
-        },
-        {
-          "type": "text",
-          "id": "max_days_out",
-          "label": "Max days out",
-          "default": "180"
-        },
-        {
-          "type": "textarea",
-          "id": "holidays",
-          "label": "Holiday dates (MM/DD/YYYY, comma-separated)",
-          "default": "12/25/2025,01/01/2026,12/26/2025"
-        },
-        {
-          "type": "header",
-          "content": "Helper copy"
-        },
-        {
-          "type": "paragraph",
-          "content": "Text shown below the calendar. Use placeholders {ship_day}, {arrival_date}, {arrival_long} to insert dynamic values (auto-bolded). Plain text only."
-        },
-        {
-          "type": "textarea",
-          "id": "copy_before_cutoff",
-          "label": "Before cutoff (e.g. before 2pm PT)",
-          "default": "Order before 2pm PT and we ship today. Estimated arrival: {arrival_date}. Pick a date or skip, checkout works either way."
-        },
-        {
-          "type": "textarea",
-          "id": "copy_after_cutoff",
-          "label": "After cutoff / weekend / holiday",
-          "default": "Cutoff is 2pm PT Mon-Fri. Ships {ship_day}, estimated arrival {arrival_date}. Pick a date or skip, checkout works either way."
-        },
-        {
-          "type": "textarea",
-          "id": "copy_selected",
-          "label": "After date selected",
-          "default": "Your order is set to arrive {arrival_long}."
         }
       ]
     },
@@ -769,6 +670,92 @@
           "type": "color",
           "id": "text_color",
           "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "adult_signature",
+      "name": "Adult signature checkbox",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Checkbox label",
+          "default": "Adult signature is required for all orders"
+        }
+      ]
+    },
+    {
+      "type": "bb_delivery_date_picker",
+      "name": "Delivery date picker",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Custom delivery date picker. Block-level values override the global Theme settings if filled."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Pick a Delivery Date"
+        },
+        {
+          "type": "text",
+          "id": "cutoff_time",
+          "label": "Cutoff time (HH:MM, 24-hour)",
+          "default": "14:00"
+        },
+        {
+          "type": "text",
+          "id": "cutoff_timezone",
+          "label": "Cutoff timezone (IANA)",
+          "default": "America/Los_Angeles"
+        },
+        {
+          "type": "text",
+          "id": "working_days",
+          "label": "Shipping days (comma-separated)",
+          "default": "Mon,Tue,Wed,Thu,Fri"
+        },
+        {
+          "type": "text",
+          "id": "max_days_out",
+          "label": "Max days out",
+          "default": "180"
+        },
+        {
+          "type": "textarea",
+          "id": "holidays",
+          "label": "Holiday dates (MM/DD/YYYY, comma-separated)",
+          "default": "12/25/2025,01/01/2026,12/26/2025"
+        },
+        {
+          "type": "header",
+          "content": "Helper copy"
+        },
+        {
+          "type": "paragraph",
+          "content": "Text shown below the calendar. Use placeholders {ship_day}, {arrival_date}, {arrival_long} to insert dynamic values (auto-bolded). Plain text only."
+        },
+        {
+          "type": "textarea",
+          "id": "copy_before_cutoff",
+          "label": "Before cutoff (e.g. before 2pm PT)",
+          "default": "Order before 2pm PT and we ship today. Estimated arrival: {arrival_date}. Pick a date or skip, checkout works either way."
+        },
+        {
+          "type": "textarea",
+          "id": "copy_after_cutoff",
+          "label": "After cutoff / weekend / holiday",
+          "default": "Cutoff is 2pm PT Mon-Fri. Ships {ship_day}, estimated arrival {arrival_date}. Pick a date or skip, checkout works either way."
+        },
+        {
+          "type": "textarea",
+          "id": "copy_selected",
+          "label": "After date selected",
+          "default": "Your order is set to arrive {arrival_long}."
         }
       ]
     }

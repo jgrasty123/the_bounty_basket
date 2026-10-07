@@ -17,7 +17,12 @@
   }
 </style>
 
-<div class="blog" {% if section.settings.allow_transparent_header %}allow-transparent-header{% endif %}>
+<div
+  class="blog"
+  {% if section.settings.allow_transparent_header %}
+    allow-transparent-header
+  {% endif %}
+>
   {%- if blog.articles_count == 0 -%}
     <div class="empty-state">
       <div class="empty-state__icon-wrapper">
@@ -32,7 +37,14 @@
       </div>
     </div>
   {%- else -%}
-    <header {% render 'surface', class: 'blog-banner', text_color: section.settings.banner_text_color, background: section.settings.banner_background, background_fallback: 'bg-secondary' %}>
+    <header
+      {% render 'surface',
+        class: 'blog-banner',
+        text_color: section.settings.banner_text_color,
+        background: section.settings.banner_background,
+        background_fallback: 'bg-secondary'
+      %}
+    >
       <div class="container">
         <div class="blog-banner-content v-stack gap-10 text-center justify-items-center">
           <div class="v-stack gap-5 sm:gap-8">
@@ -64,7 +76,14 @@
                 {%- assign button_content = 'blog.comments.submit' | t -%}
 
                 {%- render 'input', type: 'email', name: 'contact[email]', label: label, value: customer.email, required: true, autocomplete: 'email' -%}
-                {%- render 'button', content: button_content, icon: 'email', type: 'submit', size: 'xl', background: section.settings.button_background, text_color: section.settings.button_text_color -%}
+                {%- render 'button',
+                  content: button_content,
+                  icon: 'email',
+                  type: 'submit',
+                  size: 'xl',
+                  background: section.settings.button_background,
+                  text_color: section.settings.button_text_color
+                -%}
               </div>
             {%- endform -%}
           {%- endif -%}
@@ -80,7 +99,6 @@
 
                 {%- for tag in blog.all_tags -%}
                   <li role="tab" aria-selected="{% if current_tags contains tag %}true{% else %}false{% endif %}">
-
                     {%- if current_tags contains tag -%}
                       {{- tag | link_to_remove_tag: tag -}}
                     {%- else -%}
@@ -106,7 +124,14 @@
                 {%- assign block_position = block.settings.position | at_most: section.settings.articles_per_page -%}
 
                 {%- if block_position == article_index -%}
-                  <div {% render 'surface', class: 'blog-posts-newsletter v-stack gap-6 sm:gap-8 text-center rounded', text_color: block.settings.text_color, background: block.settings.background, background_fallback: 'bg-secondary' %}>
+                  <div
+                    {% render 'surface',
+                      class: 'blog-posts-newsletter v-stack gap-6 sm:gap-8 text-center rounded',
+                      text_color: block.settings.text_color,
+                      background: block.settings.background,
+                      background_fallback: 'bg-secondary'
+                    %}
+                  >
                     <div class="blog-posts-newsletter__content v-stack gap-4 justify-items-center sm:gap-6">
                       {%- render 'icon' with 'picto-envelope', width: 24, height: 24 -%}
 
@@ -154,10 +179,31 @@
               {%- assign background_color = article.metafields.banner.background_color.value | default: section.settings.feature_article_background -%}
               {%- assign text_color = article.metafields.banner.text_color.value | default: section.settings.feature_article_text_color -%}
               {%- capture sizes -%}(max-width: 999px) 100vw, calc(min(100vw, {{ settings.page_width }}px) * 0.65){%- endcapture -%}
-              {%- render 'blog-post-card', article: article, featured: section.settings.feature_first_article, show_excerpt: section.settings.show_excerpt, show_date: section.settings.show_date, show_author: section.settings.show_author, show_comments_count: section.settings.show_comments_count, show_category: section.settings.show_category, background: background_color, text_color: text_color, sizes: sizes, position: forloop.index -%}
+              {%- render 'blog-post-card',
+                article: article,
+                featured: section.settings.feature_first_article,
+                show_excerpt: section.settings.show_excerpt,
+                show_date: section.settings.show_date,
+                show_author: section.settings.show_author,
+                show_comments_count: section.settings.show_comments_count,
+                show_category: section.settings.show_category,
+                background: background_color,
+                text_color: text_color,
+                sizes: sizes,
+                position: forloop.index
+              -%}
             {%- else -%}
               {%- capture sizes -%}(max-width: 699px) 100vw, (max-width: 1149px) calc(100vw / 2 - 40px), (max-width: 1399px) calc(min(100vw, {{ settings.page_width }}px) / 3 - 40px) , calc(min(100vw, {{ settings.page_width }}px) / 3 - 80px) {%- endcapture -%}
-              {%- render 'blog-post-card', article: article, show_excerpt: section.settings.show_excerpt, show_date: section.settings.show_date, show_author: section.settings.show_author, show_comments_count: section.settings.show_comments_count, show_category: section.settings.show_category, sizes: sizes, position: forloop.index -%}
+              {%- render 'blog-post-card',
+                article: article,
+                show_excerpt: section.settings.show_excerpt,
+                show_date: section.settings.show_date,
+                show_author: section.settings.show_author,
+                show_comments_count: section.settings.show_comments_count,
+                show_category: section.settings.show_category,
+                sizes: sizes,
+                position: forloop.index
+              -%}
             {%- endif -%}
           {%- endfor -%}
         </div>

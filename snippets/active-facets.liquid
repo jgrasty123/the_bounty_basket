@@ -1,16 +1,16 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-ACTIVE FACETS
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  ACTIVE FACETS
+  ----------------------------------------------------------------------------------------------------------------------
 
-Show the active facets for a given faceted search. This snippet automatically reads some global section settings to
-decide to show or not the filter group name
+  Show the active facets for a given faceted search. This snippet automatically reads some global section settings to
+  decide to show or not the filter group name
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* results: either collection or search drop to extract the active facets from
+  * results: either collection or search drop to extract the active facets from
 {%- endcomment -%}
 
 {%- assign active_values_count = 0 -%}
@@ -52,7 +52,7 @@ Supported variables
     {%- if request.page_type == 'collection' -%}
       {%- assign default_url = collection.url -%}
     {%- else -%}
-      {%- capture default_url -%}{{ routes.search_url }}?q={{ search.terms }}&sort_by={{ search.sort_by }}{%- endcapture -%}
+      {%- capture default_url -%}{{ routes.search_url }}?q={{ search.terms | url_encode }}&sort_by={{ search.sort_by }}{%- endcapture -%}
     {%- endif -%}
 
     <a href="{{ default_url }}" is="facet-link" class="facet-clear-all text-subdued">

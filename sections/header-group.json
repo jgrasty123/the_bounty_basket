@@ -46,73 +46,21 @@
         "phone_display": "844-446-2443",
         "phone_dial": "+18444462443",
         "supporting_text": "Questions? Call us:",
-        "background": "#1a1a1a",
+        "background": "#3a2a33",
         "text_color": "#ffffff",
-        "accent_color": "#cd241d"
+        "accent_color": "#8e3b5a"
       }
     },
     "header": {
       "type": "header",
-      "blocks": {
-        "mega_menu_V3F4g3": {
-          "type": "mega_menu",
-          "disabled": true,
-          "settings": {
-            "menu_item": "",
-            "layout": "horizontal",
-            "submenu_style": "bold_heading",
-            "image_heading_1": "",
-            "image_link_1": "",
-            "image_text_color_1": "#ffffff",
-            "image_heading_2": "",
-            "image_link_2": "",
-            "image_text_color_2": "#ffffff",
-            "image_heading_3": "",
-            "image_link_3": "",
-            "image_text_color_3": "#ffffff",
-            "product": "",
-            "product_card_background": "",
-            "product_card_text_color": "",
-            "promo_content_layout": "grid",
-            "stretch_promo": false,
-            "drawer_link_image": "hide"
-          }
-        },
-        "mega_menu_Wqt97f": {
-          "type": "mega_menu",
-          "disabled": true,
-          "settings": {
-            "menu_item": "Shop All",
-            "layout": "horizontal_center",
-            "submenu_style": "bold_heading",
-            "image_heading_1": "",
-            "image_link_1": "",
-            "image_text_color_1": "#ffffff",
-            "image_heading_2": "The Ultimate Beer Lover",
-            "image_link_2": "shopify://products/ultimate-beer-lover-gift",
-            "image_text_color_2": "#ffffff",
-            "image_heading_3": "Shop All",
-            "image_link_3": "shopify://collections/gift-baskets-for-men",
-            "image_text_color_3": "#ffffff",
-            "product": "",
-            "product_card_background": "",
-            "product_card_text_color": "",
-            "promo_content_layout": "grid",
-            "stretch_promo": false,
-            "drawer_link_image": "hide"
-          }
-        }
-      },
-      "block_order": [
-        "mega_menu_V3F4g3",
-        "mega_menu_Wqt97f"
-      ],
+      "blocks": {},
+      "block_order": [],
       "settings": {
-        "enable_sticky": false,
+        "enable_sticky": true,
         "hide_on_scroll": false,
         "logo": "shopify://shop_images/bounty_Basket_Co-logo-no-bg.png",
-        "logo_max_width": 65,
-        "logo_mobile_max_width": 50,
+        "logo_max_width": 100,
+        "logo_mobile_max_width": 70,
         "menu": "main-menu",
         "sidebar_menu": "",
         "secondary_menu": "",
@@ -121,8 +69,8 @@
         "opening_from": "left",
         "layout": "logo_left_navigation_inline",
         "show_social_media": true,
-        "show_locale_selector": true,
-        "show_country_selector": true,
+        "show_locale_selector": false,
+        "show_country_selector": false,
         "show_country_flag": true,
         "show_country_name": false,
         "transparent_header_text_color": "#ffffff",

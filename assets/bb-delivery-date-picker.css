@@ -12,7 +12,7 @@
   padding: 20px 18px;
   margin-bottom: 16px;
   font-family: inherit;
-  color: #1a1a1a;
+  color: #3a2a33;
 }
 
 .bb-delivery-date-picker__title {
@@ -39,7 +39,7 @@
 }
 
 .bb-delivery-date-picker__helper strong {
-  color: #1a1a1a;
+  color: #3a2a33;
   font-weight: 700;
 }
 
@@ -64,7 +64,7 @@
 .bb-delivery-date-picker__clear:hover {
   background: #f5f2eb;
   border-color: #bdb6a8;
-  color: #1a1a1a;
+  color: #3a2a33;
 }
 
 .bb-delivery-date-picker__status {
@@ -103,7 +103,7 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
-  color: #1a1a1a;
+  color: #3a2a33;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -126,7 +126,7 @@
 .bb-cal__month-label {
   font-size: 15px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #3a2a33;
   text-align: center;
   flex: 1;
 }
@@ -164,7 +164,7 @@
   border-radius: 50%;
   font-size: 14px;
   font-family: inherit;
-  color: #1a1a1a;
+  color: #3a2a33;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -190,9 +190,9 @@
 
 .bb-cal__cell.is-selected,
 .bb-cal__cell.is-selected:hover {
-  background: #1a1a1a;
+  background: #3a2a33;
   color: #ffffff;
-  border-color: #1a1a1a;
+  border-color: #3a2a33;
   font-weight: 700;
 }
 

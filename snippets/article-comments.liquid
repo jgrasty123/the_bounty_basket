@@ -1,16 +1,16 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-ARTICLE COMMENTS COMPONENT
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  ARTICLE COMMENTS COMPONENT
+  ----------------------------------------------------------------------------------------------------------------------
 
-Shows the blog post comments (if enabled on blog settings)
+  Shows the blog post comments (if enabled on blog settings)
 
-********************************************
-Supported parameters
-********************************************
+  ********************************************
+  Supported parameters
+  ********************************************
 
-* show_gravatar
-* comments_pagination
+  * show_gravatar
+  * comments_pagination
 {%- endcomment -%}
 
 <div class="article-comments" {{ block_attributes }} id="blog-post-comments">
@@ -23,7 +23,14 @@ Supported parameters
           {%- for comment in article.comments -%}
             <article class="comment">
               {%- if show_gravatar -%}
-                <img class="comment__gravatar rounded-full" loading="lazy" width="32" height="32" src="//www.gravatar.com/avatar/{{ comment.email | md5 }}" alt="{{ comment.author }}">
+                <img
+                  class="comment__gravatar rounded-full"
+                  loading="lazy"
+                  width="32"
+                  height="32"
+                  src="//www.gravatar.com/avatar/{{ comment.email | md5 }}"
+                  alt="{{ comment.author }}"
+                >
               {%- endif -%}
 
               <div class="v-stack gap-2 sm:gap-3">

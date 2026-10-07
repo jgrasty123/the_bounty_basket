@@ -10,13 +10,18 @@
 
   <div {% render 'section-properties' %}>
     <div class="section-stack">
-      {%- render 'section-header', subheading: section.settings.subheading, heading: section.settings.title, content: section.settings.content, text_alignment: section.settings.text_alignment -%}
+      {%- render 'section-header',
+        subheading: section.settings.subheading,
+        heading: section.settings.title,
+        content: section.settings.content,
+        text_alignment: section.settings.text_alignment
+      -%}
 
       <div class="multi-column scroll-area bleed md:unbleed">
         {%- for block in section.blocks -%}
           {%- liquid
-            assign loading_strategy = nil
-  
+            assign loading_strategy = null
+
             if section.index > 3 or forloop.index > 3
               assign loading_strategy = 'lazy'
             endif
@@ -24,14 +29,25 @@
 
           {%- case block.type -%}
             {%- when 'item' -%}
-              <div class="multi-column__item justify-{{ section.settings.text_alignment }} snap-start" style="--multi-column-item-column-count: span {{ 12.0 | divided_by: block.settings.column_size | round }}" {{ block.shopify_attributes }}>
+              <div
+                class="multi-column__item justify-{{ section.settings.text_alignment }} snap-start"
+                style="--multi-column-item-column-count: span {{ 12.0 | divided_by: block.settings.column_size | round }}"
+                {{ block.shopify_attributes }}
+              >
                 {%- if block.settings.video != blank -%}
                   <video-media autoplay style="--aspect-ratio: {{ block.settings.video.aspect_ratio }}">
-                    {{ block.settings.video | video_tag: playsinline: true, muted: true, controls: block.settings.show_controls, loop: true, preload: 'metadata', class: 'rounded' }}
+                    {{
+                      block.settings.video
+                      | video_tag: playsinline: true, muted: true, controls: block.settings.show_controls, loop: true, preload: 'metadata', class: 'rounded'
+                    }}
                   </video-media>
                 {%- elsif block.settings.image != blank -%}
                   {%- capture sizes -%}(max-width: 699px) calc(73vw - 40px), (max-width: 999px) calc(38vw - 64px), calc(min({{ settings.page_width }}px, 100vw) / {{ block.settings.column_size }}){%- endcapture -%}
-                  {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: sizes, widths: '300,400,500,600,800,1000,1200,1400,1600,1800', class: 'rounded' -}}
+                  {{-
+                    block.settings.image
+                    | image_url: width: block.settings.image.width
+                    | image_tag: loading: loading_strategy, sizes: sizes, widths: '300,400,500,600,800,1000,1200,1400,1600,1800', class: 'rounded'
+                  -}}
                 {%- endif -%}
 
                 {%- if block.settings.title != blank or block.settings.content != blank or block.settings.link_text != blank -%}
@@ -60,7 +76,11 @@
               </div>
 
             {%- when 'spacer' -%}
-              <div class="multi-column__item hidden md:block" style="--multi-column-item-column-count: span {{ 12.0 | divided_by: block.settings.column_size | round }}" {{ block.shopify_attributes }}></div>
+              <div
+                class="multi-column__item hidden md:block"
+                style="--multi-column-item-column-count: span {{ 12.0 | divided_by: block.settings.column_size | round }}"
+                {{ block.shopify_attributes }}
+              ></div>
           {%- endcase -%}
         {%- endfor -%}
       </div>
@@ -108,8 +128,8 @@
           "label": "Large"
         },
         {
-        "value": "x-large",
-        "label": "X-Large"
+          "value": "x-large",
+          "label": "X-Large"
         }
       ],
       "default": "medium"

@@ -2,9 +2,9 @@
   {%- render 'section-spacing-collapsing' -%}
 
   {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  CSS
-  ------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------
+    CSS
+    ------------------------------------------------------------------------------------------------------------------------
   {%- endcomment -%}
 
   <style>
@@ -15,9 +15,9 @@
   </style>
 
   {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  LIQUID
-  ------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------
+    LIQUID
+    ------------------------------------------------------------------------------------------------------------------------
   {%- endcomment -%}
 
   <div {% render 'section-properties' %}>
@@ -25,7 +25,13 @@
       <div class="press">
         <press-carousel id="carousel-{{ section.id }}" class="press__list full-bleed text-center sm:unbleed" role="region">
           {%- for block in section.blocks -%}
-            <div id="block-{{ section.id }}-{{ block.id }}" class="press__list-item snap-center {% if forloop.first %}is-selected{% endif %}" role="group" aria-label="{{ 'general.accessibility.item_nth_of_count' | t: index: forloop.index, count: section.blocks.size }}" {{ block.shopify_attributes }}>
+            <div
+              id="block-{{ section.id }}-{{ block.id }}"
+              class="press__list-item snap-center {% if forloop.first %}is-selected{% endif %}"
+              role="group"
+              aria-label="{{ 'general.accessibility.item_nth_of_count' | t: index: forloop.index, count: section.blocks.size }}"
+              {{ block.shopify_attributes }}
+            >
               {%- if block.settings.show_rating -%}
                 <div class="rating">
                   <div class="rating__stars" role="img" aria-label="{{ 'general.rating.info' | t: rating_value: block.settings.rating, rating_max: 5 }}">
@@ -50,8 +56,8 @@
                 <div class="v-stack gap-2">
                   {%- if block.settings.logo != blank -%}
                     {%- liquid
-                      assign loading_strategy = nil
-            
+                      assign loading_strategy = null
+
                       if section.index > 3 or forloop.first == false
                         assign loading_strategy = 'lazy'
                       endif
@@ -61,7 +67,11 @@
                       {%- capture sizes -%}{{ block.settings.logo_width }}px{%- endcapture -%}
                       {%- capture widths -%}{{ block.settings.logo_width }}, {{ block.settings.logo_width | times: 2 | at_most: block.settings.logo.width }}{%- endcapture -%}
                       {%- capture max_width -%}--press-image-max-width: {{ block.settings.logo_width }}px{%- endcapture -%}
-                      {{- block.settings.logo | image_url: width: block.settings.logo.width | image_tag: style: max_width, loading: loading_strategy, widths: widths, class: 'press__image', sizes: sizes -}}
+                      {{-
+                        block.settings.logo
+                        | image_url: width: block.settings.logo.width
+                        | image_tag: style: max_width, loading: loading_strategy, widths: widths, class: 'press__image', sizes: sizes
+                      -}}
                     </div>
                   {%- endif -%}
 

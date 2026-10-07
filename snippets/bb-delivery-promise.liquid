@@ -24,13 +24,13 @@ Supported block.settings:
   * cutoff_hour_pt        — integer (default 14 = 2pm PT = 5pm ET)
   * transit_business_days — integer (default 5)
   * show_express_note     — boolean (default true)
-  * accent_color          — color (default #cd241d — BroBasket red)
+  * accent_color          — color (default #8e3b5a — Bounty berry)
 ----------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 {%- assign cutoff_hour = block.settings.cutoff_hour_pt | default: 14 -%}
 {%- assign transit_days = block.settings.transit_business_days | default: 5 -%}
-{%- assign accent = block.settings.accent_color | default: '#cd241d' -%}
+{%- assign accent = block.settings.accent_color | default: '#8e3b5a' -%}
 
 <div
   class="bb-delivery-promise"

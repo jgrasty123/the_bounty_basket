@@ -48,12 +48,7 @@
         {%- render 'product-gallery', product: product, product_form_id: product_form_id -%}
       {%- endif -%}
 
-      {%- render 'product-info', 
-        product: product, 
-        update_url: true,
-        product_form_id: product_form_id,
-        context: 'main_product'
-      -%}
+      {%- render 'product-info', product: product, update_url: true, product_form_id: product_form_id, context: 'main_product' -%}
     </div>
   </product-rerender>
 </div>
@@ -67,7 +62,16 @@
         {%- assign button_label = 'product.general.add_to_cart_button' | t -%}
 
         <buy-buttons template="{{ product.template_suffix }}" form="{{ product_form_id }}" class="sm:hidden">
-          {%- render 'button', type: 'submit', content: button_label, form: product_form_id, background: buy_buttons_block.settings.atc_button_background, text_color: buy_buttons_block.settings.atc_button_text_color, secondary: true, stretch: true, size: 'lg' -%}
+          {%- render 'button',
+            type: 'submit',
+            content: button_label,
+            form: product_form_id,
+            background: buy_buttons_block.settings.atc_button_background,
+            text_color: buy_buttons_block.settings.atc_button_text_color,
+            secondary: true,
+            stretch: true,
+            size: 'lg'
+          -%}
         </buy-buttons>
 
         {%- assign image = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
@@ -91,7 +95,14 @@
           </div>
 
           <buy-buttons template="{{ product.template_suffix }}" form="{{ product_form_id }}" force-secondary-button>
-            {%- render 'button', type: 'submit', content: button_label, form: product_form_id, background: buy_buttons_block.settings.atc_button_background, text_color: buy_buttons_block.settings.atc_button_text_color, secondary: true -%}
+            {%- render 'button',
+              type: 'submit',
+              content: button_label,
+              form: product_form_id,
+              background: buy_buttons_block.settings.atc_button_background,
+              text_color: buy_buttons_block.settings.atc_button_text_color,
+              secondary: true
+            -%}
           </buy-buttons>
         </div>
       </product-quick-add>
@@ -100,57 +111,13 @@
 {%- endif -%}
 
 {%- comment -%}
-IMPLEMENTATION NOTE: Shopify does not currently allows to render a given section within the context of a given product. However,
-when rendering the quick buy popovers, we want to be able to re-use the merchant's choices (such as the selector type). This
-is however only possible by rendering the whole product page, and extracting the relevant part. Here, we therefore render the
-quick buy information in a template, that will be extracted in JS, but ensure it is not visible in the main product page
+  IMPLEMENTATION NOTE: Shopify does not currently allows to render a given section within the context of a given product. However,
+  when rendering the quick buy popovers, we want to be able to re-use the merchant's choices (such as the selector type). This
+  is however only possible by rendering the whole product page, and extracting the relevant part. Here, we therefore render the
+  quick buy information in a template, that will be extracted in JS, but ensure it is not visible in the main product page
 {%- endcomment -%}
 
 {%- render 'product-quick-buy', product: product -%}
-{%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  PHOTOSWIPE - LAZY LOADED
-  Optimized: PhotoSwipe is only loaded on product pages instead of globally
-  Impact: Reduces initial bundle size by ~59KB on non-product pages
-  ------------------------------------------------------------------------------------------------------------------------
-{%- endcomment -%}
-<link rel="modulepreload" href="{{ 'photoswipe.min.js' | asset_url }}">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "name": {{ collection.title | json }},
-  "description": {{ collection.description | strip_html | strip_newlines | json }},
-  "url": "{{ shop.url }}{{ collection.url }}",
-  "mainEntity": {
-    "@type": "ItemList",
-    "itemListElement": [
-      {%- for product in collection.products -%}
-        {
-          "@type": "Product",
-          "name": {{ product.title | json }},
-          "url": "{{ shop.url }}{{ product.url }}",
-          "image": [
-            {%- if product.featured_image -%}"{{ product.featured_image | image_url }}"{%- endif -%}
-          ],
-          "sku": {{ product.selected_or_first_available_variant.sku | json }},
-          "brand": {
-            "@type": "Brand",
-            "name": {{ product.vendor | json }}
-          },
-          "offers": {
-            "@type": "Offer",
-            "priceCurrency": "{{ shop.currency }}",
-            "price": "{{ product.selected_or_first_available_variant.price | money_without_currency }}",
-            "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
-          }
-        }{% unless forloop.last %},{% endunless %}
-      {%- endfor -%}
-    ]
-  }
-}
-</script>
 
 {% schema %}
 {
@@ -158,6 +125,360 @@ quick buy information in a template, that will be extracted in JS, but ensure it
   "class": "shopify-section--main-product",
   "tag": "section",
   "blocks": [
+    {
+      "type": "engraving",
+      "name": "Engraving options",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows engraving options for products with 'Engraved Bottle' in option_set_v2. Add 'Engraving Mandatory' to make it required."
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "engraved_glass",
+      "name": "Engraved glass options",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows engraved glass options (Rocks Glass / Shot Glass) for products with 'Engraved Glass' in option_set_v2. Add 'Engraving Mandatory' to make it required."
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "gift_card",
+      "name": "Gift card & message",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows gift card options for products with 'Card' in option_set_v2 metafield."
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "adult_signature",
+      "name": "Adult signature",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows adult signature checkbox (preselected) for products with 'Alcohol Signature' in option_set_v2."
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "product_upsells",
+      "name": "Product upsells",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows metafield-based upsell checkboxes. Products must have custom.upsell metafield values set."
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "drinkable_card_picker",
+      "name": "Drinkable card picker",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Renders a grid of mini bottles from a collection. Customer must select one mini before ATC. Pairs the mini with the card in a single cart/add.js call via bb-product-addons."
+        },
+        {
+          "type": "text",
+          "id": "collection_handle",
+          "label": "Mini bottle collection handle",
+          "default": "mini-bottles",
+          "info": "The collection of mini bottles to display. Only available variants render."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Pick Your Bottle"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Required — choose one mini to fill your card."
+        }
+      ]
+    },
+    {
+      "type": "trust_badges",
+      "name": "Trust badges",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "badge_1_icon",
+          "label": "Badge 1 icon",
+          "options": [
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "calendar",
+              "label": "Calendar"
+            },
+            {
+              "value": "usa",
+              "label": "Flag"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "check",
+              "label": "Checkmark"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            }
+          ],
+          "default": "gift"
+        },
+        {
+          "type": "text",
+          "id": "badge_1_text",
+          "label": "Badge 1 text",
+          "default": "Includes your personalized gift message on a greeting card"
+        },
+        {
+          "type": "select",
+          "id": "badge_2_icon",
+          "label": "Badge 2 icon",
+          "options": [
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "calendar",
+              "label": "Calendar"
+            },
+            {
+              "value": "usa",
+              "label": "Flag"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "check",
+              "label": "Checkmark"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "text",
+          "id": "badge_2_text",
+          "label": "Badge 2 text",
+          "default": "Orders placed by 5PM EST ship same day"
+        },
+        {
+          "type": "select",
+          "id": "badge_3_icon",
+          "label": "Badge 3 icon",
+          "options": [
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "calendar",
+              "label": "Calendar"
+            },
+            {
+              "value": "usa",
+              "label": "Flag"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "check",
+              "label": "Checkmark"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            }
+          ],
+          "default": "calendar"
+        },
+        {
+          "type": "text",
+          "id": "badge_3_text",
+          "label": "Badge 3 text",
+          "default": "Need it later? Choose a future delivery date"
+        },
+        {
+          "type": "select",
+          "id": "badge_4_icon",
+          "label": "Badge 4 icon",
+          "options": [
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "calendar",
+              "label": "Calendar"
+            },
+            {
+              "value": "usa",
+              "label": "Flag"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "check",
+              "label": "Checkmark"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            }
+          ],
+          "default": "usa"
+        },
+        {
+          "type": "text",
+          "id": "badge_4_text",
+          "label": "Badge 4 text",
+          "default": "Made to order in the USA by our in-house team"
+        }
+      ]
+    },
+    {
+      "type": "bb_delivery_promise",
+      "name": "Delivery promise (W2-01)",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Live countdown to daily order cutoff with auto-calculated arrival date. Holidays and weekends respected."
+        },
+        {
+          "type": "range",
+          "id": "cutoff_hour_pt",
+          "label": "Daily cutoff hour (Pacific, 24h)",
+          "info": "14 = 2pm PT = 5pm ET. Orders placed before this ship same day.",
+          "min": 0,
+          "max": 23,
+          "step": 1,
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "transit_business_days",
+          "label": "Transit business days (nationwide worst case)",
+          "info": "6 covers East Coast ground at max. Use a lower value if you want a tighter promise — but you risk missing.",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 6
+        },
+        {
+          "type": "checkbox",
+          "id": "show_express_note",
+          "label": "Show \"Express at checkout\" subline",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Accent colour",
+          "default": "#8e3b5a"
+        }
+      ]
+    },
+    {
+      "type": "bundle_content_v2",
+      "name": "Bundle content v2",
+      "settings": []
+    },
     {
       "type": "@app"
     },
@@ -271,6 +592,306 @@ quick buy information in a template, that will be extracted in JS, but ensure it
       "name": "Description",
       "limit": 1,
       "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "picto-coupon",
+              "label": "Coupon",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-percent",
+              "label": "Percent",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-gift",
+              "label": "Gift",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-star",
+              "label": "Star",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-like",
+              "label": "Like",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-building",
+              "label": "Building",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-love",
+              "label": "Love",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-award-gift",
+              "label": "Award gift",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-happy",
+              "label": "Happy",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-box",
+              "label": "Box",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-pin",
+              "label": "Pin",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-timer",
+              "label": "Timer",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-validation",
+              "label": "Validation",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-truck",
+              "label": "Truck",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-return",
+              "label": "Return",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-earth",
+              "label": "Earth",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-plane",
+              "label": "Plane",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-credit-card",
+              "label": "Credit card",
+              "group": "Payment & Security"
+            },
+            {
+              "value": "picto-lock",
+              "label": "Lock",
+              "group": "Payment & Security"
+            },
+            {
+              "value": "picto-shield",
+              "label": "Shield",
+              "group": "Payment & Security"
+            },
+            {
+              "value": "picto-secure-profile",
+              "label": "Secure profile",
+              "group": "Payment & Security"
+            },
+            {
+              "value": "picto-money",
+              "label": "Money",
+              "group": "Payment & Security"
+            },
+            {
+              "value": "picto-recycle",
+              "label": "Recycle",
+              "group": "Ecology"
+            },
+            {
+              "value": "picto-leaf",
+              "label": "Leaf",
+              "group": "Ecology"
+            },
+            {
+              "value": "picto-tree",
+              "label": "Tree",
+              "group": "Ecology"
+            },
+            {
+              "value": "picto-mobile-phone",
+              "label": "Mobile phone",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-phone",
+              "label": "Phone",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-chat",
+              "label": "Chat",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-customer-support",
+              "label": "Customer support",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-operator",
+              "label": "Operator",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-mailbox",
+              "label": "Mailbox",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-envelope",
+              "label": "Envelope",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-comment",
+              "label": "Comment",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-question",
+              "label": "Question",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-send",
+              "label": "Send",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-at-sign",
+              "label": "At sign",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-camera",
+              "label": "Camera",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-wifi",
+              "label": "WiFi",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-bluetooth",
+              "label": "Bluetooth",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-printer",
+              "label": "Printer",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-smart-watch",
+              "label": "Smart watch",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-coffee",
+              "label": "Coffee",
+              "group": "Food & Drink"
+            },
+            {
+              "value": "picto-burger",
+              "label": "Burger",
+              "group": "Food & Drink"
+            },
+            {
+              "value": "picto-beer",
+              "label": "Beer",
+              "group": "Food & Drink"
+            },
+            {
+              "value": "picto-target",
+              "label": "Target",
+              "group": "Other"
+            },
+            {
+              "value": "picto-document",
+              "label": "Document",
+              "group": "Other"
+            },
+            {
+              "value": "picto-jewelry",
+              "label": "Jewelry",
+              "group": "Other"
+            },
+            {
+              "value": "picto-music",
+              "label": "Music",
+              "group": "Other"
+            },
+            {
+              "value": "picto-file",
+              "label": "File",
+              "group": "Other"
+            },
+            {
+              "value": "picto-mask",
+              "label": "Mask",
+              "group": "Other"
+            },
+            {
+              "value": "picto-stop",
+              "label": "Stop",
+              "group": "Other"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon",
+          "info": "96 x 96px .png or .svg recommended. Only used when content is collapsed."
+        },
+        {
+          "type": "range",
+          "id": "icon_width",
+          "min": 16,
+          "max": 48,
+          "step": 2,
+          "unit": "px",
+          "label": "Icon width",
+          "default": 20
+        },
+        {
+          "type": "checkbox",
+          "id": "collapse_content",
+          "label": "Collapse content",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "disclosures",
+      "name": "Disclosures",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Required safety warnings and regulatory disclosures for this product. [Learn more](https://help.shopify.com/en/manual/products/product-disclosures)."
+        },
         {
           "type": "select",
           "id": "icon",
@@ -741,121 +1362,6 @@ quick buy information in a template, that will be extracted in JS, but ensure it
       ]
     },
     {
-      "type": "engraving",
-      "name": "Engraving options",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Shows engraving options for products with 'Engraved Bottle' in option_set_v2. Add 'Engraving Mandatory' to make it required."
-        },
-        {
-          "type": "checkbox",
-          "id": "open_by_default",
-          "label": "Open by default",
-          "default": false
-        }
-      ]
-    },
-    {
-      "type": "engraved_glass",
-      "name": "Engraved glass options",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Shows engraved glass options (Rocks Glass / Shot Glass) for products with 'Engraved Glass' in option_set_v2. Add 'Engraving Mandatory' to make it required."
-        },
-        {
-          "type": "checkbox",
-          "id": "open_by_default",
-          "label": "Open by default",
-          "default": false
-        }
-      ]
-    },
-    {
-      "type": "gift_card",
-      "name": "Gift card & message",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Shows gift card options for products with 'Card' in option_set_v2 metafield."
-        },
-        {
-          "type": "checkbox",
-          "id": "open_by_default",
-          "label": "Open by default",
-          "default": false
-        }
-      ]
-    },
-    {
-      "type": "adult_signature",
-      "name": "Adult signature",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Shows adult signature checkbox (preselected) for products with 'Alcohol Signature' in option_set_v2."
-        },
-        {
-          "type": "checkbox",
-          "id": "open_by_default",
-          "label": "Open by default",
-          "default": false
-        }
-      ]
-    },
-    {
-      "type": "product_upsells",
-      "name": "Product upsells",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Shows metafield-based upsell checkboxes. Products must have custom.upsell metafield values set."
-        },
-        {
-          "type": "checkbox",
-          "id": "open_by_default",
-          "label": "Open by default",
-          "default": false
-        }
-      ]
-    },
-    {
-      "type": "drinkable_card_picker",
-      "name": "Drinkable card picker",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Renders a grid of mini bottles from a collection. Customer must select one mini before ATC. Pairs the mini with the card in a single cart/add.js call via bb-product-addons."
-        },
-        {
-          "type": "text",
-          "id": "collection_handle",
-          "label": "Mini bottle collection handle",
-          "default": "mini-bottles",
-          "info": "The collection of mini bottles to display. Only available variants render."
-        },
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Heading",
-          "default": "Pick Your Bottle"
-        },
-        {
-          "type": "text",
-          "id": "subheading",
-          "label": "Subheading",
-          "default": "Required — choose one mini to fill your card."
-        }
-      ]
-    },
-    {
       "type": "quantity_selector",
       "name": "Quantity selector",
       "limit": 1,
@@ -957,301 +1463,6 @@ quick buy information in a template, that will be extracted in JS, but ensure it
           "default": "<p>Share some content to your customers about your products.</p>"
         }
       ]
-    },
-    {
-      "type": "trust_badges",
-      "name": "Trust badges",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "select",
-          "id": "badge_1_icon",
-          "label": "Badge 1 icon",
-          "options": [
-            {
-              "value": "gift",
-              "label": "Gift"
-            },
-            {
-              "value": "truck",
-              "label": "Truck"
-            },
-            {
-              "value": "calendar",
-              "label": "Calendar"
-            },
-            {
-              "value": "usa",
-              "label": "Flag"
-            },
-            {
-              "value": "shield",
-              "label": "Shield"
-            },
-            {
-              "value": "heart",
-              "label": "Heart"
-            },
-            {
-              "value": "check",
-              "label": "Checkmark"
-            },
-            {
-              "value": "star",
-              "label": "Star"
-            }
-          ],
-          "default": "gift"
-        },
-        {
-          "type": "text",
-          "id": "badge_1_text",
-          "label": "Badge 1 text",
-          "default": "Includes your personalized gift message on a greeting card"
-        },
-        {
-          "type": "select",
-          "id": "badge_2_icon",
-          "label": "Badge 2 icon",
-          "options": [
-            {
-              "value": "gift",
-              "label": "Gift"
-            },
-            {
-              "value": "truck",
-              "label": "Truck"
-            },
-            {
-              "value": "calendar",
-              "label": "Calendar"
-            },
-            {
-              "value": "usa",
-              "label": "Flag"
-            },
-            {
-              "value": "shield",
-              "label": "Shield"
-            },
-            {
-              "value": "heart",
-              "label": "Heart"
-            },
-            {
-              "value": "check",
-              "label": "Checkmark"
-            },
-            {
-              "value": "star",
-              "label": "Star"
-            }
-          ],
-          "default": "truck"
-        },
-        {
-          "type": "text",
-          "id": "badge_2_text",
-          "label": "Badge 2 text",
-          "default": "Orders placed by 5PM EST ship same day"
-        },
-        {
-          "type": "select",
-          "id": "badge_3_icon",
-          "label": "Badge 3 icon",
-          "options": [
-            {
-              "value": "gift",
-              "label": "Gift"
-            },
-            {
-              "value": "truck",
-              "label": "Truck"
-            },
-            {
-              "value": "calendar",
-              "label": "Calendar"
-            },
-            {
-              "value": "usa",
-              "label": "Flag"
-            },
-            {
-              "value": "shield",
-              "label": "Shield"
-            },
-            {
-              "value": "heart",
-              "label": "Heart"
-            },
-            {
-              "value": "check",
-              "label": "Checkmark"
-            },
-            {
-              "value": "star",
-              "label": "Star"
-            }
-          ],
-          "default": "calendar"
-        },
-        {
-          "type": "text",
-          "id": "badge_3_text",
-          "label": "Badge 3 text",
-          "default": "Need it later? Choose a future delivery date"
-        },
-        {
-          "type": "select",
-          "id": "badge_4_icon",
-          "label": "Badge 4 icon",
-          "options": [
-            {
-              "value": "gift",
-              "label": "Gift"
-            },
-            {
-              "value": "truck",
-              "label": "Truck"
-            },
-            {
-              "value": "calendar",
-              "label": "Calendar"
-            },
-            {
-              "value": "usa",
-              "label": "Flag"
-            },
-            {
-              "value": "shield",
-              "label": "Shield"
-            },
-            {
-              "value": "heart",
-              "label": "Heart"
-            },
-            {
-              "value": "check",
-              "label": "Checkmark"
-            },
-            {
-              "value": "star",
-              "label": "Star"
-            }
-          ],
-          "default": "usa"
-        },
-        {
-          "type": "text",
-          "id": "badge_4_text",
-          "label": "Badge 4 text",
-          "default": "Made to order in the USA by our in-house team"
-        }
-      ]
-    },
-    {
-      "type": "bundle_content",
-      "name": "Bundle content",
-      "settings": []
-    },
-    {
-      "type": "bb_delivery_promise",
-      "name": "Delivery promise (W2-01)",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Live countdown to daily order cutoff with auto-calculated arrival date. Holidays and weekends respected."
-        },
-        {
-          "type": "range",
-          "id": "cutoff_hour_pt",
-          "label": "Daily cutoff hour (Pacific, 24h)",
-          "info": "14 = 2pm PT = 5pm ET. Orders placed before this ship same day.",
-          "min": 0,
-          "max": 23,
-          "step": 1,
-          "default": 14
-        },
-        {
-          "type": "range",
-          "id": "transit_business_days",
-          "label": "Transit business days (nationwide worst case)",
-          "info": "6 covers East Coast ground at max. Use a lower value if you want a tighter promise — but you risk missing.",
-          "min": 1,
-          "max": 10,
-          "step": 1,
-          "default": 6
-        },
-        {
-          "type": "checkbox",
-          "id": "show_express_note",
-          "label": "Show \"Express at checkout\" subline",
-          "default": true
-        },
-        {
-          "type": "color",
-          "id": "accent_color",
-          "label": "Accent colour",
-          "default": "#cd241d"
-        }
-      ]
-    },
-    {
-      "type": "bb_hero_review",
-      "name": "Hero review (W2-03)",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Above-the-fold curated review. Defaults shipped; override per product if a better review fits. Leave photo blank to render an initials circle fallback."
-        },
-        {
-          "type": "image_picker",
-          "id": "reviewer_photo",
-          "label": "Reviewer photo (optional, 160x160 recommended)"
-        },
-        {
-          "type": "range",
-          "id": "rating",
-          "label": "Star rating",
-          "min": 1,
-          "max": 5,
-          "step": 1,
-          "default": 5
-        },
-        {
-          "type": "text",
-          "id": "headline",
-          "label": "Headline"
-        },
-        {
-          "type": "textarea",
-          "id": "quote",
-          "label": "Review body"
-        },
-        {
-          "type": "text",
-          "id": "reviewer_name",
-          "label": "Reviewer name"
-        },
-        {
-          "type": "text",
-          "id": "review_meta",
-          "label": "Meta line (e.g. Verified Customer · Dec 2025)"
-        },
-        {
-          "type": "color",
-          "id": "star_color",
-          "label": "Star colour",
-          "default": "#F5A623"
-        }
-      ]
-    },
-    {
-      "type": "bundle_content_v2",
-      "name": "Bundle content v2",
-      "settings": []
     },
     {
       "type": "collapsible_text",
@@ -2108,306 +2319,6 @@ quick buy information in a template, that will be extracted in JS, but ensure it
             }
           ],
           "default": "start"
-        }
-      ]
-    },
-    {
-      "type": "disclosures",
-      "name": "Disclosures",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Required safety warnings and regulatory disclosures for this product. [Learn more](https://help.shopify.com/en/manual/products/product-disclosures)."
-        },
-        {
-          "type": "select",
-          "id": "icon",
-          "label": "Icon",
-          "options": [
-            {
-              "value": "none",
-              "label": "None"
-            },
-            {
-              "value": "picto-coupon",
-              "label": "Coupon",
-              "group": "Shop"
-            },
-            {
-              "value": "picto-percent",
-              "label": "Percent",
-              "group": "Shop"
-            },
-            {
-              "value": "picto-gift",
-              "label": "Gift",
-              "group": "Shop"
-            },
-            {
-              "value": "picto-star",
-              "label": "Star",
-              "group": "Shop"
-            },
-            {
-              "value": "picto-like",
-              "label": "Like",
-              "group": "Shop"
-            },
-            {
-              "value": "picto-building",
-              "label": "Building",
-              "group": "Shop"
-            },
-            {
-              "value": "picto-love",
-              "label": "Love",
-              "group": "Shop"
-            },
-            {
-              "value": "picto-award-gift",
-              "label": "Award gift",
-              "group": "Shop"
-            },
-            {
-              "value": "picto-happy",
-              "label": "Happy",
-              "group": "Shop"
-            },
-            {
-              "value": "picto-box",
-              "label": "Box",
-              "group": "Shipping"
-            },
-            {
-              "value": "picto-pin",
-              "label": "Pin",
-              "group": "Shipping"
-            },
-            {
-              "value": "picto-timer",
-              "label": "Timer",
-              "group": "Shipping"
-            },
-            {
-              "value": "picto-validation",
-              "label": "Validation",
-              "group": "Shipping"
-            },
-            {
-              "value": "picto-truck",
-              "label": "Truck",
-              "group": "Shipping"
-            },
-            {
-              "value": "picto-return",
-              "label": "Return",
-              "group": "Shipping"
-            },
-            {
-              "value": "picto-earth",
-              "label": "Earth",
-              "group": "Shipping"
-            },
-            {
-              "value": "picto-plane",
-              "label": "Plane",
-              "group": "Shipping"
-            },
-            {
-              "value": "picto-credit-card",
-              "label": "Credit card",
-              "group": "Payment & Security"
-            },
-            {
-              "value": "picto-lock",
-              "label": "Lock",
-              "group": "Payment & Security"
-            },
-            {
-              "value": "picto-shield",
-              "label": "Shield",
-              "group": "Payment & Security"
-            },
-            {
-              "value": "picto-secure-profile",
-              "label": "Secure profile",
-              "group": "Payment & Security"
-            },
-            {
-              "value": "picto-money",
-              "label": "Money",
-              "group": "Payment & Security"
-            },
-            {
-              "value": "picto-recycle",
-              "label": "Recycle",
-              "group": "Ecology"
-            },
-            {
-              "value": "picto-leaf",
-              "label": "Leaf",
-              "group": "Ecology"
-            },
-            {
-              "value": "picto-tree",
-              "label": "Tree",
-              "group": "Ecology"
-            },
-            {
-              "value": "picto-mobile-phone",
-              "label": "Mobile phone",
-              "group": "Communication"
-            },
-            {
-              "value": "picto-phone",
-              "label": "Phone",
-              "group": "Communication"
-            },
-            {
-              "value": "picto-chat",
-              "label": "Chat",
-              "group": "Communication"
-            },
-            {
-              "value": "picto-customer-support",
-              "label": "Customer support",
-              "group": "Communication"
-            },
-            {
-              "value": "picto-operator",
-              "label": "Operator",
-              "group": "Communication"
-            },
-            {
-              "value": "picto-mailbox",
-              "label": "Mailbox",
-              "group": "Communication"
-            },
-            {
-              "value": "picto-envelope",
-              "label": "Envelope",
-              "group": "Communication"
-            },
-            {
-              "value": "picto-comment",
-              "label": "Comment",
-              "group": "Communication"
-            },
-            {
-              "value": "picto-question",
-              "label": "Question",
-              "group": "Communication"
-            },
-            {
-              "value": "picto-send",
-              "label": "Send",
-              "group": "Communication"
-            },
-            {
-              "value": "picto-at-sign",
-              "label": "At sign",
-              "group": "Tech"
-            },
-            {
-              "value": "picto-camera",
-              "label": "Camera",
-              "group": "Tech"
-            },
-            {
-              "value": "picto-wifi",
-              "label": "WiFi",
-              "group": "Tech"
-            },
-            {
-              "value": "picto-bluetooth",
-              "label": "Bluetooth",
-              "group": "Tech"
-            },
-            {
-              "value": "picto-printer",
-              "label": "Printer",
-              "group": "Tech"
-            },
-            {
-              "value": "picto-smart-watch",
-              "label": "Smart watch",
-              "group": "Tech"
-            },
-            {
-              "value": "picto-coffee",
-              "label": "Coffee",
-              "group": "Food & Drink"
-            },
-            {
-              "value": "picto-burger",
-              "label": "Burger",
-              "group": "Food & Drink"
-            },
-            {
-              "value": "picto-beer",
-              "label": "Beer",
-              "group": "Food & Drink"
-            },
-            {
-              "value": "picto-target",
-              "label": "Target",
-              "group": "Other"
-            },
-            {
-              "value": "picto-document",
-              "label": "Document",
-              "group": "Other"
-            },
-            {
-              "value": "picto-jewelry",
-              "label": "Jewelry",
-              "group": "Other"
-            },
-            {
-              "value": "picto-music",
-              "label": "Music",
-              "group": "Other"
-            },
-            {
-              "value": "picto-file",
-              "label": "File",
-              "group": "Other"
-            },
-            {
-              "value": "picto-mask",
-              "label": "Mask",
-              "group": "Other"
-            },
-            {
-              "value": "picto-stop",
-              "label": "Stop",
-              "group": "Other"
-            }
-          ],
-          "default": "none"
-        },
-        {
-          "type": "image_picker",
-          "id": "custom_icon",
-          "label": "Custom icon",
-          "info": "96 x 96px .png or .svg recommended. Only used when content is collapsed."
-        },
-        {
-          "type": "range",
-          "id": "icon_width",
-          "min": 16,
-          "max": 48,
-          "step": 2,
-          "unit": "px",
-          "label": "Icon width",
-          "default": 20
-        },
-        {
-          "type": "checkbox",
-          "id": "collapse_content",
-          "label": "Collapse content",
-          "default": false
         }
       ]
     }

@@ -49,18 +49,19 @@
           {%- render 'product-gallery', product: section.settings.product, product_form_id: product_form_id -%}
         {%- endif -%}
 
-        {%- render 'product-info', 
-          product: section.settings.product, 
-          product_form_id: product_form_id, 
-          update_url: false,
-          context: 'featured_product'
-        -%}
+        {%- render 'product-info', product: section.settings.product, product_form_id: product_form_id, update_url: false, context: 'featured_product' -%}
       {%- else -%}
-        <product-gallery form="placeholder-{{ section.id }}" class="product-gallery {% if section.settings.mobile_carousel_control contains 'dots' %}product-gallery--mobile-dots{% endif %} {% if section.settings.desktop_media_layout contains 'grid' %}product-gallery--desktop-grid{% else %}product-gallery--desktop-carousel{% endif %} {% if section.settings.desktop_media_layout == 'carousel_thumbnails_left' %}product-gallery--desktop-thumbnails-left{% endif %} {% if section.settings.mobile_media_size == 'expanded' %}product-gallery--mobile-expanded{% endif %}">
+        <product-gallery
+          form="placeholder-{{ section.id }}"
+          class="product-gallery {% if section.settings.mobile_carousel_control contains 'dots' %}product-gallery--mobile-dots{% endif %} {% if section.settings.desktop_media_layout contains 'grid' %}product-gallery--desktop-grid{% else %}product-gallery--desktop-carousel{% endif %} {% if section.settings.desktop_media_layout == 'carousel_thumbnails_left' %}product-gallery--desktop-thumbnails-left{% endif %} {% if section.settings.mobile_media_size == 'expanded' %}product-gallery--mobile-expanded{% endif %}"
+        >
           <div class="product-gallery__ar-wrapper">
             <div class="product-gallery__media-list-wrapper">
-
-              <media-carousel desktop-mode="{{ section.settings.desktop_media_layout }}" adaptive-height class="product-gallery__media-list {% if section.settings.mobile_media_size == 'expanded' %}full-bleed{% else %}bleed{% endif %} scroll-area md:unbleed">
+              <media-carousel
+                desktop-mode="{{ section.settings.desktop_media_layout }}"
+                adaptive-height
+                class="product-gallery__media-list {% if section.settings.mobile_media_size == 'expanded' %}full-bleed{% else %}bleed{% endif %} scroll-area md:unbleed"
+              >
                 <div class="product-gallery__media {% if section.settings.mobile_carousel_control != 'free_scroll' %}snap-center{% endif %}">
                   {{- 'product-1' | placeholder_svg_tag: 'placeholder rounded' -}}
                 </div>
@@ -100,34 +101,56 @@
                   {%- assign variant = section.settings.product.selected_or_first_available_variant -%}
 
                   <div class="form-control">
-                    <label for="{{ product_form_id }}-quantity" class="block-label text-subdued">{{- 'product.quantity.label' | t -}}:</label>
+                    <label for="{{ product_form_id }}-quantity" class="block-label text-subdued">
+                      {{- 'product.quantity.label' | t -}}
+                      :</label
+                    >
 
                     <quantity-selector class="quantity-selector">
-                      <button type="button" tabindex="-1" class="quantity-selector__button" aria-label="{{ 'product.quantity.decrease_quantity' | t }}">{% render 'icon' with 'minus', width: 10, height: 2 %}</button>
-                      <input id="{{ product_form_id }}-quantity" type="number" is="quantity-input" inputmode="numeric" class="quantity-selector__input" name="quantity" form="{{ product_form_id }}" value="{{ variant.quantity_rule.min | default: 1 }}" step="{{ variant.quantity_rule.increment }}" min="{{ variant.quantity_rule.min }}" {% if variant.quantity_rule.max != nil %}max="{{ variant.quantity_rule.max }}"{% endif %} autocomplete="off">
-                      <button type="button" tabindex="-1" class="quantity-selector__button" aria-label="{{ 'product.quantity.increase_quantity' | t }}">{% render 'icon' with 'plus', width: 10, height: 10 %}</button>
+                      <button type="button" tabindex="-1" class="quantity-selector__button" aria-label="{{ 'product.quantity.decrease_quantity' | t }}">
+                        {% render 'icon' with 'minus', width: 10, height: 2 %}
+                      </button>
+                      <input
+                        id="{{ product_form_id }}-quantity"
+                        type="number"
+                        is="quantity-input"
+                        inputmode="numeric"
+                        class="quantity-selector__input"
+                        name="quantity"
+                        form="{{ product_form_id }}"
+                        value="{{ variant.quantity_rule.min | default: 1 }}"
+                        step="{{ variant.quantity_rule.increment }}"
+                        min="{{ variant.quantity_rule.min }}"
+                        {% if variant.quantity_rule.max != null %}
+                          max="{{ variant.quantity_rule.max }}"
+                        {% endif %}
+                        autocomplete="off"
+                      >
+                      <button type="button" tabindex="-1" class="quantity-selector__button" aria-label="{{ 'product.quantity.increase_quantity' | t }}">
+                        {% render 'icon' with 'plus', width: 10, height: 10 %}
+                      </button>
                     </quantity-selector>
                   </div>
 
                   {%- liquid
                     assign quantity_rules = ''
-    
+
                     if variant.quantity_rule.min > 1
                       assign rule = 'product.quantity.minimum_of' | t: min: variant.quantity_rule.min
                       assign quantity_rules = quantity_rules | append: ' / ' | append: rule
                     endif
-    
-                    if variant.quantity_rule.max != nil
+
+                    if variant.quantity_rule.max != null
                       assign rule = 'product.quantity.maximum_of' | t: max: variant.quantity_rule.max
                       assign quantity_rules = quantity_rules | append: ' / ' | append: rule
                     endif
-    
+
                     if variant.quantity_rule.increment > 1
                       assign rule = 'product.quantity.increment_of' | t: step: variant.quantity_rule.increment
                       assign quantity_rules = quantity_rules | append: ' / ' | append: rule
                     endif
                   -%}
-    
+
                   {%- if quantity_rules != blank -%}
                     <p class="text-subdued text-sm">{{ quantity_rules | remove_first: ' / ' | capitalize }}</p>
                   {%- endif -%}
@@ -137,7 +160,13 @@
                 <div class="product-info__buy-buttons" {{ block.shopify_attributes }}>
                   <buy-buttons class="buy-buttons">
                     {%- capture button_content -%}{{ 'product.general.add_to_cart_button' | t }}{%- endcapture -%}
-                    {%- render 'button', content: button_content, type: 'submit', size: 'xl', background: block.settings.atc_button_background, text_color: block.settings.atc_button_text_color -%}
+                    {%- render 'button',
+                      content: button_content,
+                      type: 'submit',
+                      size: 'xl',
+                      background: block.settings.atc_button_background,
+                      text_color: block.settings.atc_button_text_color
+                    -%}
                   </buy-buttons>
                 </div>
             {%- endcase -%}
@@ -271,6 +300,306 @@
       "name": "Description",
       "limit": 1,
       "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "picto-coupon",
+              "label": "Coupon",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-percent",
+              "label": "Percent",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-gift",
+              "label": "Gift",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-star",
+              "label": "Star",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-like",
+              "label": "Like",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-building",
+              "label": "Building",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-love",
+              "label": "Love",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-award-gift",
+              "label": "Award gift",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-happy",
+              "label": "Happy",
+              "group": "Shop"
+            },
+            {
+              "value": "picto-box",
+              "label": "Box",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-pin",
+              "label": "Pin",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-timer",
+              "label": "Timer",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-validation",
+              "label": "Validation",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-truck",
+              "label": "Truck",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-return",
+              "label": "Return",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-earth",
+              "label": "Earth",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-plane",
+              "label": "Plane",
+              "group": "Shipping"
+            },
+            {
+              "value": "picto-credit-card",
+              "label": "Credit card",
+              "group": "Payment & Security"
+            },
+            {
+              "value": "picto-lock",
+              "label": "Lock",
+              "group": "Payment & Security"
+            },
+            {
+              "value": "picto-shield",
+              "label": "Shield",
+              "group": "Payment & Security"
+            },
+            {
+              "value": "picto-secure-profile",
+              "label": "Secure profile",
+              "group": "Payment & Security"
+            },
+            {
+              "value": "picto-money",
+              "label": "Money",
+              "group": "Payment & Security"
+            },
+            {
+              "value": "picto-recycle",
+              "label": "Recycle",
+              "group": "Ecology"
+            },
+            {
+              "value": "picto-leaf",
+              "label": "Leaf",
+              "group": "Ecology"
+            },
+            {
+              "value": "picto-tree",
+              "label": "Tree",
+              "group": "Ecology"
+            },
+            {
+              "value": "picto-mobile-phone",
+              "label": "Mobile phone",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-phone",
+              "label": "Phone",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-chat",
+              "label": "Chat",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-customer-support",
+              "label": "Customer support",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-operator",
+              "label": "Operator",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-mailbox",
+              "label": "Mailbox",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-envelope",
+              "label": "Envelope",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-comment",
+              "label": "Comment",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-question",
+              "label": "Question",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-send",
+              "label": "Send",
+              "group": "Communication"
+            },
+            {
+              "value": "picto-at-sign",
+              "label": "At sign",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-camera",
+              "label": "Camera",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-wifi",
+              "label": "WiFi",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-bluetooth",
+              "label": "Bluetooth",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-printer",
+              "label": "Printer",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-smart-watch",
+              "label": "Smart watch",
+              "group": "Tech"
+            },
+            {
+              "value": "picto-coffee",
+              "label": "Coffee",
+              "group": "Food & Drink"
+            },
+            {
+              "value": "picto-burger",
+              "label": "Burger",
+              "group": "Food & Drink"
+            },
+            {
+              "value": "picto-beer",
+              "label": "Beer",
+              "group": "Food & Drink"
+            },
+            {
+              "value": "picto-target",
+              "label": "Target",
+              "group": "Other"
+            },
+            {
+              "value": "picto-document",
+              "label": "Document",
+              "group": "Other"
+            },
+            {
+              "value": "picto-jewelry",
+              "label": "Jewelry",
+              "group": "Other"
+            },
+            {
+              "value": "picto-music",
+              "label": "Music",
+              "group": "Other"
+            },
+            {
+              "value": "picto-file",
+              "label": "File",
+              "group": "Other"
+            },
+            {
+              "value": "picto-mask",
+              "label": "Mask",
+              "group": "Other"
+            },
+            {
+              "value": "picto-stop",
+              "label": "Stop",
+              "group": "Other"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon",
+          "info": "96 x 96px .png or .svg recommended. Only used when content is collapsed."
+        },
+        {
+          "type": "range",
+          "id": "icon_width",
+          "min": 16,
+          "max": 48,
+          "step": 2,
+          "unit": "px",
+          "label": "Icon width",
+          "default": 20
+        },
+        {
+          "type": "checkbox",
+          "id": "collapse_content",
+          "label": "Collapse content",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "disclosures",
+      "name": "Disclosures",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Required safety warnings and regulatory disclosures for this product. [Learn more](https://help.shopify.com/en/manual/products/product-disclosures)."
+        },
         {
           "type": "select",
           "id": "icon",
@@ -1762,7 +2091,7 @@
       "default": "carousel_thumbnails_left"
     },
     {
-      "type":"select",
+      "type": "select",
       "id": "mobile_media_size",
       "label": "Mobile media size",
       "options": [

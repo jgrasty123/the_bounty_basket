@@ -1,16 +1,16 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-CUSTOMER ADDRESS
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  CUSTOMER ADDRESS
+  ----------------------------------------------------------------------------------------------------------------------
 
-Generate the drawer and all the associated fields for a customer address. This handles both the new address and
-existing address.
+  Generate the drawer and all the associated fields for a customer address. This handles both the new address and
+  existing address.
 
-********************************************
-Supported parameters
-********************************************
+  ********************************************
+  Supported parameters
+  ********************************************
 
-* address: the address to edit, or "customer.new_address" to create a new one
+  * address: the address to edit, or "customer.new_address" to create a new one
 {%- endcomment -%}
 
 <x-drawer id="customer-address-{{ address.id | default: 'new' }}" class="drawer drawer--lg">

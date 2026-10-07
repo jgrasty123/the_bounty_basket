@@ -1,25 +1,25 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-BLOG POST COMPONENT
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  BLOG POST COMPONENT
+  ----------------------------------------------------------------------------------------------------------------------
 
-Renders a single blog post (optionally highlighted)
+  Renders a single blog post (optionally highlighted)
 
-********************************************
-Supported parameters
-********************************************
+  ********************************************
+  Supported parameters
+  ********************************************
 
-* article: the article to render. If no article is passed then a placeholder is generated
-* show_excerpt: if set to true, it will show the excerpt first or truncated part of the main content if none is set
-* show_date
-* show_author
-* show_comments_count
-* show_category: if set to true, the first tag of the article is shown as a category
-* featured: if set to true, the blog post takes the full width with a different layout
-* background: the background to use for the card when the blog post is featured
-* text_color: the text color to use for the card when the blog post is featured
-* sizes: the sizes attribute to show for loading the images
-* position: the position of the card in the list. If specified, the theme will eagerly load the first 3 cards images
+  * article: the article to render. If no article is passed then a placeholder is generated
+  * show_excerpt: if set to true, it will show the excerpt first or truncated part of the main content if none is set
+  * show_date
+  * show_author
+  * show_comments_count
+  * show_category: if set to true, the first tag of the article is shown as a category
+  * featured: if set to true, the blog post takes the full width with a different layout
+  * background: the background to use for the card when the blog post is featured
+  * text_color: the text color to use for the card when the blog post is featured
+  * sizes: the sizes attribute to show for loading the images
+  * position: the position of the card in the list. If specified, the theme will eagerly load the first 3 cards images
 {%- endcomment -%}
 
 {%- capture card_content -%}
@@ -100,7 +100,14 @@ Supported parameters
 {%- endcapture -%}
 
 {%- if featured -%}
-  <blog-post-card {% render 'surface', class: 'blog-post-card blog-post-card--featured snap-center group rounded', background: background, text_color: text_color, background_fallback: 'bg-secondary' %}>
+  <blog-post-card
+    {% render 'surface',
+      class: 'blog-post-card blog-post-card--featured snap-center group rounded',
+      background: background,
+      text_color: text_color,
+      background_fallback: 'bg-secondary'
+    %}
+  >
     {{- card_content -}}
   </blog-post-card>
 {%- else -%}

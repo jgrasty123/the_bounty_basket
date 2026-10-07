@@ -1,16 +1,16 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-FREE SHIPPING BAR
-----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  FREE SHIPPING BAR
+  ----------------------------------------------------------------------------------------------------------------------
 
-Renders the free shipping bar component. It is used on cart page and cart drawer to render the remaining amount before
-being eligible for free shipping.
+  Renders the free shipping bar component. It is used on cart page and cart drawer to render the remaining amount before
+  being eligible for free shipping.
 
-********************************************
-Supported variables
-********************************************
+  ********************************************
+  Supported variables
+  ********************************************
 
-* size: accept the value "sm"
+  * size: accept the value "sm"
 {%- endcomment -%}
 
 {%- liquid
@@ -34,7 +34,13 @@ Supported variables
 -%}
 
 {%- if cart.requires_shipping -%}
-  <free-shipping-bar class="free-shipping-bar" threshold="{{ settings.cart_free_shipping_threshold | times: 100.0 }}" total-price="{{ calculated_total_price }}" reached-message="{{ 'cart.free_shipping_bar.limit_reached_html' | t | escape }}" unreached-message="{{ 'cart.free_shipping_bar.limit_unreached_html' | t | escape }}">
+  <free-shipping-bar
+    class="free-shipping-bar"
+    threshold="{{ settings.cart_free_shipping_threshold | times: 100.0 }}"
+    total-price="{{ calculated_total_price }}"
+    reached-message="{{ 'cart.free_shipping_bar.limit_reached_html' | t | escape }}"
+    unreached-message="{{ 'cart.free_shipping_bar.limit_unreached_html' | t | escape }}"
+  >
     {%- comment -%}The span below is the placeholder where the content will be inserted in JS{%- endcomment -%}
     <span>&nbsp;</span>
 
