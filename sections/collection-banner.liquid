@@ -12,9 +12,39 @@
   {%- endif -%}
 
   {%- if section.settings.show_collection_description and collection.description != blank -%}
-    <div class="prose">
-      {{- collection.description -}}
+    {%- comment -%}
+      BB read more: the full description stays in the HTML for SEO; it's clamped visually to a short intro with a
+      Read more / Read less toggle so the products aren't pushed below the fold. Styles in assets/bb-overrides.css.
+    {%- endcomment -%}
+    <div class="bb-readmore" data-bb-readmore>
+      <div class="prose bb-readmore__content" id="bb-readmore-{{ section.id }}">
+        {{- collection.description -}}
+      </div>
+      <button type="button" class="bb-readmore__toggle link" data-bb-readmore-toggle aria-expanded="false" aria-controls="bb-readmore-{{ section.id }}" hidden>Read more</button>
     </div>
+    <script>
+      (function() {
+        var root = document.currentScript.previousElementSibling;
+        if (!root || !root.matches('[data-bb-readmore]')) return;
+        var content = root.querySelector('.bb-readmore__content');
+        var btn = root.querySelector('[data-bb-readmore-toggle]');
+        function check() {
+          if (root.classList.contains('is-open')) return;
+          var overflowing = content.scrollHeight > content.clientHeight + 4;
+          btn.hidden = !overflowing;
+          root.classList.toggle('is-clamped', overflowing);
+        }
+        btn.addEventListener('click', function() {
+          var open = root.classList.toggle('is-open');
+          root.classList.toggle('is-clamped', !open);
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          btn.textContent = open ? 'Read less' : 'Read more';
+          if (!open) root.scrollIntoView({ block: 'nearest' });
+        });
+        check();
+        window.addEventListener('load', check);
+      })();
+    </script>
   {%- endif -%}
 {%- endcapture -%}
 

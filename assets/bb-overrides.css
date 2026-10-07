@@ -840,3 +840,14 @@ product-card:has(.badge--sold-out) .product-card__image {
 
 /* Never allow sideways scroll on phones */
 html, body { overflow-x: clip; }
+
+/* Collection description: clamped intro + Read more (sections/collection-banner.liquid) */
+.bb-readmore__content { max-height: 7.5em; overflow: hidden; position: relative; }
+.bb-readmore.is-clamped .bb-readmore__content::after {
+  content: ''; position: absolute; inset: auto 0 0 0; height: 3em;
+  background: linear-gradient(to bottom, rgb(var(--background) / 0), rgb(var(--background)));
+  pointer-events: none;
+}
+.bb-readmore.is-open .bb-readmore__content { max-height: none; }
+.bb-readmore__toggle { margin-block-start: 8px; font-weight: 700; color: rgb(var(--button-background-primary)); text-decoration: underline; text-underline-offset: 3px; }
+@media (min-width: 1000px) { .bb-readmore__content { max-height: 9em; } }
