@@ -140,5 +140,25 @@
       basket has left the cart. Linkage is properties.For == parent product title.
     {%- endcomment -%}
     <script src="{{ 'bb-orphan-addon-sweeper.js' | asset_url }}" defer></script>
+
+    {%- comment -%}
+      BB display diagnostic: add ?bbdiag=1 to any URL to show how the browser is sizing the page (for debugging
+      phones that render the site zoomed out). Invisible otherwise.
+    {%- endcomment -%}
+    <script>
+      if (/[?&]bbdiag=1/.test(location.search)) {
+        window.addEventListener('load', function () {
+          var meta = document.querySelector('meta[name=viewport]');
+          var d = document.createElement('div');
+          d.style.cssText = 'position:fixed;left:8px;right:8px;top:8px;z-index:2147483647;background:#3a2a33;color:#fff;font:600 16px/1.4 system-ui,sans-serif;padding:14px;border-radius:12px';
+          var mobileUA = /Mobile|Android.*Mobile|iPhone/.test(navigator.userAgent);
+          var zoomed = window.innerWidth > (screen.width + 20);
+          d.innerHTML = '<div style="font-size:20px;margin-bottom:6px">' + (zoomed ? '\u26a0\ufe0f Page is rendering zoomed out' : '\u2705 Page is rendering at phone width') + '</div>' +
+            'Page width: ' + window.innerWidth + 'px<br>Screen width: ' + screen.width + 'px<br>Pixel ratio: ' + window.devicePixelRatio +
+            '<br>Mobile browser mode: ' + (mobileUA ? 'yes' : 'NO (Desktop site is on)') + '<br>Viewport tag: ' + (meta ? 'present' : 'missing');
+          document.body.appendChild(d);
+        });
+      }
+    </script>
   </body>
 </html>
