@@ -74,7 +74,7 @@
         "show_country_flag": true,
         "show_country_name": false,
         "transparent_header_text_color": "#ffffff",
-        "transparent_logo": "shopify://shop_images/bounty_Basket_Co-logo-no-bg.png",
+        "transparent_logo": "shopify://shop_images/bounty_Basket_Co-logo.png",
         "reduce_padding": false,
         "background_opacity": 0,
         "background_blur_radius": 0
