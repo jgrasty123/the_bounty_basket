@@ -191,7 +191,7 @@
       {%- if show_rating and show_vendor == false or product.vendor == blank -%}
         <div class="rating-with-text">
           <span class="product-card__title"
-            ><a href="{{ product.url }}" class="bold" data-instant>{{ product.metafields.custom.short_title.value | default: product.title }}</a></span
+            ><a href="{{ product.url }}" class="bold" data-instant>{%- render 'bb-display-title', product: product -%}</a></span
           >
 
           {%- if text_alignment != 'center' -%}
@@ -201,7 +201,7 @@
         </div>
       {%- else -%}
         <span class="product-card__title"
-          ><a href="{{ product.url }}" class="bold" data-instant>{{ product.metafields.custom.short_title.value | default: product.title }}</a></span
+          ><a href="{{ product.url }}" class="bold" data-instant>{%- render 'bb-display-title', product: product -%}</a></span
         >
       {%- endif -%}
 

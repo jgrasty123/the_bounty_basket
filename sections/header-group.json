@@ -60,7 +60,7 @@
         "hide_on_scroll": false,
         "logo": "shopify://shop_images/bounty_Basket_Co-logo-no-bg.png",
         "logo_max_width": 100,
-        "logo_mobile_max_width": 90,
+        "logo_mobile_max_width": 60,
         "menu": "main-menu",
         "sidebar_menu": "",
         "secondary_menu": "",
@@ -75,7 +75,7 @@
         "show_country_name": false,
         "transparent_header_text_color": "#ffffff",
         "transparent_logo": "shopify://shop_images/bounty_Basket_Co-logo.png",
-        "reduce_padding": false,
+        "reduce_padding": true,
         "background_opacity": 100,
         "background_blur_radius": 0
       }

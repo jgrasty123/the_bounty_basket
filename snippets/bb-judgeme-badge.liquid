@@ -1,0 +1,10 @@
+{%- comment -%}
+  BB Judge.me star badge (filled by the Judge.me core app embed). Renders nothing until a product has reviews.
+{%- endcomment -%}
+{%- if product.metafields.reviews.rating_count.value > 0 -%}
+  <a href="#bb-reviews" class="bb-jm-badge-link" aria-label="Read reviews">
+    <div class="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}" data-template="product" data-auto-install="false">
+      {{- product.metafields.judgeme.badge -}}
+    </div>
+  </a>
+{%- endif -%}

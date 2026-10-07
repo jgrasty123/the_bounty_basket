@@ -1,0 +1,16 @@
+{%- comment -%}
+  BB display title: short, shopper-friendly product name for headings and cards on mobile.
+  Order: custom.short_title metafield → the part of the SEO title before " — " or " | ".
+  The full product title stays in the <title> tag, structured data and the Google feed.
+  Usage: {% render 'bb-display-title', product: product %}
+{%- endcomment -%}
+{%- liquid
+  assign bb_t = product.metafields.custom.short_title.value
+  if bb_t == blank
+    assign bb_t = product.title | split: ' — ' | first | split: ' | ' | first | strip
+  endif
+  if bb_t == blank
+    assign bb_t = product.title
+  endif
+-%}
+{{- bb_t | escape -}}

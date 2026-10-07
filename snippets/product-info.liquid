@@ -124,8 +124,9 @@
 
         {%- when 'title' -%}
           {%- if request.page_type == 'product' -%}
+            {%- render 'bb-judgeme-badge', product: product -%}
             <h1 class="product-info__title {{ block.settings.heading_tag }}">
-              {{- product.title -}}
+              {%- render 'bb-display-title', product: product -%}
             </h1>
           {%- else -%}
             <h2 class="product-info__title {{ block.settings.heading_tag }}">

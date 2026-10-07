@@ -15,10 +15,6 @@
             "show_taxes_notice": false
           }
         },
-        "rating": {
-          "type": "rating",
-          "settings": {}
-        },
         "payment_terms": {
           "type": "payment_terms",
           "settings": {}
@@ -105,7 +101,6 @@
       "block_order": [
         "title",
         "price",
-        "rating",
         "payment_terms",
         "variant_picker",
         "engraving_options",
@@ -153,12 +148,6 @@
         "icon_3": "package",
         "headline_3": "Guaranteed to Arrive Looking Awesome",
         "body_3": "Or we'll fix it for free."
-      }
-    },
-    "reviews_apps": {
-      "type": "apps",
-      "settings": {
-        "full_width": true
       }
     },
     "bb_faq": {
@@ -212,12 +201,18 @@
     "related-products": {
       "type": "related-products",
       "settings": {}
+    },
+    "bb_reviews": {
+      "type": "bb-reviews",
+      "settings": {
+        "heading": "What customers are saying"
+      }
     }
   },
   "order": [
-    "main",
     "bb_guarantee_strip",
-    "reviews_apps",
+    "main",
+    "bb_reviews",
     "bb_faq",
     "bb_story",
     "related-products"
