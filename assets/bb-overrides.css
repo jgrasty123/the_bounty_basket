@@ -851,3 +851,47 @@ html, body { overflow-x: clip; }
 .bb-readmore.is-open .bb-readmore__content { max-height: none; }
 .bb-readmore__toggle { margin-block-start: 8px; font-weight: 700; color: rgb(var(--button-background-primary)); text-decoration: underline; text-underline-offset: 3px; }
 @media (min-width: 1000px) { .bb-readmore__content { max-height: 9em; } }
+
+/* ============================================================
+   BIG + BOLD MOBILE PASS (2026-10-07) — match BoozeFinders readability
+   ============================================================ */
+@media (max-width: 999px) {
+  /* Product title + price */
+  .product-info__title { font-size: 28px; line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; }
+  .product-info__price .price-list--lg sale-price { font-size: 30px; font-weight: 800; }
+  .product-info__payment-terms, shopify-payment-terms { font-size: 16px; }
+
+  /* Gift options */
+  .bb-gift-options__heading { font-size: 18px; font-weight: 800; }
+  .bb-gift-options__title { font-size: 17px; font-weight: 700; }
+  .bb-gift-options .accordion__toggle { padding-block: 14px; }
+  .bb-gift-options select,
+  .bb-gift-options textarea,
+  .bb-gift-options input[type="text"],
+  .product-info select,
+  .product-info textarea { font-size: 16px; } /* 16px also stops iOS zooming into the field */
+  .bb-gift-options label, .bb-gift-options .block-label { font-size: 16px; font-weight: 700; }
+
+  /* Adult signature line */
+  .product-adult-signature__label-text { font-size: 16px; font-weight: 700; }
+  .product-adult-signature__hint { font-size: 14px; }
+
+  /* Add to cart */
+  .product-info__buy-buttons button[type="submit"],
+  .product-quick-add button[type="submit"] { min-height: 60px; font-size: 19px; font-weight: 800; letter-spacing: 0.01em; }
+
+  /* Delivery promise + trust badges */
+  .product-info__delivery-promise { font-size: 16px; }
+  .bb-trust-badges__text { font-size: 15px; font-weight: 700; line-height: 1.35; }
+
+  /* Accordions (Description, What's included) */
+  .product-info .accordion__toggle { font-size: 18px; font-weight: 800; }
+
+  /* Guarantee strip + FAQ */
+  .bb-guarantee-strip__headline { font-size: 15px; line-height: 1.3; }
+  .bb-faq__q-text { font-size: 17px; font-weight: 700; }
+
+  /* Collection cards (one per row on mobile) */
+  .product-card__title { font-size: 18px; line-height: 1.3; }
+  .product-card .price-list sale-price { font-size: 19px; font-weight: 800; }
+}
