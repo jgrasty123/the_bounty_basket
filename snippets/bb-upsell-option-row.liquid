@@ -4,11 +4,20 @@ Reusable upsell option row.
 Inputs:
 - input_type: checkbox | radio
 - input_name: required for radio (used as the name attribute)
-- variant_ref: a resolved product_variant reference from a metaobject
+- variant_ref: a resolved product_variant OR product reference from a metaobject
 {%- endcomment -%}
 
-{%- assign upsell_variant = variant_ref -%}
-{%- assign upsell_product = upsell_variant.product -%}
+{%- comment -%}
+  The Upsell metaobject's `products` field is list.product_reference on Bounty (variant references on BroBasket).
+  Accept either: a product resolves to its first available variant.
+{%- endcomment -%}
+{%- if variant_ref.variants != blank -%}
+  {%- assign upsell_product = variant_ref -%}
+  {%- assign upsell_variant = variant_ref.selected_or_first_available_variant -%}
+{%- else -%}
+  {%- assign upsell_variant = variant_ref -%}
+  {%- assign upsell_product = upsell_variant.product -%}
+{%- endif -%}
 {%- assign display_title  = upsell_variant.title -%}
 {%- if upsell_product != blank and upsell_variant.title == 'Default Title' -%}
   {%- assign display_title = upsell_product.title -%}

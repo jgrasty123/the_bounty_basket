@@ -96,6 +96,12 @@
           "settings": {
             "collapse_content": true
           }
+        },
+        "product_upsells": {
+          "type": "product_upsells",
+          "settings": {
+            "open_by_default": false
+          }
         }
       },
       "block_order": [
@@ -106,6 +112,7 @@
         "engraving_options",
         "engraved_glass_options",
         "gift_card_options",
+        "product_upsells",
         "adult_signature_options",
         "buy_buttons",
         "bb_delivery_promise",
