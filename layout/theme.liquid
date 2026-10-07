@@ -68,25 +68,12 @@
     <script type="module" src="{{ 'theme.js' | asset_url }}"></script>
 
     {%- comment -%}
-      BB adult signature: loads the cart-side fee script only when the cart holds a product whose
-      custom.option_set_v2 metafield contains "Alcohol Signature". Ported unchanged from the_bounty_basket/main.
+      Adult Signature fee — audit FIX-05 (2026-10-07). Always loaded, so the first AJAX alcohol add is
+      reconciled even when the page rendered with an empty / non-alcohol cart. Rule: ONE fee per order
+      when alcohol is present. Replaces assets/adult-signature.js (retained, no longer loaded).
+      Server-side detection: sections/bb-cart-fee-state.liquid.
     {%- endcomment -%}
-    {%- liquid
-      assign requires_adult_signature = false
-      for item in cart.items
-        assign option_set_metafield = item.product.metafields.custom.option_set_v2
-        if option_set_metafield != blank
-          assign option_set_string = option_set_metafield | metafield_text
-          if option_set_string contains 'Alcohol Signature'
-            assign requires_adult_signature = true
-            break
-          endif
-        endif
-      endfor
-    -%}
-    {%- if requires_adult_signature -%}
-      <script src="{{ 'adult-signature.js' | asset_url }}" defer></script>
-    {%- endif -%}
+    {%- render 'bb-alcohol-fee-reconciler-v2' -%}
 
     {{ content_for_header }}
 
