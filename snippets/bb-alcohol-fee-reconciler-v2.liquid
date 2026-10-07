@@ -1,0 +1,268 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+ALCOHOL FEE RECONCILER  v2.0  —  Bounty Basket (Impact 7.2.0)  —  audit FIX-05, 2026-10-07
+----------------------------------------------------------------------------------------------------------------------
+Ported from BroBasket's snippets/bb-alcohol-fee-reconciler-v2.liquid. REPLACES assets/adult-signature.js on
+this store (file retained, no longer loaded), which had two defects found in the Oct 7 audit:
+  1. hasAlcoholProductsInCart() treated ANY non-fee item as alcohol, so removing the last bottle while a
+     non-alcohol item stayed left the fee in place.
+  2. It was only loaded if alcohol was in the cart when the page rendered, so the first AJAX alcohol add on
+     a page that loaded with an empty cart was never reconciled.
+It also wrapped window.fetch; this does not.
+
+RULE: one fee per order whenever alcohol is present (James, 2026-10-07). Detection is server-side in
+sections/bb-cart-fee-state.liquid. The PDP still adds the fee immediately (as one untagged line that merges
+on repeat adds); this reconciler trims/adds/removes so the cart always converges to 0 or 1.
+
+Refresh: cart:refresh re-fetches section HTML (Impact), same as BroBasket v2.
+
+SAFETY: re-entrancy lock + queued recheck; self-dispatch quiet window; circuit breaker (4 writes / 15s);
+sanity cap; every failure is non-fatal (worst case: a stale fee until the next cart change).
+
+DEBUG: window.__bbFeeVerbose = true;  window.__bbAlcoholFee.state() / .plan() / .reconcile()
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<script>
+  (function () {
+    'use strict';
+
+    var LOG_PREFIX = '[bb-alcohol-fee v2]';
+    var STATE_SECTION = 'bb-cart-fee-state';
+    var FEE_VARIANT_ID = 51099741126902;
+
+    // Circuit breaker: at most this many mutating runs inside WINDOW_MS.
+    var MAX_MUTATIONS = 4;
+    var WINDOW_MS = 15000;
+
+    // If the server ever reports something absurd, do nothing rather than
+    // stuff a cart with fees.
+    var MAX_REASONABLE_FEES = 30;
+
+    // Ignore cart:change events fired this soon after our own cart:refresh.
+    var SELF_DISPATCH_QUIET_MS = 900;
+
+    var isReconciling = false;
+    var pendingRecheck = false;
+    var quietUntil = 0;
+    var mutationTimes = [];
+
+    function log() {
+      if (!window.__bbFeeVerbose) return;
+      try {
+        console.log.apply(console, [LOG_PREFIX].concat(Array.prototype.slice.call(arguments)));
+      } catch (e) {}
+    }
+
+    function breadcrumb(message, data) {
+      if (window.Sentry && typeof window.Sentry.addBreadcrumb === 'function') {
+        try {
+          window.Sentry.addBreadcrumb({
+            category: 'cart',
+            message: message,
+            level: 'info',
+            data: data || {}
+          });
+        } catch (e) {}
+      }
+    }
+
+    // ── Server state ─────────────────────────────────────────────────────────
+    // The Section Rendering API returns the section wrapped in a container
+    // div, so we parse the fragment and pull our JSON tag out of it.
+    function fetchState() {
+      var url = Shopify.routes.root + '?section_id=' + STATE_SECTION;
+      return fetch(url, { headers: { 'Accept': 'text/html' } })
+        .then(function (res) {
+          if (!res.ok) throw new Error('section fetch ' + res.status);
+          return res.text();
+        })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var tag = doc.querySelector('script[data-bb-cart-fee-state]');
+          if (!tag) throw new Error('state tag missing from section response');
+          return JSON.parse(tag.textContent);
+        });
+    }
+
+    // ── Convergence planning ─────────────────────────────────────────────────
+    // Returns { updates: {lineKey: qty}, addQuantity: n } or null for no-op.
+    //
+    // Ordering matters. We touch our own fee lines before EBB's so the two
+    // systems collide as little as possible while EBB is still installed.
+    function planConvergence(state) {
+      var desired = state.desired_fee_quantity;
+      var feeLines = (state.fee_lines || []).slice();
+
+      var current = 0;
+      for (var i = 0; i < feeLines.length; i++) current += feeLines[i].quantity;
+
+      if (current === desired) return null;
+
+      // Ours first, EBB's last — for both growing and shrinking.
+      feeLines.sort(function (a, b) {
+        if (a.owner === b.owner) return 0;
+        return a.owner === 'bb' ? -1 : 1;
+      });
+
+      var updates = {};
+      var addQuantity = 0;
+
+      if (current > desired) {
+        // Shrink. Walk forward through the sorted list so our own lines are
+        // drained first and EBB's are only touched if the overage outlives
+        // them. Removing EBB's line can prompt EBB to re-add it; ours won't.
+        var toRemove = current - desired;
+        for (var j = 0; j < feeLines.length && toRemove > 0; j++) {
+          var line = feeLines[j];
+          var take = Math.min(line.quantity, toRemove);
+          updates[line.key] = line.quantity - take;
+          toRemove -= take;
+        }
+      } else {
+        // Grow. Prefer bumping an existing line we own.
+        var shortfall = desired - current;
+        var ours = null;
+        for (var k = 0; k < feeLines.length; k++) {
+          if (feeLines[k].owner === 'bb') { ours = feeLines[k]; break; }
+        }
+        if (ours) {
+          updates[ours.key] = ours.quantity + shortfall;
+        } else {
+          addQuantity = shortfall;
+        }
+      }
+
+      var hasUpdates = Object.keys(updates).length > 0;
+      if (!hasUpdates && !addQuantity) return null;
+
+      return { updates: updates, addQuantity: addQuantity, from: current, to: desired };
+    }
+
+    // ── Cart writes ──────────────────────────────────────────────────────────
+    function applyUpdates(updates) {
+      if (!Object.keys(updates).length) return Promise.resolve(null);
+      return fetch(Shopify.routes.root + 'cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ updates: updates })
+      }).then(function (res) {
+        if (!res.ok) throw new Error('cart/update.js ' + res.status);
+        return res.json();
+      });
+    }
+
+    function addFee(quantity) {
+      if (!quantity) return Promise.resolve(null);
+      return fetch(Shopify.routes.root + 'cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items: [{ id: FEE_VARIANT_ID, quantity: quantity }] })
+      }).then(function (res) {
+        if (!res.ok) throw new Error('cart/add.js ' + res.status);
+        return res.json();
+      });
+    }
+
+    // ── Circuit breaker ──────────────────────────────────────────────────────
+    function trippedBreaker() {
+      var now = Date.now();
+      mutationTimes = mutationTimes.filter(function (t) { return now - t < WINDOW_MS; });
+      return mutationTimes.length >= MAX_MUTATIONS;
+    }
+
+    // ── Core ─────────────────────────────────────────────────────────────────
+    function reconcile(reason) {
+      if (isReconciling) {
+        pendingRecheck = true;
+        log('busy; queued recheck', reason);
+        return Promise.resolve();
+      }
+      isReconciling = true;
+
+      return fetchState()
+        .then(function (state) {
+          log('state', reason, state);
+
+          if (typeof state.desired_fee_quantity !== 'number') {
+            throw new Error('malformed state');
+          }
+          if (state.desired_fee_quantity > MAX_REASONABLE_FEES) {
+            breadcrumb('alcohol fee: sanity cap hit', { desired: state.desired_fee_quantity });
+            log('sanity cap hit, standing down', state.desired_fee_quantity);
+            return null;
+          }
+
+          var plan = planConvergence(state);
+          if (!plan) {
+            log('balanced, no action');
+            return null;
+          }
+
+          if (trippedBreaker()) {
+            breadcrumb('alcohol fee: circuit breaker tripped', plan);
+            console.warn(LOG_PREFIX, 'circuit breaker tripped, standing down', plan);
+            return null;
+          }
+
+          log('converging', plan);
+          breadcrumb('alcohol fee reconciled', { from: plan.from, to: plan.to, reason: reason });
+          mutationTimes.push(Date.now());
+
+          return applyUpdates(plan.updates)
+            .then(function () { return addFee(plan.addQuantity); })
+            .then(function () { return plan; });
+        })
+        .then(function (plan) {
+          if (!plan) return;
+          // Refresh cart surfaces. cart:refresh re-fetches section HTML rather
+          // than racing the drawer's delayed innerHTML swap.
+          quietUntil = Date.now() + SELF_DISPATCH_QUIET_MS;
+          document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
+        })
+        .catch(function (err) {
+          // Non-fatal by design. A stale fee is recoverable; a broken cart is not.
+          console.warn(LOG_PREFIX, 'reconcile failed:', err);
+          if (window.Sentry && typeof window.Sentry.captureException === 'function') {
+            try { window.Sentry.captureException(err); } catch (e) {}
+          }
+        })
+        .then(function () {
+          isReconciling = false;
+          if (pendingRecheck) {
+            pendingRecheck = false;
+            return reconcile('queued');
+          }
+        });
+    }
+
+    // ── Wiring ───────────────────────────────────────────────────────────────
+    function onCartChange() {
+      if (Date.now() < quietUntil) {
+        log('within self-dispatch quiet window, ignoring');
+        return;
+      }
+      setTimeout(function () { reconcile('cart:change'); }, 60);
+    }
+
+    function init() {
+      document.addEventListener('cart:change', onCartChange);
+      // One run on load catches carts left inconsistent by a previous session,
+      // by EBB, or by the legacy script this replaces.
+      reconcile('init');
+    }
+
+    window.__bbAlcoholFee = {
+      reconcile: function () { return reconcile('manual'); },
+      state: function () { return fetchState(); },
+      plan: function () { return fetchState().then(planConvergence); },
+      isReconciling: function () { return isReconciling; }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>

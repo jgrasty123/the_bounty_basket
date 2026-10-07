@@ -49,6 +49,7 @@ Supported variables
           data-adult-signature-checkbox
           data-variant-id="{{ adult_signature_variant_id }}"
           checked
+          disabled
         >
         <span class="product-adult-signature__label-text">
           Adult Signature Required
@@ -56,7 +57,7 @@ Supported variables
           <span class="product-adult-signature__price">({{ adult_signature_price | money }})</span>
         </span>
       </label>
-      <p class="product-adult-signature__hint">Required for all alcohol orders. Someone 21+ must sign for delivery.</p>
+      <p class="product-adult-signature__hint">Charged once per order, however many bottles. Someone 21+ must sign for delivery.</p>
     </div>
 
     <input type="hidden" data-adult-signature-variant-id value="{{ adult_signature_variant_id }}">
@@ -83,11 +84,12 @@ Supported variables
               return null;
             }
             
+            // FIX-05 (2026-10-07): one fee per ORDER. No 'For' property, so repeat adds merge into
+            // a single line instead of one fee per product; bb-alcohol-fee-reconciler-v2 trims it
+            // to exactly 1 and removes it when the last alcohol item leaves the cart.
             return {
               id: parseInt(variantId, 10),
-              properties: {
-                'For': productTitle
-              }
+              quantity: 1
             };
           },
           validate: function() {

@@ -1,0 +1,118 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+CART FEE STATE  (Adult Signature fee — audit FIX-05, 2026-10-07)  —  Bounty Basket
+----------------------------------------------------------------------------------------------------------------------
+JSON endpoint for snippets/bb-alcohol-fee-reconciler-v2.liquid, served via the Section Rendering API:
+
+    GET /?section_id=bb-cart-fee-state
+
+Never placed on a page. Ported from BroBasket's v2 (sections/bb-cart-fee-state.liquid), which exists
+because /cart.js exposes no metafields, tags or product type — detection has to happen server-side.
+
+THE RULE FOR THIS STORE (James, 2026-10-07): ONE FEE PER ORDER.
+    any alcohol in the cart ....... 1 fee
+    no alcohol in the cart ........ 0 fees
+(BroBasket charges per package; this store deliberately does not.)
+
+ALCOHOL DETECTION — cascade, same as BroBasket v2:
+    line property _alcohol_signature_required == 'true'
+    → product tag  contains_alcohol
+    → product type Alcohol
+    → custom.option_set_v2 contains 'Alcohol Signature'
+Add-on lines (non-empty `For` property) and the fee line itself are never counted as alcohol.
+If an alcohol product is ever missed, tag it `contains_alcohol`.
+----------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- liquid
+  assign fee_product_id = 9436776136950
+  assign has_alcohol = false
+  assign fee_json = ''
+  assign line_json = ''
+  assign fee_first = true
+  assign line_first = true
+
+  for item in cart.items
+    if item.product_id == fee_product_id
+      assign key_json = item.key | json
+      assign entry = '{"key":' | append: key_json | append: ',"quantity":' | append: item.quantity | append: ',"owner":"bb"}'
+      if fee_first
+        assign fee_json = entry
+        assign fee_first = false
+      else
+        assign fee_json = fee_json | append: ',' | append: entry
+      endif
+      continue
+    endif
+
+    if item.properties['For'] != blank
+      continue
+    endif
+
+    assign is_alcohol = false
+    assign alcohol_reason = 'none'
+    if item.properties['_alcohol_signature_required'] == 'true'
+      assign is_alcohol = true
+      assign alcohol_reason = 'property'
+    endif
+    unless is_alcohol
+      if item.product.tags contains 'contains_alcohol'
+        assign is_alcohol = true
+        assign alcohol_reason = 'tag'
+      endif
+    endunless
+    unless is_alcohol
+      if item.product.type == 'Alcohol'
+        assign is_alcohol = true
+        assign alcohol_reason = 'product_type'
+      endif
+    endunless
+    unless is_alcohol
+      assign osv2_raw = item.product.metafields.custom.option_set_v2
+      if osv2_raw != blank
+        assign osv2 = osv2_raw | metafield_text
+        if osv2 contains 'Alcohol Signature'
+          assign is_alcohol = true
+          assign alcohol_reason = 'metafield'
+        endif
+      endif
+    endunless
+
+    if is_alcohol
+      assign has_alcohol = true
+    endif
+
+    assign key_json = item.key | json
+    assign title_json = item.product_title | json
+    assign entry = '{"key":' | append: key_json | append: ',"title":' | append: title_json | append: ',"alcohol":' | append: is_alcohol | append: ',"why":"' | append: alcohol_reason | append: '"}'
+    if line_first
+      assign line_json = entry
+      assign line_first = false
+    else
+      assign line_json = line_json | append: ',' | append: entry
+    endif
+  endfor
+
+  assign desired = 0
+  if has_alcohol
+    assign desired = 1
+  endif
+-%}
+<script type="application/json" data-bb-cart-fee-state>
+{
+  "version": "2.0-per-order",
+  "desired_fee_quantity": {{ desired }},
+  "fee_lines": [{{ fee_json }}],
+  "lines": [{{ line_json }}],
+  "cart_item_count": {{ cart.item_count }},
+  "fee_variant_id": 51099741126902,
+  "fee_product_id": {{ fee_product_id }}
+}
+</script>
+
+{% schema %}
+{
+  "name": "Cart fee state",
+  "settings": []
+}
+{% endschema %}
