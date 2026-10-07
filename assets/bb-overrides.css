@@ -857,41 +857,41 @@ html, body { overflow-x: clip; }
    ============================================================ */
 @media (max-width: 999px) {
   /* Product title + price */
-  .product-info__title { font-size: 28px; line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; }
-  .product-info__price .price-list--lg sale-price { font-size: 30px; font-weight: 800; }
-  .product-info__payment-terms, shopify-payment-terms { font-size: 16px; }
+  .product-info__title { font-size: 28px !important; line-height: 1.15 !important; font-weight: 600 !important; letter-spacing: -0.01em !important; }
+  .product-info__price .price-list--lg sale-price { font-size: 30px !important; font-weight: 800 !important; }
+  .product-info__payment-terms, shopify-payment-terms { font-size: 16px !important; }
 
   /* Gift options */
-  .bb-gift-options__heading { font-size: 18px; font-weight: 800; }
-  .bb-gift-options__title { font-size: 17px; font-weight: 700; }
-  .bb-gift-options .accordion__toggle { padding-block: 14px; }
+  .bb-gift-options__heading { font-size: 18px !important; font-weight: 800 !important; }
+  .bb-gift-options__title { font-size: 17px !important; font-weight: 700 !important; }
+  .bb-gift-options .accordion__toggle { padding-block: 14px !important; }
   .bb-gift-options select,
   .bb-gift-options textarea,
   .bb-gift-options input[type="text"],
   .product-info select,
-  .product-info textarea { font-size: 16px; } /* 16px also stops iOS zooming into the field */
-  .bb-gift-options label, .bb-gift-options .block-label { font-size: 16px; font-weight: 700; }
+  .product-info textarea { font-size: 16px !important; } /* 16px also stops iOS zooming into the field */
+  .bb-gift-options label, .bb-gift-options .block-label { font-size: 16px !important; font-weight: 700 !important; }
 
   /* Adult signature line */
-  .product-adult-signature__label-text { font-size: 16px; font-weight: 700; }
-  .product-adult-signature__hint { font-size: 14px; }
+  .product-adult-signature__label-text { font-size: 16px !important; font-weight: 700 !important; }
+  .product-adult-signature__hint { font-size: 14px !important; }
 
   /* Add to cart */
   .product-info__buy-buttons button[type="submit"],
-  .product-quick-add button[type="submit"] { min-height: 60px; font-size: 19px; font-weight: 800; letter-spacing: 0.01em; }
+  .product-quick-add button[type="submit"] { min-height: 60px !important; font-size: 19px !important; font-weight: 800 !important; letter-spacing: 0.01em !important; }
 
   /* Delivery promise + trust badges */
-  .product-info__delivery-promise { font-size: 16px; }
-  .bb-trust-badges__text { font-size: 15px; font-weight: 700; line-height: 1.35; }
+  .product-info__delivery-promise { font-size: 16px !important; }
+  .bb-trust-badges__text { font-size: 15px !important; font-weight: 700 !important; line-height: 1.35 !important; }
 
   /* Accordions (Description, What's included) */
-  .product-info .accordion__toggle { font-size: 18px; font-weight: 800; }
+  .product-info .accordion__toggle { font-size: 18px !important; font-weight: 800 !important; }
 
   /* Guarantee strip + FAQ */
-  .bb-guarantee-strip__headline { font-size: 15px; line-height: 1.3; }
-  .bb-faq__q-text { font-size: 17px; font-weight: 700; }
+  .bb-guarantee-strip__headline { font-size: 15px !important; line-height: 1.3 !important; }
+  .bb-faq__q-text { font-size: 17px !important; font-weight: 700 !important; }
 
   /* Collection cards (one per row on mobile) */
-  .product-card__title { font-size: 18px; line-height: 1.3; }
-  .product-card .price-list sale-price { font-size: 19px; font-weight: 800; }
+  .product-card__title { font-size: 18px !important; line-height: 1.3 !important; }
+  .product-card .price-list sale-price { font-size: 19px !important; font-weight: 800 !important; }
 }
