@@ -163,6 +163,8 @@
     sweepInProgress = true;
     removeOrphans(orphans)
       .then(function () {
+        var stale = document.querySelector('[data-bb-sweep-error]');
+        if (stale) stale.remove();
         document.dispatchEvent(new CustomEvent('cart:refresh'));
       })
       .catch(function (err) {
@@ -172,6 +174,7 @@
         if (window.Sentry && typeof window.Sentry.captureException === 'function') {
           try { window.Sentry.captureException(err); } catch (_) { /* ignore */ }
         }
+        handleSweepFailure();
       })
       .then(function () {
         sweepInProgress = false;
@@ -234,6 +237,47 @@
   }
 
   /**
+   * FIX-07 (audit 2026-10-07): if removal fails, the lines are still in the
+   * server cart and still chargeable. Un-hide them, re-render from the real
+   * cart, and tell the customer — never leave a hidden line in a payable cart.
+   */
+  function restoreHiddenLineItems() {
+    try {
+      var rows = document.querySelectorAll('[data-bb-orphan-hidden]');
+      for (var i = 0; i < rows.length; i++) {
+        rows[i].style.display = '';
+        rows[i].removeAttribute('data-bb-orphan-hidden');
+      }
+    } catch (_) { /* ignore */ }
+  }
+
+  function showSweepError() {
+    try {
+      var msg = 'We couldn\u2019t update your cart automatically. Please review the items below \u2014 you can remove any add-on you don\u2019t want.';
+      var hosts = document.querySelectorAll('cart-drawer, #cart-drawer, .cart-drawer, form[action="/cart"], main');
+      var host = null;
+      for (var i = 0; i < hosts.length; i++) { if (hosts[i].offsetParent !== null || hosts[i].tagName === 'MAIN') { host = hosts[i]; break; } }
+      if (!host) return;
+      var el = host.querySelector('[data-bb-sweep-error]');
+      if (!el) {
+        el = document.createElement('p');
+        el.setAttribute('data-bb-sweep-error', '');
+        el.setAttribute('role', 'alert');
+        el.style.cssText = 'margin:0 0 12px;padding:10px 12px;border-radius:6px;background:#fdecea;color:#8a1c12;font-size:14px;';
+        host.insertBefore(el, host.firstChild);
+      }
+      el.textContent = msg;
+    } catch (_) { /* ignore */ }
+  }
+
+  function handleSweepFailure() {
+    restoreHiddenLineItems();
+    showSweepError();
+    // Re-render drawer/page from the authoritative server cart so totals match.
+    document.dispatchEvent(new CustomEvent('cart:refresh'));
+  }
+
+  /**
    * One-shot page-load sweep. Covers the cart page (where remove triggers
    * window.location.reload() instead of dispatching cart:change) and any
    * session that was already polluted before this sweeper shipped.
@@ -291,6 +335,8 @@
         if (window.Sentry && typeof window.Sentry.captureException === 'function') {
           try { window.Sentry.captureException(err); } catch (_) { /* ignore */ }
         }
+        // Only un-hide if we actually hid something (a failed /cart.js read hides nothing).
+        if (document.querySelector('[data-bb-orphan-hidden]')) handleSweepFailure();
       })
       .then(function () {
         sweepInProgress = false;
