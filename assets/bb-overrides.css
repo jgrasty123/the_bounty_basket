@@ -888,7 +888,7 @@ html, body { overflow-x: clip; }
   .product-info .accordion__toggle { font-size: 18px !important; font-weight: 800 !important; }
 
   /* Guarantee strip + FAQ */
-  .bb-guarantee-strip__headline { font-size: 15px !important; line-height: 1.3 !important; }
+  .bb-guarantee-strip__headline { font-size: 13px !important; line-height: 1.25 !important; }
   .bb-faq__q-text { font-size: 17px !important; font-weight: 700 !important; }
 
   /* Collection cards (one per row on mobile) */
@@ -899,13 +899,14 @@ html, body { overflow-x: clip; }
 /* ============================================================
    BROBASKET-PARITY PASS (2026-10-07)
    ============================================================ */
-/* Judge.me stars above the product title */
-.bb-jm-badge-link { display: inline-block; margin-block-end: 2px; text-decoration: none; }
-.bb-jm-badge-link .jdgm-prev-badge__stars { color: rgb(var(--product-rating-color, 212 162 76)) !important; font-size: 16px; }
-.bb-jm-badge-link .jdgm-prev-badge__text { font-size: 14px; font-weight: 700; color: rgb(var(--text-color)); }
+/* Star badge above the product title (snippets/bb-judgeme-badge.liquid) */
+.bb-stars { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: rgb(var(--text-color)); font-size: 14px; font-weight: 700; margin-block-end: 2px; }
+.bb-stars__icons { color: #d4a24c; font-size: 17px; letter-spacing: 1px; line-height: 1; }
+.bb-stars__star.is-empty { color: rgb(var(--text-color) / .2); }
+.bb-stars__sep { opacity: .35; font-weight: 400; }
 
 /* Collection description preview: show intro copy, not a second giant title */
-.bb-readmore__content :is(h1,h2,h3) { font-size: 20px; line-height: 1.25; margin-block: 0 8px; }
+.bb-readmore__content :is(h1,h2,h3,.h1,.h2,.h3) { font-size: 20px !important; line-height: 1.25 !important; margin-block: 0 8px !important; }
 
 /* Compact mobile header + guarantee strip at the top of product pages */
 @media (max-width: 999px) {

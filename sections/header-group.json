@@ -60,7 +60,7 @@
         "hide_on_scroll": false,
         "logo": "shopify://shop_images/bounty_Basket_Co-logo-no-bg.png",
         "logo_max_width": 100,
-        "logo_mobile_max_width": 60,
+        "logo_mobile_max_width": 80,
         "menu": "main-menu",
         "sidebar_menu": "",
         "secondary_menu": "",

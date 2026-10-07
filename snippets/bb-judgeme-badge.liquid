@@ -1,10 +1,16 @@
 {%- comment -%}
-  BB Judge.me star badge (filled by the Judge.me core app embed). Renders nothing until a product has reviews.
+  BB star badge above the product title. Reads the standard reviews.rating / reviews.rating_count metafields that
+  Judge.me syncs, so it only shows real review data. Renders nothing until a product has at least one review.
 {%- endcomment -%}
-{%- if product.metafields.reviews.rating_count.value > 0 -%}
-  <a href="#bb-reviews" class="bb-jm-badge-link" aria-label="Read reviews">
-    <div class="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}" data-template="product" data-auto-install="false">
-      {{- product.metafields.judgeme.badge -}}
-    </div>
+{%- assign bb_count = product.metafields.reviews.rating_count.value | default: 0 -%}
+{%- if bb_count > 0 -%}
+  {%- assign bb_rating = product.metafields.reviews.rating.value.rating | default: 0 -%}
+  {%- assign bb_full = bb_rating | round -%}
+  <a href="#bb-reviews" class="bb-stars" aria-label="Rated {{ bb_rating | round: 1 }} out of 5 from {{ bb_count }} reviews. Read reviews">
+    <span class="bb-stars__icons" aria-hidden="true">
+      {%- for i in (1..5) -%}<span class="bb-stars__star{% if i > bb_full %} is-empty{% endif %}">★</span>{%- endfor -%}
+    </span>
+    <span class="bb-stars__sep" aria-hidden="true">|</span>
+    <span class="bb-stars__count">{{ bb_count }} {% if bb_count == 1 %}review{% else %}reviews{% endif %}</span>
   </a>
 {%- endif -%}
