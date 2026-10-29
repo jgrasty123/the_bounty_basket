@@ -15,10 +15,11 @@ jobs:
       pull-requests: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - name: Run Theme Check
-        uses: shopify/theme-check-action@v2
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          theme_root: '.'
-          token: ${{ github.token }}
-          flags: '--fail-level error'
+          node-version: '22'
+      # shopify/theme-check-action@v2 crashes on the Node 24 runners
+      # ('e.filter is not a function', Oct 2026). Same check, run via the CLI.
+      - name: Run Theme Check
+        run: npx --yes @shopify/cli@latest theme check --path . --fail-level error --output text
