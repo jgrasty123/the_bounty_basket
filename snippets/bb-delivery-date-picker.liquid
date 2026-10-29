@@ -20,7 +20,8 @@
         cutoff_timezone: 'America/Los_Angeles',
         working_days: 'Mon,Tue,Wed,Thu,Fri',
         max_days_out: 180,
-        holidays: '12/25/2025,01/01/2026,12/26/2025',
+        holidays: '11/26/2026,12/25/2026,01/01/2027,01/18/2027,05/31/2027,07/05/2027,09/06/2027,11/25/2027,12/25/2027',
+        no_ship_days: '12/24/2026,12/31/2026,12/24/2027,12/31/2027',
         title: 'Pick a Delivery Date'
     %}
 {%- endcomment -%}
@@ -33,7 +34,8 @@
   data-working-days="{{ working_days | default: settings.bb_dp_working_days | default: 'Mon,Tue,Wed,Thu,Fri' }}"
   data-min-lead-days="1"
   data-max-days-out="{{ max_days_out | default: settings.bb_dp_max_days_out | default: 180 }}"
-  data-holidays="{{ holidays | default: settings.bb_dp_holidays | default: '' }}"
+  data-holidays="{{ holidays | default: settings.bb_dp_holidays | default: '11/26/2026,12/25/2026,01/01/2027,01/18/2027,05/31/2027,07/05/2027,09/06/2027,11/25/2027,12/25/2027' }}"
+  data-no-ship-days="{{ no_ship_days | default: settings.bb_dp_no_ship_days | default: '12/24/2026,12/31/2026,12/24/2027,12/31/2027' }}"
   data-current-delivery-date="{{ cart.attributes['Delivery Date'] | default: '' }}"
   data-current-delivery-day="{{ cart.attributes['Delivery Day'] | default: '' }}"
   data-copy-before-cutoff="{{ copy_before_cutoff | escape }}"

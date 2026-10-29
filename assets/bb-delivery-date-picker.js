@@ -190,6 +190,9 @@
   function isShippingDay(cd, settings) {
     if (!settings.workingDays[calendarDateDayOfWeek(cd)]) return false;
     if (settings.holidays[calendarDateToISO(cd)]) return false;
+    // No-ship days: UPS delivers but has no Ground pickup (Christmas Eve,
+    // New Year's Eve). Still pickable as a delivery date.
+    if (settings.noShipDays && settings.noShipDays[calendarDateToISO(cd)]) return false;
     return true;
   }
 
@@ -507,6 +510,7 @@
       minLeadDays     : parseInt(rootEl.getAttribute('data-min-lead-days'), 10) || 1,
       maxDaysOut      : parseInt(rootEl.getAttribute('data-max-days-out'), 10) || 180,
       holidays        : parseHolidays(rootEl.getAttribute('data-holidays')),
+      noShipDays      : parseHolidays(rootEl.getAttribute('data-no-ship-days')),
       copyTemplates   : {
         beforeCutoff  : rootEl.getAttribute('data-copy-before-cutoff') || DEFAULT_COPY_BEFORE,
         afterCutoff   : rootEl.getAttribute('data-copy-after-cutoff')  || DEFAULT_COPY_AFTER,
