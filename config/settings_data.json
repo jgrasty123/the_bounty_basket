@@ -19,20 +19,31 @@
     "button_style": "fill",
     "background": "#fbf5f2",
     "text_color": "#3a2a33",
+    "success_color": "#2e7d5b",
+    "warning_color": "#e0a43a",
+    "error_color": "#c0392b",
     "header_background": "#ffffff",
     "header_text_color": "#3a2a33",
     "footer_background": "#3a2a33",
     "footer_text_color": "#fbf5f2",
+    "dialog_background": "#ffffff",
     "primary_button_background": "#8e3b5a",
     "primary_button_text_color": "#ffffff",
     "secondary_button_background": "#e8b4b8",
     "secondary_button_text_color": "#3a2a33",
+    "product_card_background": "#ffffff",
     "product_card_text_color": "#3a2a33",
+    "product_rating_color": "#d4a24c",
+    "product_on_sale_accent": "#b4374f",
+    "product_sold_out_badge_background": "#6e6168",
     "product_primary_badge_background": "#8e3b5a",
     "heading_font": "fraunces_n6",
     "heading_font_size": "medium",
+    "heading_text_transform": "normal",
     "heading_letter_spacing": -1,
     "text_font": "nunito_sans_n4",
+    "text_font_size_mobile": 16,
+    "text_font_size_desktop": 16,
     "heading_apparition": "none",
     "show_quick_buy": false,
     "show_product_rating": true,
@@ -47,6 +58,7 @@
     "social_twitter": "https://x.com/bountybasketco",
     "social_instagram": "https://www.instagram.com/thebountybasketco/",
     "favicon": "shopify://shop_images/bounty-favicon-512.png",
+    "content_for_index": [],
     "blocks": {
       "6159598353363395418": {
         "type": "shopify://apps/google-youtube/blocks/store_widget/14ec7bd0-ac77-49a9-9417-90752398bdff",
@@ -68,18 +80,19 @@
         "type": "shopify://apps/triplewhale/blocks/triple_pixel_snippet/483d496b-3f1a-4609-aea7-8eee3b6b7a2a",
         "disabled": false,
         "settings": {}
+      },
+      "855628211100114053": {
+        "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
+        "disabled": false,
+        "settings": {}
+      },
+      "13929909141650721496": {
+        "type": "shopify://apps/help-scout/blocks/beacon/019e4ca5-8c56-72e2-93ee-3b480c66e98d",
+        "disabled": false,
+        "settings": {
+          "beacon_id": ""
+        }
       }
-    },
-    "success_color": "#2e7d5b",
-    "warning_color": "#e0a43a",
-    "error_color": "#c0392b",
-    "dialog_background": "#ffffff",
-    "product_card_background": "#ffffff",
-    "product_rating_color": "#d4a24c",
-    "product_on_sale_accent": "#b4374f",
-    "product_sold_out_badge_background": "#6e6168",
-    "text_font_size_mobile": 16,
-    "text_font_size_desktop": 16,
-    "heading_text_transform": "normal"
+    }
   }
 }
